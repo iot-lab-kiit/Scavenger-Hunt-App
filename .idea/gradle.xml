@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/authorization" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/design" />
             <option value="$PROJECT_DIR$/onBoarding" />
             <option value="$PROJECT_DIR$/teamBuilding" />
           </set>
