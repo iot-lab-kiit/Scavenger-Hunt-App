@@ -16,3 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "Scavenger Hunt"
 include(":app")
 include(":authorization")
+include(":onBoarding")
+include(":teamBuilding")
