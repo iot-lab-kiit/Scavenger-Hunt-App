@@ -45,6 +45,7 @@ class AuthRepositoryImpl @Inject constructor(
 //                token = token
 //            )
 //        )
+        // TODO: Remove this once the server is ready
         return AuthenticationResponse(
             success = true
         )

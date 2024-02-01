@@ -9,6 +9,5 @@ interface AuthRepository {
     val currentUser: User?
     suspend fun signIn(context: Context): AuthResult
     suspend fun logout()
-
     suspend fun authenticateUserOnServer(token: String): AuthenticationResponse
 }

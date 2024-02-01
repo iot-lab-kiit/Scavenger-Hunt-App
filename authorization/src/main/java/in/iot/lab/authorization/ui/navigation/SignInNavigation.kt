@@ -8,6 +8,7 @@ import `in`.iot.lab.authorization.ui.screen.SignInScreen
 
 const val SIGNIN_ROUTE = "signin_route"
 
+// TODO: add navigateToSignIn in Main Navigation Graph
 fun NavController.navigateToSignin(navOptions: NavOptions) = navigate(SIGNIN_ROUTE, navOptions)
 
 fun NavGraphBuilder.signInScreen() {
