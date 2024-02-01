@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -39,7 +41,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":core:design"))
     // Base Dependencies : -------------------------------------------------------
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -59,4 +61,23 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // ----------------------------------------------------------------------------
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-auth")
+
+    // Credential Manager
+    implementation("androidx.credentials:credentials:1.3.0-alpha01")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+
+    // Hilt
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.48")
+    ksp("com.google.dagger:hilt-compiler:2.48")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

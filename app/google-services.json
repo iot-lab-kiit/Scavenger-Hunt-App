@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1022740957493",
+    "project_id": "matrix-4c024",
+    "storage_bucket": "matrix-4c024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022740957493:android:f8ad436f4fafee2e33647c",
+        "android_client_info": {
+          "package_name": "in.iot.lab.scavengerhunt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1022740957493-d3imhk0hrdrpu6ea5dgugsthdl9br6ql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.iot.lab.scavengerhunt",
+            "certificate_hash": "3888b48706369cbbc555fafe86aef8ad5dc9f5f8"
+          }
+        },
+        {
+          "client_id": "1022740957493-u88ivl6juq5bkihalrj06vrc840mcogf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAR8Icj4CsLvalOqqm4ZTkP9FtUIFvCi9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1022740957493-u88ivl6juq5bkihalrj06vrc840mcogf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
