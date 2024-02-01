@@ -59,4 +59,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // ----------------------------------------------------------------------------
+
+    // QR Code Dependency added
+    implementation(project(":core:qrCode"))
 }

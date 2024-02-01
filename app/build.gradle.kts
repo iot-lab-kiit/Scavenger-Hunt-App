@@ -74,4 +74,7 @@ dependencies {
 
     // Implementing the core:design module
     implementation(project(":core:design"))
+
+    // Implementing the core:qrCode Module which has all the QR Code logic to it
+    implementation(project(":teamBuilding"))
 }
