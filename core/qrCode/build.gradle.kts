@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "in.iot.lab.teambuilding"
+    namespace = "in.iot.lab.qrcode"
     compileSdk = 34
 
     defaultConfig {
@@ -60,6 +60,9 @@ dependencies {
 
     // ----------------------------------------------------------------------------
 
-    // QR Code Dependency added
-    implementation(project(":core:qrCode"))
+    // Google Bar Code Scanner
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
+
+    // Goggle Play Store Base Service dependency
+    implementation("com.google.android.gms:play-services-base:18.3.0")
 }
