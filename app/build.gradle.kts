@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -71,7 +74,13 @@ dependencies {
 
     // ----------------------------------------------------------------------------
 
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    ksp("com.google.dagger:hilt-compiler:2.48")
 
     // Implementing the core:design module
     implementation(project(":core:design"))
+
+    // Implementing the core:qrCode Module which has all the QR Code logic to it
+    implementation(project(":teamBuilding"))
 }
