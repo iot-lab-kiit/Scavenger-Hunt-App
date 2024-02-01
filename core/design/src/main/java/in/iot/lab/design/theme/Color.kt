@@ -1,4 +1,4 @@
-package `in`.iot.lab.scavengerhunt.ui.theme
+package `in`.iot.lab.design.theme
 
 import androidx.compose.ui.graphics.Color
 

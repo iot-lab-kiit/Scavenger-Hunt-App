@@ -70,4 +70,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // ----------------------------------------------------------------------------
+
+
+    // Implementing the core:design module
+    implementation(project(":core:design"))
 }
