@@ -65,4 +65,8 @@ dependencies {
 
     // Goggle Play Store Base Service dependency
     implementation("com.google.android.gms:play-services-base:18.3.0")
+
+    // Code Generator Dependency
+    implementation("com.google.zxing:core:3.5.1")
+
 }
