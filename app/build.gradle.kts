@@ -74,4 +74,8 @@ dependencies {
 
     // Implementing the core:design module
     implementation(project(":core:design"))
+    implementation(project(":teamBuilding"))
+
+    val nav_version = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 }
