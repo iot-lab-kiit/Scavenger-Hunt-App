@@ -6,5 +6,4 @@ import `in`.iot.lab.teambuilding.view.navigation.TeamNavigation
 @Composable
 fun TestComposable() {
     // Call Your Function here for testing
-    TeamNavigation()
 }

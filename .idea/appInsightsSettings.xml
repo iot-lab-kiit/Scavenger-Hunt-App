@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="in.iot.lab.scavengerhunt" />
+                  <option name="mobileSdkAppId" value="1:1022740957493:android:f8ad436f4fafee2e33647c" />
+                  <option name="projectId" value="matrix-4c024" />
+                  <option name="projectNumber" value="1022740957493" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -63,4 +63,6 @@ dependencies {
     //Navigation Dependency :
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    implementation(project(":core:qrCode"))
 }
