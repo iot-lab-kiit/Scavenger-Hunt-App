@@ -1,26 +1,17 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
-    id("dagger.hilt.android.plugin")
-    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "in.iot.lab.scavengerhunt"
+    namespace = "in.iot.lab.qrcode"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "in.iot.lab.scavengerhunt"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -44,11 +35,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 
@@ -74,13 +60,9 @@ dependencies {
 
     // ----------------------------------------------------------------------------
 
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    ksp("com.google.dagger:hilt-compiler:2.48")
+    // Google Bar Code Scanner
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 
-    // Implementing the core:design module
-    implementation(project(":core:design"))
-
-    // Implementing the core:qrCode Module which has all the QR Code logic to it
-    implementation(project(":teamBuilding"))
+    // Goggle Play Store Base Service dependency
+    implementation("com.google.android.gms:play-services-base:18.3.0")
 }
