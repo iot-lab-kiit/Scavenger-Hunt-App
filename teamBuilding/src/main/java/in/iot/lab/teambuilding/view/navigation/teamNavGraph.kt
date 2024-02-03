@@ -1,11 +1,14 @@
 package `in`.iot.lab.teambuilding.view.navigation
 
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import `in`.iot.lab.teambuilding.view.TeamBuildingViewModel
 import `in`.iot.lab.teambuilding.view.screens.CreateScreen
-import `in`.iot.lab.teambuilding.view.screens.JoinScreen
+import `in`.iot.lab.teambuilding.view.screens.TeamJoinScreenControl
 import `in`.iot.lab.teambuilding.view.screens.TeamHome
 
 const val TEAM_BUILDING_ROUTE = "team-building-home-route"
@@ -38,6 +41,20 @@ fun NavGraphBuilder.teamNavGraph(navController: NavController) {
 
     // Join Screen Route
     composable(JOIN_TEAM_ROUTE) {
-        JoinScreen(navController = navController)
+
+        // View Model
+        val viewModel = hiltViewModel<TeamBuildingViewModel>()
+
+        // State Variables
+        val installState = viewModel.qrInstallerState.collectAsState().value
+        val teamJoiningApiState = viewModel.teamJoiningApiState.collectAsState().value
+
+        // Join Screen
+        TeamJoinScreenControl(
+            installState = installState,
+            teamJoiningApiState = teamJoiningApiState,
+            navController = navController,
+            setEvent = viewModel::uiListener
+        )
     }
 }
