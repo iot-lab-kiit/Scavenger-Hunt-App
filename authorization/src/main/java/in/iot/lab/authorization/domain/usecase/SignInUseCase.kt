@@ -22,7 +22,7 @@ class SignInUseCase @Inject constructor(
                 val postAuthApiResult = repository.authenticateUserOnServer(userIdToken)
                 // TODO: Remove this delay once the server is ready
                 delay(2000)
-                if (postAuthApiResult.success) {
+                if (postAuthApiResult.user != null) {
                     emit(Result.Success(result))
                 }
             } else {
