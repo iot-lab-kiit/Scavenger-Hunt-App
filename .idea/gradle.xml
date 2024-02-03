@@ -14,7 +14,10 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/design" />
             <option value="$PROJECT_DIR$/core/qrCode" />
+            <option value="$PROJECT_DIR$/dashboard" />
+            <option value="$PROJECT_DIR$/leaderBoard" />
             <option value="$PROJECT_DIR$/onBoarding" />
+            <option value="$PROJECT_DIR$/playGame" />
             <option value="$PROJECT_DIR$/teamBuilding" />
           </set>
         </option>
