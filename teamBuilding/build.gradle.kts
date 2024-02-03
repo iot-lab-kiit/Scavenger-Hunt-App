@@ -64,5 +64,10 @@ dependencies {
     val nav_version = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
+    // Implementing the QR Code Reader and generator
     implementation(project(":core:qrCode"))
+
+    // Implementing the Design Library
+    implementation(project(":core:design"))
+
 }

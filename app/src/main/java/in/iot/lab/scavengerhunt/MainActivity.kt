@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
+import `in`.iot.lab.scavengerhunt.navigation.MainNavGraph
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -21,7 +23,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TestComposable()
+
+                    // Calling the Main Nav Graph and linking the other screens slowly
+                    MainNavGraph(navHostController = rememberNavController())
                 }
             }
         }
