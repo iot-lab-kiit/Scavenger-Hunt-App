@@ -10,8 +10,10 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import `in`.iot.lab.authorization.data.remote.ApiService
+import `in`.iot.lab.authorization.domain.model.AuthRequest
+import `in`.iot.lab.authorization.domain.model.AuthResponse
 import `in`.iot.lab.authorization.domain.model.AuthResult
-import `in`.iot.lab.authorization.domain.model.AuthenticationResponse
+import `in`.iot.lab.authorization.domain.model.RemoteUser
 import `in`.iot.lab.authorization.domain.model.User
 import `in`.iot.lab.authorization.domain.model.toUser
 import `in`.iot.lab.authorization.domain.repository.AuthRepository
@@ -39,15 +41,16 @@ class AuthRepositoryImpl @Inject constructor(
         auth.signOut()
     }
 
-    override suspend fun authenticateUserOnServer(token: String): AuthenticationResponse {
+    override suspend fun authenticateUserOnServer(token: String): AuthResponse {
 //        return apiService.postAuthentication(
-//            PostAuthenticationRequest(
+//            AuthRequest(
 //                token = token
 //            )
 //        )
         // TODO: Remove this once the server is ready
-        return AuthenticationResponse(
-            success = true
+        return AuthResponse(
+            message = "Success",
+            user = RemoteUser()
         )
     }
 
