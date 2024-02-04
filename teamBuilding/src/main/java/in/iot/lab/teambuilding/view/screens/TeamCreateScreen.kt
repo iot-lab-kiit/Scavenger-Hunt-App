@@ -15,14 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import `in`.iot.lab.teambuilding.view.components.AppScreen
 import `in`.iot.lab.teambuilding.view.components.TeamBuildingButton
 import `in`.iot.lab.teambuilding.view.components.TeamBuildingOutlinedTextField
 import `in`.iot.lab.teambuilding.view.components.TheMatrixHeaderUI
 
 @Composable
-fun CreateScreen(navController: NavController) {
+fun TeamCreateScreen(onNavigateToQRScreen: (String) -> Unit) {
 
     // Team Name Input from the User
     var teamName by remember { mutableStateOf("") }
@@ -56,10 +55,9 @@ fun CreateScreen(navController: NavController) {
             TeamBuildingButton(
                 buttonLabel = "Create Team",
                 buttonColor = ButtonDefaults.buttonColors(containerColor = Color(0xFFCC2936)),
-                textColor = Color.White
-            ) {
-                // TODO :-
-            }
+                textColor = Color.White,
+                onClick = { onNavigateToQRScreen(teamName) }
+            )
         }
     }
 }

@@ -10,9 +10,9 @@ package `in`.iot.lab.network.state
  * @property Success This means that an api call is a success and we have received the required data
  * @property Failed This means that the api call is a failure and we didn't received data
  */
-sealed interface UiState {
-    data object Loading : UiState
-    data object Idle : UiState
-    data class Success<T>(val data: T) : UiState
-    data class Failed(val message: String) : UiState
+sealed interface UiState<out T> {
+    data object Loading : UiState<Nothing>
+    data object Idle : UiState<Nothing>
+    data class Success<T>(val data: T) : UiState<T>
+    data class Failed(val message: String) : UiState<Nothing>
 }

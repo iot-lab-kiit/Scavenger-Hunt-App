@@ -2,6 +2,7 @@ package `in`.iot.lab.teambuilding.view
 
 import android.util.Log.d
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.installer.ModuleInstaller
@@ -9,8 +10,10 @@ import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -27,6 +30,38 @@ class TeamBuildingViewModel @Inject constructor(
     private val qrCodeScanner: QrCodeScanner,
     private val moduleInstaller: ModuleInstaller
 ) : ViewModel() {
+
+
+    /**
+     * This variable is used to define the create team api call state
+     */
+    private val _createTeamApiState = MutableStateFlow<UiState<String>>(UiState.Idle)
+    val createTeamApiState = _createTeamApiState.asStateFlow()
+
+
+    /**
+     * This function creates the team and returns the Team UID to generate the QR Code
+     */
+    private fun createTeamApi(teamName: String) {
+
+        // Checking if the api is already queued at the moment
+        if (_createTeamApiState.value is UiState.Loading)
+            return
+
+        // Changing State to Loading
+        _createTeamApiState.value = UiState.Loading
+
+        viewModelScope.launch {
+
+            // for testing
+            delay(2000)
+
+            // TODO :- Do the actual API call here
+
+            _createTeamApiState.value = UiState.Success(data = "$teamName Uid is this this this")
+        }
+    }
+
 
     /**
      * This variable is used to define the QR Scanner Download state
@@ -71,7 +106,7 @@ class TeamBuildingViewModel @Inject constructor(
     /**
      * This variable defines the team joining api state
      */
-    private val _teamJoiningApiState = MutableStateFlow<UiState>(UiState.Idle)
+    private val _teamJoiningApiState = MutableStateFlow<UiState<String>>(UiState.Idle)
     val teamJoiningApiState = _teamJoiningApiState.asStateFlow()
 
 
@@ -129,6 +164,10 @@ class TeamBuildingViewModel @Inject constructor(
         when (event) {
             is TeamBuildingEvent.CheckScannerAvailability -> {
                 checkScannerModule()
+            }
+
+            is TeamBuildingEvent.CreateTeamApiCall -> {
+                createTeamApi(teamName = event.teamName)
             }
         }
     }

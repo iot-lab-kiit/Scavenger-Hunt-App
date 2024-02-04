@@ -27,7 +27,7 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 @Composable
 fun TeamJoinScreenControl(
     installState: ModuleInstallerState,
-    teamJoiningApiState: UiState,
+    teamJoiningApiState: UiState<String>,
     navController: NavController,
     setEvent: (TeamBuildingEvent) -> Unit
 ) {

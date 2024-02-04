@@ -18,13 +18,14 @@ import androidx.compose.ui.graphics.Color
 @Composable
 internal fun AppScreen(
     modifier: Modifier = Modifier,
+    contentAlignment: Alignment = Alignment.Center,
     body: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
             .background(Color(0xff11151c))
             .fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = contentAlignment
     ) {
         body()
     }
