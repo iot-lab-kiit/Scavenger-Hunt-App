@@ -2,7 +2,7 @@ package `in`.iot.lab.network.state
 
 
 /**
- * This variable is used to defines the various types of states in an API call and each state is
+ * This class is used to defines the various types of states in an API call and each state is
  * defines by their respective data object classes
  *
  * @property Idle This means that the api is currently not being used
