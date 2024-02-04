@@ -12,7 +12,7 @@ object NetworkUtil {
      * This function is a wrapper function over the Retrofit Api calls to make the exception
      * handling easier and less boilerplate code needs to be generated
      */
-    suspend fun <T> getResponseState(
+    suspend fun <T> getRetrofitResponseState(
         onSuccess: suspend () -> Unit = {},
         onFailure: suspend (Exception) -> Unit = {},
         request: suspend () -> Response<T>
