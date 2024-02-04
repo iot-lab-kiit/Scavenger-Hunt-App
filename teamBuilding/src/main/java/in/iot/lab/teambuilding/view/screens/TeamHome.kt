@@ -19,12 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
-import `in`.iot.lab.teambuilding.R
 
 // Preview Function
 @Preview("Light")
@@ -49,7 +49,7 @@ fun TeamHome(navController: NavController) {
 
         // Background Image
         Image(
-            painter = painterResource(id = R.drawable.team_building_background),
+            painter = painterResource(id = R.drawable.matrix_background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
