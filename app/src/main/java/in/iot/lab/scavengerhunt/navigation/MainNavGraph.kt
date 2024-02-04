@@ -8,6 +8,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import `in`.iot.lab.authorization.ui.navigation.SIGNIN_ROUTE
 import `in`.iot.lab.authorization.ui.navigation.signInScreen
+import `in`.iot.lab.dashboard.ui.navigation.dashboardScreen
 import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_ROUTE
 import `in`.iot.lab.teambuilding.view.navigation.navigateToTeamBuilding
 import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
@@ -41,5 +42,9 @@ fun MainNavGraph(navHostController: NavHostController) {
         )
         // Team - Building Nav Graph
         teamNavGraph(navHostController)
+        // TODO: Navigate to dashboard once team building is done
+        // using DASHBOARD_ROOT as the route
+        // Dashboard Nav Graph
+        dashboardScreen()
     }
 }
