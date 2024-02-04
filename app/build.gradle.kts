@@ -84,4 +84,10 @@ dependencies {
 
     // Implementing the core:design module
     implementation(project(":core:design"))
+
+    // Implementing the teamBuilding module
+    implementation(project(":teamBuilding"))
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.6")
 }

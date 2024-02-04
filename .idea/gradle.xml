@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/authorization" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/design" />
+            <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/qrCode" />
             <option value="$PROJECT_DIR$/dashboard" />
             <option value="$PROJECT_DIR$/leaderBoard" />
