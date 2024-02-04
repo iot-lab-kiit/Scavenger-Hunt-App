@@ -12,11 +12,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import `in`.iot.lab.design.components.AppScreen
+import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.generator.QrGenerator
-import `in`.iot.lab.teambuilding.view.components.AppFailureScreen
-import `in`.iot.lab.teambuilding.view.components.AppScreen
-import `in`.iot.lab.teambuilding.view.components.TheMatrixHeaderUI
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 
 @Composable
@@ -64,7 +64,7 @@ fun TeamCreateQr(
 
                 // Failed State
                 is UiState.Failed -> {
-                    AppFailureScreen(onCancel = {}) {
+                    ErrorDialog(onCancel = {}) {
                         setEvent(TeamBuildingEvent.CreateTeamApiCall(teamName = teamName))
                     }
                 }

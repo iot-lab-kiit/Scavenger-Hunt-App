@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
@@ -33,12 +34,13 @@ internal fun TeamBuildingOutlinedTextField(
     input: String,
     labelString: String,
     colors: TextFieldColors = TextFieldDefaults.colors(
-        focusedIndicatorColor = Color(0xFFCC2936),
-        unfocusedIndicatorColor = Color(0xFFCC2936),
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
-        focusedLabelColor = Color(0xFFCC2936),
-        unfocusedLabelColor = Color(0xFFCC2936)
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+        focusedTextColor = MaterialTheme.colorScheme.onPrimary
     ),
     onValueChange: (String) -> Unit
 ) {
