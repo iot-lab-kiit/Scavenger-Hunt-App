@@ -1,12 +1,12 @@
 package `in`.iot.lab.authorization.data.remote
 
-import `in`.iot.lab.authorization.Constants
 import `in`.iot.lab.authorization.domain.model.AuthRequest
 import `in`.iot.lab.authorization.domain.model.AuthResponse
+import `in`.iot.lab.network.utils.NetworkConstants
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ApiService {
-    @POST(Constants.AUTH_ENDPOINT)
+    @POST(NetworkConstants.AUTH_ENDPOINT)
     suspend fun postAuthentication(@Body request: AuthRequest): AuthResponse
 }
