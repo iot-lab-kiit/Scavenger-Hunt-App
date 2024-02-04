@@ -1,4 +1,4 @@
-package `in`.iot.lab.teambuilding.view.components
+package `in`.iot.lab.design.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
  * @param body This is the Composable that should be inside this
  */
 @Composable
-internal fun AppScreen(
+fun AppScreen(
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     body: @Composable () -> Unit
