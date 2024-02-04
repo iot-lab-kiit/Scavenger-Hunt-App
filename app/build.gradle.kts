@@ -88,6 +88,13 @@ dependencies {
     // Implementing the teamBuilding module
     implementation(project(":teamBuilding"))
 
+    // Auth Module
+    implementation(project(":authorization"))
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-auth")
 }

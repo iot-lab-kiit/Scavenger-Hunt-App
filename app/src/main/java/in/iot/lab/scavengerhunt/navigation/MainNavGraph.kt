@@ -3,7 +3,13 @@ package `in`.iot.lab.scavengerhunt.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import `in`.iot.lab.authorization.ui.navigation.SIGNIN_ROUTE
+import `in`.iot.lab.authorization.ui.navigation.signInScreen
 import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_ROUTE
+import `in`.iot.lab.teambuilding.view.navigation.navigateToTeamBuilding
 import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
 
 
@@ -14,12 +20,25 @@ import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
  */
 @Composable
 fun MainNavGraph(navHostController: NavHostController) {
-
+    val initialRoute =
+        if (Firebase.auth.currentUser != null) TEAM_BUILDING_ROUTE
+        else SIGNIN_ROUTE
     NavHost(
         navController = navHostController,
-        startDestination = TEAM_BUILDING_ROUTE
+        startDestination = initialRoute
     ) {
-
+        // Authorization Screen
+        signInScreen(
+            onUserSignedIn = {
+                navHostController.navigateToTeamBuilding(
+                    navOptions = navOptions {
+                        popUpTo(SIGNIN_ROUTE) {
+                            inclusive = true
+                        }
+                    }
+                )
+            }
+        )
         // Team - Building Nav Graph
         teamNavGraph(navHostController)
     }
