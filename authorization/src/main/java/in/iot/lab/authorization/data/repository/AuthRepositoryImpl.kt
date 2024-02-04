@@ -10,7 +10,6 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import `in`.iot.lab.authorization.data.remote.ApiService
-import `in`.iot.lab.authorization.domain.model.AuthRequest
 import `in`.iot.lab.authorization.domain.model.AuthResponse
 import `in`.iot.lab.authorization.domain.model.AuthResult
 import `in`.iot.lab.authorization.domain.model.RemoteUser
@@ -61,10 +60,6 @@ class AuthRepositoryImpl @Inject constructor(
                     try {
                         val googleIdTokenCredential =
                             GoogleIdTokenCredential.createFrom(credential.data)
-                        val email = googleIdTokenCredential.id
-                        if (!email.isKiitEmail()) {
-                            throw Exception("Please use your KIIT email to login")
-                        }
                         val idToken = googleIdTokenCredential.idToken
                         loginWithFirebase(idToken)
                     } catch (e: GoogleIdTokenParsingException) {
@@ -86,9 +81,5 @@ class AuthRepositoryImpl @Inject constructor(
         return AuthResult(
             data = firebaseUser.toUser()
         )
-    }
-
-    private fun String.isKiitEmail(): Boolean {
-        return this.endsWith("@kiit.ac.in")
     }
 }
