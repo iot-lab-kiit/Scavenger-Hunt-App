@@ -1,13 +1,10 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-
-    id("dagger.hilt.android.plugin")
-    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "in.iot.lab.teambuilding"
+    namespace = "in.iot.lab.network"
     compileSdk = 34
 
     defaultConfig {
@@ -33,12 +30,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
 }
 
 dependencies {
@@ -62,22 +53,4 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // ----------------------------------------------------------------------------
-
-    //Navigation Dependency :
-    val nav_version = "2.7.6"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    // Implementing the QR Code Reader and generator
-    implementation(project(":core:qrCode"))
-
-    // Implementing the Design Module
-    implementation(project(":core:design"))
-
-    // Implementing the Core Network Module
-    implementation(project(":core:network"))
-
-    // Hilt
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    implementation("com.google.dagger:hilt-android:2.48")
-    ksp("com.google.dagger:hilt-compiler:2.48")
 }
