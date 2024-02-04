@@ -13,15 +13,15 @@ internal fun DashboardNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         route = DASHBOARD_ROOT,
-        startDestination = DashboardRoutes.TEAM_ROUTE
+        startDestination = DashboardRoutes.Team.route
     ) {
-        composable(DashboardRoutes.TEAM_ROUTE) {
+        composable(DashboardRoutes.Team.route) {
             TeamScreen()
         }
-        composable(DashboardRoutes.PLAY_ROUTE) {
+        composable(DashboardRoutes.Play.route) {
             PlayScreen()
         }
-        composable(DashboardRoutes.LEADERBOARD_ROUTE) {
+        composable(DashboardRoutes.Leaderboard.route) {
             LeaderboardScreen()
         }
     }
