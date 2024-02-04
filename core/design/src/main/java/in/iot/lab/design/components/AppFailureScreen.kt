@@ -1,4 +1,4 @@
-package `in`.iot.lab.teambuilding.view.components
+package `in`.iot.lab.design.components
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
@@ -11,10 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,9 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import `in`.iot.lab.teambuilding.R
+import `in`.iot.lab.design.R
+import `in`.iot.lab.design.theme.ScavengerHuntTheme
 
 
 // Default Preview Function
@@ -47,8 +46,10 @@ import `in`.iot.lab.teambuilding.R
 )
 @Composable
 private fun DefaultPreview() {
-    AppScreen {
-        AppFailureScreen()
+    ScavengerHuntTheme {
+        AppScreen {
+            ErrorDialog()
+        }
     }
 }
 
@@ -66,11 +67,12 @@ private fun DefaultPreview() {
  * @param imageId This is the Image Id which would be shown in the Dialog
  * @param onTryAgain This function would be executed when the retry button would be clicked
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppFailureScreen(
+fun ErrorDialog(
     modifier: Modifier = Modifier,
     title: String = "Whoops !!",
-    text: String = "Second Internet connection was found. Check your connection or try again.",
+    text: String = "No Internet connection was found. Check your connection or try again.",
     imageId: Int = R.drawable.server_error,
     onCancel: () -> Unit = {},
     onTryAgain: () -> Unit = {}
@@ -81,21 +83,18 @@ fun AppFailureScreen(
 
     // We are animating the entry and Exit of the Dialog Bars
     AnimatedVisibility(isDialogVisible) {
-        Dialog(
+        AlertDialog(
             onDismissRequest = {
                 isDialogVisible = false
                 onCancel()
             },
-
-            // Defines that back press and clicking outside won't remove the Dialog
             properties = DialogProperties(
                 dismissOnBackPress = false,
                 dismissOnClickOutside = false
             )
         ) {
-
+            Card(shape = RoundedCornerShape(8.dp),) {
             // Dialog Contents which would be shown inside the Dialog
-            Card(shape = RoundedCornerShape(8.dp)) {
                 DialogContent(
                     modifier = modifier,
                     imageId = imageId,
@@ -107,13 +106,14 @@ fun AppFailureScreen(
                     onCancel()
                 }
             }
+
         }
     }
 }
 
 
 /**
- * This function provides the Contents inside the [AppFailureScreen] Composable
+ * This function provides the Contents inside the [ErrorDialog] Composable
  *
  * @param modifier This is for the parent function to pass modifications to the child
  * @param title This is the Heading of the issue/error which would be shown as a Heading below
@@ -182,37 +182,32 @@ private fun DialogContent(
         ) {
 
             // Cancel Button
-            OutlinedButton(
+            SecondaryButton(
                 onClick = onDismiss,
                 modifier = Modifier.weight(1F),
                 shape = RoundedCornerShape(8.dp),
             ) {
-
                 Text(
                     text = "Cancel",
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    )
                 )
             }
 
 
-            // Try Again Button
-            FilledTonalButton(
+            PrimaryButton(
                 onClick = onTryAgain,
                 modifier = Modifier.weight(1F),
                 shape = RoundedCornerShape(8.dp),
             ) {
-
                 Text(
                     text = "Try Again",
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
-                    ),
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    )
                 )
             }
         }

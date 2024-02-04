@@ -9,9 +9,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
-import `in`.iot.lab.teambuilding.view.components.AppFailureScreen
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 
 
@@ -53,7 +53,7 @@ fun TeamJoinScreenControl(
             is ModuleInstallerState.Failure -> {
 
                 // Failure Screen
-                AppFailureScreen(
+                ErrorDialog(
                     text = installState.exception.message.toString(),
                     onCancel = { navController.popBackStack() }
                 ) {
@@ -89,7 +89,7 @@ fun TeamJoinScreenControl(
             is UiState.Failed -> {
 
                 // Failure Screen
-                AppFailureScreen(
+                ErrorDialog(
                     text = teamJoiningApiState.message,
                     onCancel = { navController.popBackStack() }
                 ) {
