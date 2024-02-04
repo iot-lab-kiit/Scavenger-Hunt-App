@@ -6,23 +6,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import `in`.iot.lab.design.R
+import `in`.iot.lab.design.components.AppScreen
+import `in`.iot.lab.design.components.PrimaryButton
+import `in`.iot.lab.design.components.SecondaryButton
+import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
-import `in`.iot.lab.teambuilding.R
-import `in`.iot.lab.teambuilding.view.components.AppScreen
-import `in`.iot.lab.teambuilding.view.components.TeamBuildingButton
-import `in`.iot.lab.teambuilding.view.components.TheMatrixHeaderUI
 
 // Preview Function
 @Preview("Light")
@@ -47,7 +49,7 @@ fun TeamHome(navController: NavController) {
 
         // Background Image
         Image(
-            painter = painterResource(id = R.drawable.team_building_background),
+            painter = painterResource(id = R.drawable.matrix_background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
@@ -66,17 +68,24 @@ fun TeamHome(navController: NavController) {
             Spacer(modifier = Modifier.height(150.dp))
 
             // Create Team Button
-            TeamBuildingButton(buttonLabel = "CREATE TEAM") {
-                navController.navigate("team-building-create-route")
+            SecondaryButton(
+                modifier = Modifier
+                    .padding(vertical = 8.dp, horizontal = 32.dp)
+                    .fillMaxWidth()
+                    .height(height = 56.dp),
+                onClick = { navController.navigate("team-building-create-route") },
+            ) {
+                Text(text = "CREATE TEAM")
             }
 
             // Join Team Button
-            TeamBuildingButton(
-                buttonLabel = "JOIN TEAM",
-                buttonColor = ButtonDefaults.buttonColors(containerColor = Color(0xFFCC2936)),
-                textColor = Color.White
-            ) {
-                navController.navigate("team-building-join-route")
+            PrimaryButton(
+                modifier = Modifier
+                    .padding(vertical = 8.dp, horizontal = 32.dp)
+                    .fillMaxWidth()
+                    .height(height = 56.dp),
+                onClick = { navController.navigate("team-building-join-route") }) {
+                Text(text = "JOIN TEAM")
             }
         }
     }

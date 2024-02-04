@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import `in`.iot.lab.authorization.domain.model.Result
 import `in`.iot.lab.authorization.domain.model.User
 import `in`.iot.lab.authorization.domain.usecase.SignInUseCase
+import `in`.iot.lab.network.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,20 +25,20 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             signInUseCase.invoke(context).collect {
                 when (it) {
-                    is Result.Error -> {
+                    is UiState.Failed -> {
                         _state.value = _state.value.copy(
                             isLoading = false,
-                            errorMessage = it.exception.message
+                            errorMessage = it.message
                         )
-                        Log.e("SignInViewModel", "signIn: ", it.exception)
+                        Log.e("SignInViewModel", "signIn: ${it.message}")
                     }
 
-                    Result.Loading -> {
+                    UiState.Loading -> {
                         Log.d("SignInViewModel", "signIn: Loading")
                         _state.value = _state.value.copy(isLoading = true)
                     }
 
-                    is Result.Success -> {
+                    is UiState.Success -> {
                         Log.d("SignInViewModel", "signIn: Success")
                         _state.value = _state.value.copy(
                             isLoading = false,
@@ -46,6 +46,7 @@ class SignInViewModel @Inject constructor(
                             errorMessage = null
                         )
                     }
+                    UiState.Idle -> {}
                 }
             }
         }
