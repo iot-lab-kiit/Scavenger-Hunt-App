@@ -43,6 +43,7 @@ android {
 dependencies {
 
     implementation(project(":core:design"))
+    implementation(project(":core:network"))
 
     // Base Dependencies : -------------------------------------------------------
 

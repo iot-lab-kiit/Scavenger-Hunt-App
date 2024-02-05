@@ -10,10 +10,26 @@ import `in`.iot.lab.dashboard.ui.screen.DashboardScreen
 
 const val DASHBOARD_ROOT = "dashboard_route"
 
-sealed class DashboardRoutes(val route: String, @DrawableRes val icon: Int) {
-    object Team : DashboardRoutes("team_route", R.drawable.team)
-    object Play : DashboardRoutes("play_route", R.drawable.home)
-    object Leaderboard : DashboardRoutes("leaderboard_route", R.drawable.leaderboard)
+sealed class DashboardRoutes(
+    val route: String,
+    @DrawableRes val icon: Int,
+    @DrawableRes val selectedIcon: Int
+) {
+    data object Team : DashboardRoutes(
+        route = "team_route",
+        icon = R.drawable.ic_group_outline,
+        selectedIcon = R.drawable.ic_group
+    )
+    data object Play : DashboardRoutes(
+        route = "play_route",
+        icon = R.drawable.ic_home_outline,
+        selectedIcon = R.drawable.ic_home
+    )
+    data object Leaderboard : DashboardRoutes(
+        route = "leaderboard_route",
+        icon = R.drawable.ic_leaderboard_outline,
+        selectedIcon = R.drawable.ic_leaderboard
+    )
 }
 
 fun NavController.navigateToDashboard(navOptions: NavOptions) = navigate(DASHBOARD_ROOT, navOptions)
