@@ -37,12 +37,12 @@ fun LdrBoardScreen(
         HeaderText(
             text = "LEADERBOARD",
             modifier = Modifier
-                .padding(top = 78.dp, start = 42.dp)
+                .padding(top = 64.dp, start = 42.dp)
                 .height(32.dp)
                 .requiredWidth(240.dp)
         )
 
-        Divider(Modifier.padding(70.dp), color = Color(0xFF11151C))
+        Divider(Modifier.padding(40.dp), color = Color.Transparent)
 
         ThemeCard(text1 = "Team Name",
             text2 = "Points",
