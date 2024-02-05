@@ -42,6 +42,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core:design"))
+
     // Base Dependencies : -------------------------------------------------------
 
     implementation("androidx.core:core-ktx:1.12.0")
