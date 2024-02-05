@@ -47,12 +47,13 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: RoundedCornerShape = RoundedCornerShape(percent = 50),
+    contentPadding: PaddingValues = PaddingValues(25.dp, 0.dp),
     content: @Composable() (RowScope.() -> Unit)
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
-        contentPadding = PaddingValues(25.dp, 0.dp),
+        contentPadding = contentPadding,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -72,12 +73,13 @@ fun SecondaryButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: RoundedCornerShape = RoundedCornerShape(percent = 50),
+    contentPadding: PaddingValues = PaddingValues(25.dp, 0.dp),
     content: @Composable() (RowScope.() -> Unit)
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
-        contentPadding = PaddingValues(25.dp, 0.dp),
+        contentPadding = contentPadding,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.surface,
