@@ -37,7 +37,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import `in`.iot.lab.dashboard.R
+import `in`.iot.lab.design.R
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
@@ -54,7 +54,7 @@ internal fun TeamScreen() {
             .fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.matrix),
+            painter = painterResource(id = R.drawable.matrix_background),
             contentDescription = "Bottom",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -101,7 +101,7 @@ internal fun TeamScreen() {
 }
 
 data class Comet(var angle: Float, var isDone: Boolean, val color: Color) {
-    var distance = (4 * Math.random()).toInt() / 4f
+    var distance = (4 * Math.random()).toInt() / 4f + (0.1f * Math.random()).toFloat()
     val offColor = lerp(color, Color.Black, 0.3f)
     val speed = 1f + Math.random().toFloat() * 0.3f
 }
