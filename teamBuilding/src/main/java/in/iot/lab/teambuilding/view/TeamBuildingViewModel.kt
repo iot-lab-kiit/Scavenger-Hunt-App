@@ -3,12 +3,16 @@ package `in`.iot.lab.teambuilding.view
 import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.installer.ModuleInstaller
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
+import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,9 +31,31 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
+    private val repository: TeamBuildingRepo,
+    firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner,
     private val moduleInstaller: ModuleInstaller
 ) : ViewModel() {
+
+    // Firebase UID
+    private val userFirebaseId = firebase.currentUser?.uid ?: ""
+
+    private val _userData = MutableStateFlow<UiState<RemoteUser>>(UiState.Idle)
+    val userData = _userData.asStateFlow()
+
+    fun getUserById(userId: String = userFirebaseId) {
+
+        if (_userData.value is UiState.Loading)
+            return
+
+        _userData.value = UiState.Loading
+
+        viewModelScope.launch {
+            _userData.value = repository
+                .getUserById(userId)
+                .toUiState()
+        }
+    }
 
 
     /**
