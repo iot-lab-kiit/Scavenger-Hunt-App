@@ -25,7 +25,7 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
  * @param setEvent This is used to pass events to the View Model from the UI Layer
  */
 @Composable
-fun TeamJoinScreenControl(
+internal fun JoinTeamScreenControl(
     installState: ModuleInstallerState,
     teamJoiningApiState: UiState<String>,
     navController: NavController,

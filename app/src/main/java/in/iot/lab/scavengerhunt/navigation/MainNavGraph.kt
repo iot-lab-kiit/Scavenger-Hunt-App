@@ -9,7 +9,8 @@ import com.google.firebase.ktx.Firebase
 import `in`.iot.lab.authorization.ui.navigation.SIGNIN_ROUTE
 import `in`.iot.lab.authorization.ui.navigation.signInScreen
 import `in`.iot.lab.dashboard.ui.navigation.dashboardScreen
-import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_ROUTE
+import `in`.iot.lab.dashboard.ui.navigation.navigateToDashboard
+import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_ROOT_ROUTE
 import `in`.iot.lab.teambuilding.view.navigation.navigateToTeamBuilding
 import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
 
@@ -22,7 +23,7 @@ import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
 @Composable
 fun MainNavGraph(navHostController: NavHostController) {
     val initialRoute =
-        if (Firebase.auth.currentUser != null) TEAM_BUILDING_ROUTE
+        if (Firebase.auth.currentUser != null) TEAM_BUILDING_ROOT_ROUTE
         else SIGNIN_ROUTE
     NavHost(
         navController = navHostController,
@@ -40,9 +41,18 @@ fun MainNavGraph(navHostController: NavHostController) {
                 )
             }
         )
+
         // Team - Building Nav Graph
-        teamNavGraph(navHostController)
-        // TODO: Navigate to dashboard once team building is done
+        teamNavGraph(navHostController) {
+            navHostController.navigateToDashboard(
+                navOptions = navOptions {
+                    popUpTo(TEAM_BUILDING_ROOT_ROUTE) {
+                        inclusive = true
+                    }
+                }
+            )
+        }
+
         // using DASHBOARD_ROOT as the route
         // Dashboard Nav Graph
         dashboardScreen()

@@ -36,13 +36,13 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 @Composable
 private fun DefaultPreview1() {
     ScavengerHuntTheme {
-        TeamHome(rememberNavController())
+        TeamHomeScreen(rememberNavController())
     }
 }
 
 
 @Composable
-fun TeamHome(navController: NavController) {
+internal fun TeamHomeScreen(navController: NavController) {
 
     // Background Related Customizations
     AppScreen {

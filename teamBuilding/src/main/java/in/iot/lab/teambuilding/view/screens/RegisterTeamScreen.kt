@@ -20,7 +20,7 @@ import `in`.iot.lab.qrcode.generator.QrGenerator
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 
 @Composable
-fun TeamCreateQr(
+internal fun RegisterTeamScreenControl(
     teamName: String,
     createTeamState: UiState<String>,
     setEvent: (TeamBuildingEvent) -> Unit

@@ -21,7 +21,7 @@ import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.teambuilding.view.components.TeamBuildingOutlinedTextField
 
 @Composable
-fun TeamCreateScreen(onNavigateToQRScreen: (String) -> Unit) {
+internal fun CreateTeamScreenControl(onNavigateToQRScreen: (String) -> Unit) {
 
     // Team Name Input from the User
     var teamName by remember { mutableStateOf("") }
