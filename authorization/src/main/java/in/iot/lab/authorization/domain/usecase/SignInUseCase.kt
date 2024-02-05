@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import `in`.iot.lab.authorization.data.utils.await
 import `in`.iot.lab.authorization.domain.repository.AuthRepository
+import `in`.iot.lab.network.state.ResponseState
 import `in`.iot.lab.network.state.UiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -22,8 +23,13 @@ class SignInUseCase @Inject constructor(
                 val postAuthApiResult = repository.authenticateUserOnServer(userIdToken)
                 // TODO: Remove this delay once the server is ready
                 delay(2000)
-                if (postAuthApiResult.user != null) {
+                if (postAuthApiResult is ResponseState.Success && postAuthApiResult.data.user != null) {
                     emit(UiState.Success(result))
+                } else {
+                    // Logout the user if the server authentication fails as we are navigating
+                    // to teamBuilding screen based on if the current user is not or not
+                    repository.logout()
+                    emit(UiState.Failed("Something went wrong"))
                 }
             } else {
                 emit(UiState.Failed("Something went wrong"))
