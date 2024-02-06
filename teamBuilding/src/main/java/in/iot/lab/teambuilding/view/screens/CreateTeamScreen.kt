@@ -65,7 +65,7 @@ internal fun CreateTeamScreenControl(
         // Failed State
         is UiState.Failed -> {
             ErrorDialog(onCancel = {}) {
-                setEvent(TeamBuildingEvent.CreateTeamApiCall)
+                setEvent(TeamBuildingEvent.NetworkIO.CreateTeamApiCall)
             }
         }
 
@@ -99,7 +99,7 @@ private fun CreateTeamIdleScreen(
                         isCreateTeamLast = false
                     }
                 ) {
-                    setEvent(TeamBuildingEvent.CreateTeamApiCall)
+                    setEvent(TeamBuildingEvent.NetworkIO.CreateTeamApiCall)
                 }
             }
         }
@@ -122,7 +122,7 @@ private fun CreateTeamIdleScreen(
                 modifier = Modifier.padding(horizontal = 32.dp),
                 input = teamName,
                 onValueChange = {
-                    setEvent(TeamBuildingEvent.SetTeamName(it))
+                    setEvent(TeamBuildingEvent.Helper.SetTeamName(it))
                 },
                 labelString = "Team Name"
             )

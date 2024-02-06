@@ -2,11 +2,17 @@ package `in`.iot.lab.teambuilding.view.events
 
 sealed class TeamBuildingEvent {
 
-    data object GetUserRegistrationData : TeamBuildingEvent()
+    sealed class NetworkIO : TeamBuildingEvent() {
+        data object GetUserRegistrationData : NetworkIO()
 
-    data class SetTeamName(val teamName: String) : TeamBuildingEvent()
+        data object CreateTeamApiCall : NetworkIO()
+    }
 
-    data object CreateTeamApiCall : TeamBuildingEvent()
+    sealed class ScannerIO : TeamBuildingEvent() {
+        data object CheckScannerAvailability : ScannerIO()
+    }
 
-    data object CheckScannerAvailability : TeamBuildingEvent()
+    sealed class Helper : TeamBuildingEvent() {
+        data class SetTeamName(val teamName: String) : Helper()
+    }
 }

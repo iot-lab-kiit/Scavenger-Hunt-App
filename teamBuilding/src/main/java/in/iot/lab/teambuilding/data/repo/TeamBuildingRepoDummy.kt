@@ -58,8 +58,20 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
         }
     }
 
-    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
-        return ResponseState.Success(RemoteTeam())
+    override suspend fun createTeam(): ResponseState<RemoteTeam> {
+        return ResponseState.Success(provideRemoteTeam())
+    }
+
+    override suspend fun joinTeam(): ResponseState<RemoteTeam> {
+        return ResponseState.Success(provideRemoteTeam())
+    }
+
+    override suspend fun registerTeam(): ResponseState<RemoteTeam> {
+        return ResponseState.Success(provideRemoteTeam())
+    }
+
+    override suspend fun getTeamById(): ResponseState<RemoteTeam> {
+        return ResponseState.Success(provideRemoteTeam())
     }
 
     private fun provideRemoteUser(): RemoteUser {

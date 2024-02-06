@@ -12,7 +12,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import `in`.iot.lab.network.state.UiState
-import `in`.iot.lab.teambuilding.view.TeamBuildingViewModel
+import `in`.iot.lab.teambuilding.view.vm.TeamBuildingViewModel
 import `in`.iot.lab.teambuilding.view.screens.CreateTeamScreenControl
 import `in`.iot.lab.teambuilding.view.screens.RegisterTeamScreenControl
 import `in`.iot.lab.teambuilding.view.screens.JoinTeamScreenControl

@@ -34,7 +34,7 @@ internal fun JoinTeamScreenControl(
 
     // Starting the Scanner Flow in the View Model
     LaunchedEffect(Unit) {
-        setEvent(TeamBuildingEvent.CheckScannerAvailability)
+        setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -57,7 +57,7 @@ internal fun JoinTeamScreenControl(
                     text = installState.exception.message.toString(),
                     onCancel = { navController.popBackStack() }
                 ) {
-                    setEvent(TeamBuildingEvent.CheckScannerAvailability)
+                    setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
                 }
             }
 
@@ -93,7 +93,7 @@ internal fun JoinTeamScreenControl(
                     text = teamJoiningApiState.message,
                     onCancel = { navController.popBackStack() }
                 ) {
-                    setEvent(TeamBuildingEvent.CheckScannerAvailability)
+                    setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
                 }
             }
         }

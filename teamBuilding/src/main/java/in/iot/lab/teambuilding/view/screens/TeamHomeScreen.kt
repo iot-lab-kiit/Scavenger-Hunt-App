@@ -88,7 +88,7 @@ internal fun TeamHomeScreenControl(
 
         // Idle State
         is UserRegistrationState.Idle -> {
-            setEvent(TeamBuildingEvent.GetUserRegistrationData)
+            setEvent(TeamBuildingEvent.NetworkIO.GetUserRegistrationData)
         }
 
         // Loading State
@@ -119,7 +119,7 @@ internal fun TeamHomeScreenControl(
                     navController.popBackStack()
                 },
                 onTryAgain = {
-                    setEvent(TeamBuildingEvent.GetUserRegistrationData)
+                    setEvent(TeamBuildingEvent.NetworkIO.GetUserRegistrationData)
                 }
             )
         }

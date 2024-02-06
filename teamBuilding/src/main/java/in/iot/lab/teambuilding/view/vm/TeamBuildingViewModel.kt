@@ -1,4 +1,4 @@
-package `in`.iot.lab.teambuilding.view
+package `in`.iot.lab.teambuilding.view.vm
 
 import android.util.Log.d
 import androidx.lifecycle.ViewModel
@@ -217,19 +217,19 @@ class TeamBuildingViewModel @Inject constructor(
     fun uiListener(event: TeamBuildingEvent) {
         when (event) {
 
-            is TeamBuildingEvent.GetUserRegistrationData -> {
+            is TeamBuildingEvent.NetworkIO.GetUserRegistrationData -> {
                 getUserRegistrationData()
             }
 
-            is TeamBuildingEvent.SetTeamName -> {
+            is TeamBuildingEvent.Helper.SetTeamName -> {
                 setTeamName(event.teamName)
             }
 
-            is TeamBuildingEvent.CheckScannerAvailability -> {
+            is TeamBuildingEvent.ScannerIO.CheckScannerAvailability -> {
                 checkScannerModule()
             }
 
-            is TeamBuildingEvent.CreateTeamApiCall -> {
+            is TeamBuildingEvent.NetworkIO.CreateTeamApiCall -> {
                 createTeamApi()
             }
         }
