@@ -4,9 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +29,7 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 fun TeamTopBar(
     teamName: String = "Team 1",
     teamScore: Int = 0,
-    onTeamScoreClick: () -> Unit = {}
+    onNavigateToTeamDetails: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -39,17 +42,17 @@ fun TeamTopBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
+        TeamHeader(
             modifier = Modifier.weight(0.8f),
-            text = teamName,
-            style = MaterialTheme.typography.headlineSmall.copy(
-                fontFamily = FontFamily(Font(R.font.orbitron_regular))
-            ),
-            letterSpacing = 4.sp
+            teamName = teamName,
+            onClick = onNavigateToTeamDetails
         )
+        Spacer(modifier = Modifier.weight(0.05f))
         PrimaryButton(
-            modifier = Modifier.size(60.dp, 30.dp).weight(0.15f),
-            onClick = onTeamScoreClick,
+            modifier = Modifier
+                .size(60.dp, 30.dp)
+                .weight(0.15f),
+            onClick = {},
             contentPadding = PaddingValues(0.dp),
             content = {
                 Row(
@@ -74,5 +77,42 @@ fun TeamTopBar(
 private fun TeamTopBarPreview() {
     ScavengerHuntTheme {
         TeamTopBar()
+    }
+}
+
+
+@Composable
+private fun TeamHeader(
+    modifier: Modifier,
+    teamName: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = teamName,
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontFamily = FontFamily(Font(R.font.orbitron_regular))
+            ),
+            letterSpacing = 4.sp
+        )
+
+        PrimaryButton(
+            modifier = Modifier.size(28.dp),
+            onClick = onClick,
+            contentPadding = PaddingValues(0.dp),
+            shape = RoundedCornerShape(8.dp),
+
+        ) {
+            Icon(
+                painter = painterResource(`in`.iot.lab.dashboard.R.drawable.ic_arrow_forward),
+                modifier = Modifier.size(16.dp),
+                contentDescription = "Go to Team Details",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }

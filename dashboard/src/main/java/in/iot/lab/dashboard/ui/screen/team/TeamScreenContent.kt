@@ -33,7 +33,7 @@ fun TeamScreenContent(
     team: RemoteTeam,
     mainQuests: List<Boolean>,
     sideQuests: List<Boolean>,
-    onTeamScoreClick: () -> Unit
+    onNavigateToTeamDetails: () -> Unit
 ) {
     Box(modifier = modifier) {
         Image(
@@ -49,9 +49,9 @@ fun TeamScreenContent(
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
             TeamTopBar(
-                teamName = team.teamName ?: "Team",
+                teamName = team.teamName ?: "Team Name",
                 teamScore = team.score ?: 0,
-                onTeamScoreClick = onTeamScoreClick
+                onNavigateToTeamDetails = onNavigateToTeamDetails
             )
             Spacer(modifier = Modifier.size(40.dp))
             ProgressAnimation(
