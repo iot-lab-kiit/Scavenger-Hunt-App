@@ -20,25 +20,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavController
 import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.teambuilding.view.components.ConfirmDialogUI
 import `in`.iot.lab.teambuilding.view.components.TeamBuildingOutlinedTextField
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
-import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_JOIN_ROUTE
-import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_REGISTER_ROUTE
+
 
 @Composable
 internal fun CreateTeamScreenControl(
     teamName: String,
-    createTeamState: UiState<String>,
-    navController: NavController,
-    setEvent: (TeamBuildingEvent) -> Unit
+    createTeamState: UiState<RemoteTeam>,
+    setEvent: (TeamBuildingEvent) -> Unit,
+    onNavigateToRegistration: () -> Unit
 ) {
 
     // Create Team Api State
@@ -59,7 +58,7 @@ internal fun CreateTeamScreenControl(
 
         // Success State
         is UiState.Success -> {
-            navController.navigate(TEAM_BUILDING_REGISTER_ROUTE)
+            onNavigateToRegistration()
         }
 
         // Failed State
@@ -124,7 +123,7 @@ private fun CreateTeamIdleScreen(
                 onValueChange = {
                     setEvent(TeamBuildingEvent.Helper.SetTeamName(it))
                 },
-                labelString = "Team Name"
+                labelString = "TEAM NAME"
             )
 
             // Create Team Button
@@ -144,7 +143,7 @@ private fun CreateTeamIdleScreen(
                     .fillMaxWidth()
                     .height(height = 56.dp)
             ) {
-                Text(text = "Create Team")
+                Text(text = "CREATE TEAM")
             }
         }
     }

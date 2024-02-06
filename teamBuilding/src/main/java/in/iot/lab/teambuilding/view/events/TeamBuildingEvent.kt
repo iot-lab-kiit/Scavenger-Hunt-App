@@ -6,6 +6,10 @@ sealed class TeamBuildingEvent {
         data object GetUserRegistrationData : NetworkIO()
 
         data object CreateTeamApiCall : NetworkIO()
+
+        data object RegisterTeamApiCall : NetworkIO()
+
+        data object GetTeamData : NetworkIO()
     }
 
     sealed class ScannerIO : TeamBuildingEvent() {

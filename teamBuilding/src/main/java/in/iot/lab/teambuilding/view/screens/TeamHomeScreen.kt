@@ -24,8 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
@@ -36,9 +34,6 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.teambuilding.view.components.ConfirmDialogUI
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
-import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_CREATE_ROUTE
-import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_JOIN_ROUTE
-import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_REGISTER_ROUTE
 import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
 
 // Preview Function
@@ -51,7 +46,7 @@ import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
 @Composable
 private fun DefaultPreview1() {
     ScavengerHuntTheme {
-        TeamHomeNotRegisteredScreen(rememberNavController())
+        TeamHomeNotRegisteredScreen({}, {})
     }
 }
 
@@ -66,10 +61,13 @@ private fun DefaultPreview1() {
 private fun DefaultPreview2() {
     ScavengerHuntTheme {
         TeamHomeScreenControl(
-            navController = rememberNavController(),
+            navigateToCreate = {},
+            navigateToJoin = {},
+            navigateToRegister = {},
             userState = UserRegistrationState.Error("Failed to find User"),
             setEvent = {},
-            onTeamRegistered = {}
+            onTeamRegistered = {},
+            onBackPress = {}
         )
     }
 }
@@ -77,8 +75,11 @@ private fun DefaultPreview2() {
 
 @Composable
 internal fun TeamHomeScreenControl(
-    navController: NavController,
     userState: UserRegistrationState<RemoteUser>,
+    navigateToCreate: () -> Unit,
+    navigateToJoin: () -> Unit,
+    navigateToRegister: () -> Unit,
+    onBackPress: () -> Unit,
     setEvent: (TeamBuildingEvent) -> Unit,
     onTeamRegistered: () -> Unit
 ) {
@@ -98,12 +99,15 @@ internal fun TeamHomeScreenControl(
 
         // Not Registered and not in Team State
         is UserRegistrationState.NotRegistered -> {
-            TeamHomeNotRegisteredScreen(navController = navController)
+            TeamHomeNotRegisteredScreen(
+                navigateToCreate = navigateToCreate,
+                navigateToJoin = navigateToJoin
+            )
         }
 
         // In a Team and not Registered State
         is UserRegistrationState.InTeam -> {
-            navController.navigate(TEAM_BUILDING_REGISTER_ROUTE)
+            navigateToRegister()
         }
 
         // User Team is Registered State
@@ -115,9 +119,7 @@ internal fun TeamHomeScreenControl(
         is UserRegistrationState.Error -> {
             ErrorDialog(
                 text = userState.message,
-                onCancel = {
-                    navController.popBackStack()
-                },
+                onCancel = onBackPress,
                 onTryAgain = {
                     setEvent(TeamBuildingEvent.NetworkIO.GetUserRegistrationData)
                 }
@@ -128,7 +130,10 @@ internal fun TeamHomeScreenControl(
 
 
 @Composable
-private fun TeamHomeNotRegisteredScreen(navController: NavController) {
+private fun TeamHomeNotRegisteredScreen(
+    navigateToCreate: () -> Unit,
+    navigateToJoin: () -> Unit
+) {
 
     var isJoinLast by remember { mutableStateOf(false) }
 
@@ -154,10 +159,9 @@ private fun TeamHomeNotRegisteredScreen(navController: NavController) {
                     imageId = R.drawable.server_error,
                     onDismiss = {
                         isJoinLast = false
-                    }
-                ) {
-                    navController.navigate(TEAM_BUILDING_JOIN_ROUTE)
-                }
+                    },
+                    onContinue = navigateToJoin
+                )
             }
         }
 
@@ -179,9 +183,7 @@ private fun TeamHomeNotRegisteredScreen(navController: NavController) {
                     .padding(vertical = 8.dp, horizontal = 32.dp)
                     .fillMaxWidth()
                     .height(height = 56.dp),
-                onClick = {
-                    navController.navigate(TEAM_BUILDING_CREATE_ROUTE)
-                },
+                onClick = navigateToCreate,
             ) {
                 Text(text = "CREATE TEAM")
             }

@@ -1,10 +1,11 @@
 package `in`.iot.lab.teambuilding.view.vm
 
-import android.util.Log.d
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
@@ -16,7 +17,6 @@ import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
 import `in`.iot.lab.teambuilding.view.state.toUserRegistrationState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -62,10 +62,12 @@ class TeamBuildingViewModel @Inject constructor(
 
             // Calling the Api
             _userRegistrationState.value = repository
-//                .getUserById(userFirebaseId) // TODO: Remove comment for Production
-                .getUserById("3.1") // TODO: Remove comment for production
+//                .getUserById(userFirebaseId)
+                .getUserById("3.1")
                 .toUiState()
                 .toUserRegistrationState()
+
+            TODO("Remove comment for Production and comment the other line")
         }
     }
 
@@ -88,7 +90,7 @@ class TeamBuildingViewModel @Inject constructor(
     /**
      * This variable is used to define the create team api call state
      */
-    private val _createTeamApiState = MutableStateFlow<UiState<String>>(UiState.Idle)
+    private val _createTeamApiState = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val createTeamApiState = _createTeamApiState.asStateFlow()
 
 
@@ -105,14 +107,37 @@ class TeamBuildingViewModel @Inject constructor(
         _createTeamApiState.value = UiState.Loading
 
         viewModelScope.launch {
+            _createTeamApiState.value = repository
+                .createTeam()
+                .toUiState()
+        }
+    }
 
-            // for testing
-            delay(2000)
 
-            // TODO :- Do the actual API call here
+    /**
+     * This variable defines the team joining api state
+     */
+    private val _teamJoiningApiState = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
+    val teamJoiningApiState = _teamJoiningApiState.asStateFlow()
 
-            _createTeamApiState.value =
-                UiState.Success(data = "${_teamName.value} Uid is this this this")
+
+    /**
+     * This function calls the api to Add Team members to the Team
+     */
+    private fun addTeamMember(teamId: String) {
+
+        // Checking if one request is already sent to the Server
+        if (_teamJoiningApiState.value is UiState.Loading)
+            return
+
+        _teamJoiningApiState.value = UiState.Loading
+
+        viewModelScope.launch {
+            _teamJoiningApiState.value = repository
+                .joinTeam()
+                .toUiState()
+
+            TODO("Attach the team Id for the Api call")
         }
     }
 
@@ -158,13 +183,6 @@ class TeamBuildingViewModel @Inject constructor(
 
 
     /**
-     * This variable defines the team joining api state
-     */
-    private val _teamJoiningApiState = MutableStateFlow<UiState<String>>(UiState.Idle)
-    val teamJoiningApiState = _teamJoiningApiState.asStateFlow()
-
-
-    /**
      * This function starts the [QrCodeScanner] scanner and start to scan for QR Codes.
      */
     private fun startScanner() {
@@ -195,20 +213,6 @@ class TeamBuildingViewModel @Inject constructor(
 
 
     /**
-     * This function calls the api to Add Team members to the Team
-     */
-    private fun addTeamMember(teamId: String) {
-
-        // Checking if one request is already sent to the Server
-        if (_teamJoiningApiState.value is UiState.Loading)
-            return
-
-        _teamJoiningApiState.value = UiState.Loading
-        d("Team Building View Model", teamId)
-    }
-
-
-    /**
      * This function receives the events from the UI Layer and calls the Functions according to the
      * events received.
      *
@@ -231,6 +235,14 @@ class TeamBuildingViewModel @Inject constructor(
 
             is TeamBuildingEvent.NetworkIO.CreateTeamApiCall -> {
                 createTeamApi()
+            }
+
+            is TeamBuildingEvent.NetworkIO.RegisterTeamApiCall -> {
+                TODO("Register Team Api call")
+            }
+
+            is TeamBuildingEvent.NetworkIO.GetTeamData -> {
+                TODO("Get Team Data and pass State")
             }
         }
     }

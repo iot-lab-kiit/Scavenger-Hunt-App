@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
@@ -27,7 +28,7 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 @Composable
 internal fun JoinTeamScreenControl(
     installState: ModuleInstallerState,
-    teamJoiningApiState: UiState<String>,
+    teamJoiningApiState: UiState<RemoteTeam>,
     navController: NavController,
     setEvent: (TeamBuildingEvent) -> Unit
 ) {
@@ -45,8 +46,8 @@ internal fun JoinTeamScreenControl(
             // Currently Downloading
             is ModuleInstallerState.Downloading -> {
 
-                // TODO :- Remove Progress Indicator and add normal Circular Progress Indicator
                 LinearProgressIndicator(progress = installState.progress.toFloat())
+                TODO("Remove Progress Indicator and add normal Circular Progress Indicator")
             }
 
             // Download Failed
@@ -82,7 +83,7 @@ internal fun JoinTeamScreenControl(
             // Api call is successful
             is UiState.Success<*> -> {
 
-                // TODO :- Change screens
+                TODO("Change screens")
             }
 
             // Api Call Failed

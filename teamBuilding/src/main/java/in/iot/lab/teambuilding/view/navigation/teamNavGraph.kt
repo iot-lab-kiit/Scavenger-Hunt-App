@@ -10,8 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
-import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.teambuilding.view.vm.TeamBuildingViewModel
 import `in`.iot.lab.teambuilding.view.screens.CreateTeamScreenControl
 import `in`.iot.lab.teambuilding.view.screens.RegisterTeamScreenControl
@@ -32,6 +32,24 @@ internal const val TEAM_BUILDING_JOIN_ROUTE = "team-building-join-route"
  */
 fun NavController.navigateToTeamBuilding(navOptions: NavOptions? = null) {
     this.navigate(TEAM_BUILDING_ROOT_ROUTE, navOptions)
+}
+
+internal fun NavController.navigateToRegister() {
+    this.navigate(TEAM_BUILDING_REGISTER_ROUTE) {
+        navOptions {
+            popUpTo(TEAM_BUILDING_REGISTER_ROUTE) {
+                inclusive = true
+            }
+        }
+    }
+}
+
+internal fun NavController.navigateToCreate() {
+    this.navigate(TEAM_BUILDING_CREATE_ROUTE)
+}
+
+internal fun NavController.navigateToJoin() {
+    this.navigate(TEAM_BUILDING_JOIN_ROUTE)
 }
 
 /**
@@ -64,10 +82,13 @@ fun NavGraphBuilder.teamNavGraph(
 
             // Team Home screen
             TeamHomeScreenControl(
-                navController = navController,
                 userState = userState,
+                navigateToRegister = navController::navigateToRegister,
+                navigateToJoin = navController::navigateToJoin,
+                navigateToCreate = navController::navigateToCreate,
                 setEvent = viewModel::uiListener,
-                onTeamRegistered = onTeamRegistered
+                onTeamRegistered = onTeamRegistered,
+                onBackPress = navController::popBackStack
             )
         }
 
@@ -85,8 +106,8 @@ fun NavGraphBuilder.teamNavGraph(
             CreateTeamScreenControl(
                 teamName = teamName,
                 createTeamState = createTeamState,
-                navController = navController,
-                setEvent = viewModel::uiListener
+                setEvent = viewModel::uiListener,
+                onNavigateToRegistration = navController::navigateToRegister
             )
         }
 
@@ -99,8 +120,14 @@ fun NavGraphBuilder.teamNavGraph(
             // State Variables
             val createTeamState = viewModel.createTeamApiState.collectAsState().value
 
+
             // Team QR Generating Screen
-            RegisterTeamScreenControl(createTeamState = createTeamState as UiState.Success<String>)
+            RegisterTeamScreenControl(
+                createTeamState = createTeamState,
+                setEvent = viewModel::uiListener,
+                registerTeamState = createTeamState,
+                onTeamRegistered = onTeamRegistered
+            )
         }
 
         // Join Screen Route
