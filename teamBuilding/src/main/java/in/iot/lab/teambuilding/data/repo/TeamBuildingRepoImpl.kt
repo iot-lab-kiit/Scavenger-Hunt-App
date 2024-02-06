@@ -28,11 +28,19 @@ class TeamBuildingRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
-        return withContext(Dispatchers.IO) {
-            getRetrofitResponseState {
-                apiService.getTeamById(teamId = teamId)
-            }
-        }
+    override suspend fun createTeam(): ResponseState<RemoteTeam> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun joinTeam(): ResponseState<RemoteTeam> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun registerTeam(): ResponseState<RemoteTeam> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getTeamById(): ResponseState<RemoteTeam> {
+        TODO("Not yet implemented")
     }
 }
