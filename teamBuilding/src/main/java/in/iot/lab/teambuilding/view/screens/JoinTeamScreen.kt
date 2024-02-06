@@ -2,14 +2,14 @@ package `in`.iot.lab.teambuilding.view.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.LoadingTransition
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
@@ -25,16 +25,16 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
  * @param setEvent This is used to pass events to the View Model from the UI Layer
  */
 @Composable
-fun TeamJoinScreenControl(
+internal fun JoinTeamScreenControl(
     installState: ModuleInstallerState,
-    teamJoiningApiState: UiState<String>,
+    teamJoiningApiState: UiState<RemoteTeam>,
     navController: NavController,
     setEvent: (TeamBuildingEvent) -> Unit
 ) {
 
     // Starting the Scanner Flow in the View Model
     LaunchedEffect(Unit) {
-        setEvent(TeamBuildingEvent.CheckScannerAvailability)
+        setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -45,8 +45,8 @@ fun TeamJoinScreenControl(
             // Currently Downloading
             is ModuleInstallerState.Downloading -> {
 
-                // TODO :- Remove Progress Indicator and add normal Circular Progress Indicator
                 LinearProgressIndicator(progress = installState.progress.toFloat())
+                TODO("Remove Progress Indicator and add normal Circular Progress Indicator")
             }
 
             // Download Failed
@@ -57,7 +57,7 @@ fun TeamJoinScreenControl(
                     text = installState.exception.message.toString(),
                     onCancel = { navController.popBackStack() }
                 ) {
-                    setEvent(TeamBuildingEvent.CheckScannerAvailability)
+                    setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
                 }
             }
 
@@ -76,13 +76,13 @@ fun TeamJoinScreenControl(
 
             // Api Call is being queued
             is UiState.Loading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                LoadingTransition()
             }
 
             // Api call is successful
             is UiState.Success<*> -> {
 
-                // TODO :- Change screens
+                TODO("Change screens")
             }
 
             // Api Call Failed
@@ -93,7 +93,7 @@ fun TeamJoinScreenControl(
                     text = teamJoiningApiState.message,
                     onCancel = { navController.popBackStack() }
                 ) {
-                    setEvent(TeamBuildingEvent.CheckScannerAvailability)
+                    setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
                 }
             }
         }

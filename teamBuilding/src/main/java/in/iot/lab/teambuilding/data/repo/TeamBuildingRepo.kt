@@ -7,6 +7,8 @@ import `in`.iot.lab.network.state.ResponseState
 interface TeamBuildingRepo {
 
     suspend fun getUserById(userId: String): ResponseState<RemoteUser>
-    suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam>
-
+    suspend fun createTeam(): ResponseState<RemoteTeam>
+    suspend fun joinTeam(): ResponseState<RemoteTeam>
+    suspend fun registerTeam(): ResponseState<RemoteTeam>
+    suspend fun getTeamById(): ResponseState<RemoteTeam>
 }
