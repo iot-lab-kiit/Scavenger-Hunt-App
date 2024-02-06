@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.iot.lab.dashboard.ui.screen.leaderboard.LeaderboardScreen
 import `in`.iot.lab.dashboard.ui.screen.play.PlayScreen
-import `in`.iot.lab.dashboard.ui.screen.team.TeamScreen
+import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 
 @Composable
 internal fun DashboardNavGraph(navController: NavHostController) {
@@ -16,7 +16,7 @@ internal fun DashboardNavGraph(navController: NavHostController) {
         startDestination = DashboardRoutes.Team.route
     ) {
         composable(DashboardRoutes.Team.route) {
-            TeamScreen()
+            TeamRoute()
         }
         composable(DashboardRoutes.Play.route) {
             PlayScreen()
