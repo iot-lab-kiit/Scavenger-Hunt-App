@@ -4,14 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.scavengerhunt.navigation.MainNavGraph
+import `in`.iot.lab.scavengerhunt.screen.SplashScreen
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -20,14 +26,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ScavengerHuntTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                Scaffold {
+                    AppScreen(modifier = Modifier.padding(it)) {
+                        // Variable which says whether to show the splash screen or not
+                        var showSplash by remember { mutableStateOf(true) }
 
-                    // Calling the Main Nav Graph and linking the other screens slowly
-                    MainNavGraph(navHostController = rememberNavController())
+                        // Checking whether to show splash screen or the App
+                        if (showSplash)
+                            SplashScreen { showSplash = false }
+                        else
+                        // Main Nav Graph of the App
+                            MainNavGraph(navHostController = rememberNavController())
+                    }
                 }
             }
         }
