@@ -20,7 +20,7 @@ interface TeamBuildingApiService {
      */
     @GET(NetworkConstants.GET_USER_BY_ID_ENDPOINT)
     suspend fun getUserById(
-        @Path("{id}") userId: String
+        @Path("id") userId: String
     ): Response<RemoteUser>
 
 
@@ -29,6 +29,6 @@ interface TeamBuildingApiService {
      */
     @GET(NetworkConstants.GET_TEAM_BY_ID_ENDPOINT)
     suspend fun getTeamById(
-        @Path("{id}") teamId: String
+        @Path("id") teamId: String
     ): Response<RemoteTeam>
 }

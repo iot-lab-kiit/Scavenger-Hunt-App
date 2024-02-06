@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.dashboard.data.repository.DashboardRepository
+import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.data.models.team.RemoteTeam
+import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
-import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -31,9 +32,80 @@ class TeamScreenViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
-            _teamData.value = repository
-                .getTeamById(userId)
-                .toUiState()
+//            _teamData.value = repository
+//                .getTeamById(userId)
+//                .toUiState()
+
+            _teamData.value = UiState.Success(fakeTeam)
         }
     }
 }
+
+// TODO: Only for testing
+private val fakeTeam = RemoteTeam(
+    teamName = "Team 1",
+    teamLead = RemoteUser(
+        name = "Member 1",
+        email = ""
+    ),
+    teamMembers = listOf(
+        RemoteUser(
+            name = "Member 1",
+            email = "",
+            isLead = true
+        ),
+        RemoteUser(
+            name = "Member 2",
+            email = ""
+        ),
+        RemoteUser(
+            name = "Member 3",
+            email = ""
+        ),
+        RemoteUser(
+            name = "Member 4",
+            email = ""
+        ),
+        RemoteUser(
+            name = "Member 5",
+            email = ""
+        )
+    ),
+    mainQuest = listOf(
+        RemoteHint(
+            id = "1",
+            answer = "This is a hint",
+            campus = 1,
+            question = "What is this?",
+            type = 2
+        ),
+        RemoteHint(
+            id = "2",
+            answer = "This is a hint",
+            campus = 1,
+            question = "What is this?",
+            type = 2
+        ),
+        RemoteHint(
+            id = "3",
+            answer = "This is a hint",
+            campus = 1,
+            question = "What is this?",
+            type = 2
+        ),
+        RemoteHint(
+            id = "4",
+            answer = "This is a hint",
+            campus = 1,
+            question = "What is this?",
+            type = 2
+        ),
+        RemoteHint(
+            id = "5",
+            answer = "This is a hint",
+            campus = 1,
+            question = "What is this?",
+            type = 2
+        )
+    )
+)
