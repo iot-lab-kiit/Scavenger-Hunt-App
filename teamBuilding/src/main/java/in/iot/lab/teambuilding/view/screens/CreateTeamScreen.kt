@@ -1,5 +1,7 @@
 package `in`.iot.lab.teambuilding.view.screens
 
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,17 +11,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.teambuilding.view.components.ConfirmDialogUI
 import `in`.iot.lab.teambuilding.view.components.TeamBuildingOutlinedTextField
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
+import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_JOIN_ROUTE
 import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_REGISTER_ROUTE
 
 @Composable
@@ -67,9 +78,32 @@ private fun CreateTeamIdleScreen(
     setEvent: (TeamBuildingEvent) -> Unit
 ) {
 
+    var isCreateTeamLast by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     // Default Background
     AppScreen {
+
+        AnimatedVisibility(visible = isCreateTeamLast) {
+            Dialog(
+                onDismissRequest = {
+                    isCreateTeamLast = false
+                }
+            ) {
+
+                ConfirmDialogUI(
+                    text = "Are you Sure you want to Continue? You won't be able to Join " +
+                            "Another Team after Joining one.",
+                    imageId = R.drawable.server_error,
+                    onDismiss = {
+                        isCreateTeamLast = false
+                    }
+                ) {
+                    setEvent(TeamBuildingEvent.CreateTeamApiCall)
+                }
+            }
+        }
+
 
         // Parent Composable
         Column(
@@ -95,7 +129,16 @@ private fun CreateTeamIdleScreen(
 
             // Create Team Button
             PrimaryButton(
-                onClick = { setEvent(TeamBuildingEvent.CreateTeamApiCall) },
+                onClick = {
+                    if (teamName == "" || teamName.isBlank() || teamName.isEmpty())
+                        Toast.makeText(
+                            context,
+                            "Empty String is not allowed",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    else
+                        isCreateTeamLast = true
+                },
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 32.dp)
                     .fillMaxWidth()
