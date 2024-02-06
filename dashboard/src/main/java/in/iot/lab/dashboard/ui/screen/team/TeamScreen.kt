@@ -27,7 +27,7 @@ import `in`.iot.lab.network.state.UiState
 @Composable
 internal fun TeamRoute(
     viewModel: TeamScreenViewModel = hiltViewModel(),
-    onTeamScoreClick: () -> Unit = {}
+    onNavigateToTeamDetails: () -> Unit = {}
 ) {
     val teamState by viewModel.teamData.collectAsState()
 
@@ -36,7 +36,7 @@ internal fun TeamRoute(
             val data = (teamState as UiState.Success<RemoteTeam>).data
             TeamScreen(
                 team = data,
-                onTeamScoreClick = onTeamScoreClick,
+                onNavigateToTeamDetails = onNavigateToTeamDetails,
                 mainQuests = data.route?.hints?.size ?: 0,
                 // TODO: Add sideQuests here, currently its not implemented in the RemoteTeam model
                 sideQuests = 10,
@@ -58,7 +58,7 @@ internal fun TeamScreen(
     mainQuestProgress: Int = 1,
     sideQuestProgress: Int = 3,
     team: RemoteTeam = RemoteTeam(),
-    onTeamScoreClick: () -> Unit = {}
+    onNavigateToTeamDetails: () -> Unit = {}
 ) {
     Scaffold(
         containerColor = background,
@@ -90,7 +90,7 @@ internal fun TeamScreen(
 //            mainQuestProgress = mainQuestProgress,
 //            sideQuestProgress = sideQuestProgress,
             team = team,
-            onTeamScoreClick = onTeamScoreClick
+            onNavigateToTeamDetails = onNavigateToTeamDetails
         )
     }
 }
