@@ -9,6 +9,7 @@ import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.DashboardScreen
 
 const val DASHBOARD_ROOT = "dashboard_route"
+internal const val TEAM_DETAILS_ROUTE = "team_details_route"
 
 sealed class DashboardRoutes(
     val route: String,

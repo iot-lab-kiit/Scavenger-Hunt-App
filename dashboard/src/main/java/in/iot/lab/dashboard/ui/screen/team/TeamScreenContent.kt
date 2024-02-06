@@ -21,9 +21,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import `in`.iot.lab.dashboard.ui.screen.team.components.ProgressAnimation
-import `in`.iot.lab.dashboard.ui.screen.team.components.RedProgressTheme
+import `in`.iot.lab.design.components.RedProgressTheme
 import `in`.iot.lab.dashboard.ui.screen.team.components.TeamTopBar
-import `in`.iot.lab.dashboard.ui.screen.team.components.ThemedProgressBar
+import `in`.iot.lab.design.components.ThemedProgressBar
 import `in`.iot.lab.design.R
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 
@@ -33,7 +33,7 @@ fun TeamScreenContent(
     team: RemoteTeam,
     mainQuests: List<Boolean>,
     sideQuests: List<Boolean>,
-    onTeamScoreClick: () -> Unit
+    onNavigateToTeamDetails: () -> Unit
 ) {
     Box(modifier = modifier) {
         Image(
@@ -49,9 +49,9 @@ fun TeamScreenContent(
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
             TeamTopBar(
-                teamName = team.teamName ?: "Team",
+                teamName = team.teamName ?: "Team Name",
                 teamScore = team.score ?: 0,
-                onTeamScoreClick = onTeamScoreClick
+                onNavigateToTeamDetails = onNavigateToTeamDetails
             )
             Spacer(modifier = Modifier.size(40.dp))
             ProgressAnimation(
