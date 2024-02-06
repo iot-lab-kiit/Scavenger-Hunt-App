@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import `in`.iot.lab.dashboard.ui.navigation.DashboardRoutes
 import `in`.iot.lab.dashboard.ui.screen.team.components.ProgressAnimation
-import `in`.iot.lab.dashboard.ui.screen.team.components.RedProgressTheme
+import `in`.iot.lab.design.components.RedProgressTheme
 import `in`.iot.lab.dashboard.ui.screen.team.components.TeamTopBar
-import `in`.iot.lab.dashboard.ui.screen.team.components.ThemedProgressBar
+import `in`.iot.lab.design.components.ThemedProgressBar
 import `in`.iot.lab.design.R
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 

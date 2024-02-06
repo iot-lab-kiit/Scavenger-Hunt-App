@@ -1,4 +1,4 @@
-package `in`.iot.lab.dashboard.ui.screen.team.components
+package `in`.iot.lab.design.components
 
 import androidx.compose.ui.graphics.Color
 

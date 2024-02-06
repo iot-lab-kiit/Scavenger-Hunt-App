@@ -44,7 +44,7 @@ object NetworkModule {
         // Logging Interceptor
         val httpLoggingInterceptor = HttpLoggingInterceptor()
             .apply {
-                level = HttpLoggingInterceptor.Level.BASIC
+                level = HttpLoggingInterceptor.Level.BODY
             }
 
         return OkHttpClient
