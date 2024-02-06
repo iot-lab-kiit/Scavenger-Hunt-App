@@ -1,35 +1,22 @@
 package `in`.iot.lab.teambuilding.view.screens
 
-import android.util.Log.d
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.iot.lab.design.components.AppScreen
-import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.generator.QrGenerator
-import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
+
 
 @Composable
-internal fun RegisterTeamScreenControl(
-    teamName: String,
-    createTeamState: UiState<String>,
-    setEvent: (TeamBuildingEvent) -> Unit
-) {
-
-    // Calling the Api when the screen is composed first time
-    LaunchedEffect(Unit) {
-        setEvent(TeamBuildingEvent.CreateTeamApiCall(teamName = teamName))
-    }
+internal fun RegisterTeamScreenControl(createTeamState: UiState.Success<String>) {
 
     // Default App Background
     AppScreen(
@@ -49,30 +36,7 @@ internal fun RegisterTeamScreenControl(
             Spacer(modifier = Modifier.height(50.dp))
 
             // QR Code
-            when (createTeamState) {
-
-                // Loading State
-                is UiState.Loading -> {
-                    CircularProgressIndicator()
-                }
-
-                // Success State
-                is UiState.Success -> {
-                    d("Create Team Screen", createTeamState.data)
-                    QrGenerator(content = createTeamState.data)
-                }
-
-                // Failed State
-                is UiState.Failed -> {
-                    ErrorDialog(onCancel = {}) {
-                        setEvent(TeamBuildingEvent.CreateTeamApiCall(teamName = teamName))
-                    }
-                }
-
-                else -> {
-
-                }
-            }
+            QrGenerator(content = createTeamState.data)
         }
     }
 }

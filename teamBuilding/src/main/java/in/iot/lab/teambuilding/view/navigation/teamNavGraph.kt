@@ -11,19 +11,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.teambuilding.view.TeamBuildingViewModel
 import `in`.iot.lab.teambuilding.view.screens.CreateTeamScreenControl
 import `in`.iot.lab.teambuilding.view.screens.RegisterTeamScreenControl
 import `in`.iot.lab.teambuilding.view.screens.JoinTeamScreenControl
-import `in`.iot.lab.teambuilding.view.screens.TeamHomeScreen
+import `in`.iot.lab.teambuilding.view.screens.TeamHomeScreenControl
 
 
 // Routes
 const val TEAM_BUILDING_ROOT_ROUTE = "team-building-root-route"
-private const val TEAM_BUILDING_HOME_ROUTE = "team-building-home-route"
-private const val TEAM_BUILDING_CREATE_ROUTE = "team-building-create-route"
-private const val TEAM_BUILDING_REGISTER_ROUTE = "team-building-create-qr-route"
-private const val TEAM_BUILDING_JOIN_ROUTE = "team-building-join-route"
+internal const val TEAM_BUILDING_HOME_ROUTE = "team-building-home-route"
+internal const val TEAM_BUILDING_CREATE_ROUTE = "team-building-create-route"
+internal const val TEAM_BUILDING_REGISTER_ROUTE = "team-building-create-qr-route"
+internal const val TEAM_BUILDING_JOIN_ROUTE = "team-building-join-route"
 
 
 /**
@@ -54,33 +55,52 @@ fun NavGraphBuilder.teamNavGraph(
 
         // Home Routes
         composable(TEAM_BUILDING_HOME_ROUTE) {
-            TeamHomeScreen(navController = navController)
+
+            // View Model of the graph
+            val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
+
+            // User Registration State
+            val userState = viewModel.userRegistrationState.collectAsState().value
+
+            // Team Home screen
+            TeamHomeScreenControl(
+                navController = navController,
+                userState = userState,
+                setEvent = viewModel::uiListener,
+                onTeamRegistered = onTeamRegistered
+            )
         }
 
         // Create Screen Routes
         composable(TEAM_BUILDING_CREATE_ROUTE) {
-            CreateTeamScreenControl {
-                navController.navigate("$TEAM_BUILDING_REGISTER_ROUTE/$it")
-            }
+
+            // View Model of the graph
+            val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
+
+            // Team Name and create team api call State
+            val teamName = viewModel.teamName.collectAsState().value
+            val createTeamState = viewModel.createTeamApiState.collectAsState().value
+
+            // Create Team
+            CreateTeamScreenControl(
+                teamName = teamName,
+                createTeamState = createTeamState,
+                navController = navController,
+                setEvent = viewModel::uiListener
+            )
         }
 
         // Register Screen
-        composable("$TEAM_BUILDING_REGISTER_ROUTE/{teamName}") {
+        composable(TEAM_BUILDING_REGISTER_ROUTE) {
 
-            val vm = it.getViewModel<TeamBuildingViewModel>(navController)
             // View Model
-            val viewModel = hiltViewModel<TeamBuildingViewModel>()
+            val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // State Variables
-            val teamName = it.arguments?.getString("teamName") ?: ""
             val createTeamState = viewModel.createTeamApiState.collectAsState().value
 
             // Team QR Generating Screen
-            RegisterTeamScreenControl(
-                teamName = teamName,
-                createTeamState = createTeamState,
-                setEvent = viewModel::uiListener
-            )
+            RegisterTeamScreenControl(createTeamState = createTeamState as UiState.Success<String>)
         }
 
         // Join Screen Route
