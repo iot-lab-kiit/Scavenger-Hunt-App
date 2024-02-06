@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.installer.ModuleInstaller
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
@@ -14,11 +15,13 @@ import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
+import `in`.iot.lab.teambuilding.view.state.toUserRegistrationState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 
 /**
@@ -31,7 +34,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
-    private val repository: TeamBuildingRepo,
+    @Named("testing") private val repository: TeamBuildingRepo,
     firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner,
     private val moduleInstaller: ModuleInstaller
@@ -45,7 +48,7 @@ class TeamBuildingViewModel @Inject constructor(
     val userRegistrationState = _userRegistrationState.asStateFlow()
 
 
-    private fun getUserById(userId: String = "65c13b3f6958e7c773b9dacd") {
+    private fun getUserRegistrationData() {
 
         // Checking if the Api is already called
         if (_userRegistrationState.value is UserRegistrationState.Loading)
@@ -57,32 +60,26 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            delay(2000)
-            _userRegistrationState.value = UserRegistrationState.NotRegistered(
-                RemoteUser(
-                    id = "65c13b3f6958e7c773b9dacd",
-                    uid = null,
-                    name = "Anirban Basak",
-                    email = "email id",
-                    token = null,
-                    team = null,
-                    isLead = null,
-                    v = null
-                )
-            )
-
             // Calling the Api
-//            _userRegistrationState.value = repository
-//                .getUserById(userId)
-//                .toUiState()
-//                .toUserRegistrationState()
+            _userRegistrationState.value = repository
+//                .getUserById(userFirebaseId) // TODO: Remove comment for Production
+                .getUserById("3.1") // TODO: Remove comment for production
+                .toUiState()
+                .toUserRegistrationState()
         }
     }
 
 
+    /**
+     * Team name is stored and used as a shared variable
+     */
     private val _teamName = MutableStateFlow("")
     val teamName = _teamName.asStateFlow()
 
+
+    /**
+     * This function sets the team name variable
+     */
     private fun setTeamName(teamName: String) {
         _teamName.value = teamName
     }
@@ -221,7 +218,7 @@ class TeamBuildingViewModel @Inject constructor(
         when (event) {
 
             is TeamBuildingEvent.GetUserRegistrationData -> {
-                getUserById()
+                getUserRegistrationData()
             }
 
             is TeamBuildingEvent.SetTeamName -> {

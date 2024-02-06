@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
@@ -34,6 +33,7 @@ internal fun CreateTeamScreenControl(
     // Create Team Api State
     when (createTeamState) {
 
+        // Idle State
         is UiState.Idle -> {
             CreateTeamIdleScreen(
                 teamName = teamName,
