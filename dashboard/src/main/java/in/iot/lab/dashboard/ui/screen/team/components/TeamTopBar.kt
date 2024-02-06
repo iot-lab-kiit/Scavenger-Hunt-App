@@ -29,6 +29,7 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 fun TeamTopBar(
     teamName: String = "Team 1",
     teamScore: Int = 0,
+    showNavigateToTeamDetails: Boolean = true,
     onNavigateToTeamDetails: () -> Unit = {}
 ) {
     Row(
@@ -45,6 +46,7 @@ fun TeamTopBar(
         TeamHeader(
             modifier = Modifier.weight(0.8f),
             teamName = teamName,
+            showNavigateToTeamDetails = showNavigateToTeamDetails,
             onClick = onNavigateToTeamDetails
         )
         Spacer(modifier = Modifier.weight(0.05f))
@@ -85,6 +87,7 @@ private fun TeamTopBarPreview() {
 private fun TeamHeader(
     modifier: Modifier,
     teamName: String,
+    showNavigateToTeamDetails: Boolean,
     onClick: () -> Unit
 ) {
     Row(
@@ -99,20 +102,21 @@ private fun TeamHeader(
             ),
             letterSpacing = 4.sp
         )
+        if (showNavigateToTeamDetails) {
+            PrimaryButton(
+                modifier = Modifier.size(28.dp),
+                onClick = onClick,
+                contentPadding = PaddingValues(0.dp),
+                shape = RoundedCornerShape(8.dp),
 
-        PrimaryButton(
-            modifier = Modifier.size(28.dp),
-            onClick = onClick,
-            contentPadding = PaddingValues(0.dp),
-            shape = RoundedCornerShape(8.dp),
-
-        ) {
-            Icon(
-                painter = painterResource(`in`.iot.lab.dashboard.R.drawable.ic_arrow_forward),
-                modifier = Modifier.size(16.dp),
-                contentDescription = "Go to Team Details",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
+                ) {
+                Icon(
+                    painter = painterResource(`in`.iot.lab.dashboard.R.drawable.ic_arrow_forward),
+                    modifier = Modifier.size(16.dp),
+                    contentDescription = "Go to Team Details",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
     }
 }
