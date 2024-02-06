@@ -30,23 +30,19 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
 
             "3.1" -> {
                 ResponseState.Success(
-                    provideRemoteUser()
+                    getUser(1)
                 )
             }
 
             "3.2" -> {
                 ResponseState.Success(
-                    provideRemoteUser().copy(
-                        team = RemoteTeam(
-                            isRegistered = false
-                        )
-                    )
+                    getUser(1).copy(team = getUnRegisteredTeam(1))
                 )
             }
 
             "3.3" -> {
                 ResponseState.Success(
-                    provideRemoteUser().copy(
+                    getUser(1).copy(
                         team = RemoteTeam(isRegistered = true)
                     )
                 )
@@ -59,39 +55,66 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
     }
 
     override suspend fun createTeam(): ResponseState<RemoteTeam> {
-        return ResponseState.Success(provideRemoteTeam())
+        delay(4000)
+        return ResponseState.Success(createNewTeam(1))
     }
 
     override suspend fun joinTeam(): ResponseState<RemoteTeam> {
-        return ResponseState.Success(provideRemoteTeam())
+        delay(4000)
+        return ResponseState.Success(getUnRegisteredTeam(2))
     }
 
     override suspend fun registerTeam(): ResponseState<RemoteTeam> {
-        return ResponseState.Success(provideRemoteTeam())
+        delay(4000)
+        return ResponseState.Success(getUnRegisteredTeam(1).copy(isRegistered = true))
     }
 
     override suspend fun getTeamById(): ResponseState<RemoteTeam> {
-        return ResponseState.Success(provideRemoteTeam())
+        delay(4000)
+        return ResponseState.Success(getUnRegisteredTeam(3))
     }
 
-    private fun provideRemoteUser(): RemoteUser {
+    private fun getUser(number: Int): RemoteUser {
         return RemoteUser(
-            id = "Test User Id 01",
-            uid = null,
-            name = "Anirban Basak",
-            email = "email id",
+            id = "Test User Id $number",
+            uid = "Test User Uid $number",
+            name = "Test User Name $number",
+            email = "Test user email $number",
             token = null,
             team = null,
-            isLead = null,
+            isLead = false,
             v = null
         )
     }
 
-    private fun provideRemoteTeam(): RemoteTeam {
+    private fun createNewTeam(number: Int): RemoteTeam {
         return RemoteTeam(
-            id = "Test Team Id 01",
-            teamName = "Test Team 01",
-            teamLead = provideRemoteUser()
+            id = "Test Team Id $number",
+            teamName = "Test Team Name $number",
+            teamLead = getUser(1),
+            teamMembers = listOf(getUser(1)),
+            score = 0,
+            numMain = 0,
+            numSide = 0,
+            isRegistered = false
+        )
+    }
+
+    private fun getUnRegisteredTeam(number: Int): RemoteTeam {
+
+        val userList: MutableList<RemoteUser> = mutableListOf()
+        for (i in 1..number)
+            userList.add(getUser(i))
+
+        return RemoteTeam(
+            id = "Test Team Id $number",
+            teamName = "Test Team Name $number",
+            teamLead = userList[0],
+            teamMembers = userList,
+            score = 0,
+            numMain = 0,
+            numSide = 0,
+            isRegistered = false
         )
     }
 }

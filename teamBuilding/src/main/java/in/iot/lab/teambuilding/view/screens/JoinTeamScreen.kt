@@ -2,14 +2,13 @@ package `in`.iot.lab.teambuilding.view.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
@@ -77,7 +76,7 @@ internal fun JoinTeamScreenControl(
 
             // Api Call is being queued
             is UiState.Loading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                LoadingTransition()
             }
 
             // Api call is successful

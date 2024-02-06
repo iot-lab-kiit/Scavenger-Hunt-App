@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.network.data.models.team.RemoteTeam
@@ -23,54 +23,33 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 
 @Composable
 internal fun RegisterTeamScreenControl(
-    createTeamState: UiState<RemoteTeam>,
-    registerTeamState: UiState<RemoteTeam>,
+    teamDataState: UiState<RemoteTeam>,
     setEvent: (TeamBuildingEvent) -> Unit,
     onTeamRegistered: () -> Unit
 ) {
 
-    when (registerTeamState) {
+    when (teamDataState) {
 
         is UiState.Idle -> {
-            // Do Nothing
+            setEvent(TeamBuildingEvent.NetworkIO.GetTeamData)
         }
 
         is UiState.Loading -> {
-            CircularProgressIndicator()
+            LoadingTransition()
         }
 
         is UiState.Success -> {
-            onTeamRegistered()
+            if (teamDataState.data.isRegistered == true)
+                onTeamRegistered()
+            else
+                RegisterTeamSuccessScreen(team = teamDataState.data, setEvent = setEvent)
         }
 
         is UiState.Failed -> {
             ErrorDialog(
-                text = registerTeamState.message,
+                text = teamDataState.message,
                 onCancel = {}
             ) { setEvent(TeamBuildingEvent.NetworkIO.GetTeamData) }
-        }
-    }
-
-    when (createTeamState) {
-        is UiState.Idle -> {
-
-        }
-
-        is UiState.Loading -> {
-            CircularProgressIndicator()
-        }
-
-        is UiState.Success -> {
-            RegisterTeamSuccessScreen(team = createTeamState.data, setEvent = setEvent)
-        }
-
-        is UiState.Failed -> {
-            ErrorDialog(
-                text = createTeamState.message,
-                onCancel = {}
-            ) {
-                setEvent(TeamBuildingEvent.NetworkIO.GetTeamData)
-            }
         }
     }
 }
@@ -102,9 +81,10 @@ private fun RegisterTeamSuccessScreen(
             // QR Code
             item { QrGenerator(content = team.id!!) }
 
+            // Showing the Team Members
             team.teamMembers?.let {
                 items(it.size) {
-                    TODO("Call the UI for showing the Team Members")
+//                    TODO("Call the UI for showing the Team Members")
                 }
             }
 

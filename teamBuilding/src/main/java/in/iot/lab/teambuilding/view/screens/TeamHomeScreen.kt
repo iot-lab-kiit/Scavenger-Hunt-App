@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +26,7 @@ import androidx.compose.ui.window.Dialog
 import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
@@ -94,7 +94,7 @@ internal fun TeamHomeScreenControl(
 
         // Loading State
         is UserRegistrationState.Loading -> {
-            CircularProgressIndicator()
+            LoadingTransition()
         }
 
         // Not Registered and not in Team State

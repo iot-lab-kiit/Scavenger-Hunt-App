@@ -34,6 +34,10 @@ fun NavController.navigateToTeamBuilding(navOptions: NavOptions? = null) {
     this.navigate(TEAM_BUILDING_ROOT_ROUTE, navOptions)
 }
 
+
+/**
+ * This function is used to navigate to the [RegisterTeamScreenControl] screen.
+ */
 internal fun NavController.navigateToRegister() {
     this.navigate(TEAM_BUILDING_REGISTER_ROUTE) {
         navOptions {
@@ -44,13 +48,22 @@ internal fun NavController.navigateToRegister() {
     }
 }
 
+
+/**
+ * This function is used to navigate to the [CreateTeamScreenControl] screen
+ */
 internal fun NavController.navigateToCreate() {
     this.navigate(TEAM_BUILDING_CREATE_ROUTE)
 }
 
+
+/**
+ * This function is used to pop the Backstack from the graph
+ */
 internal fun NavController.navigateToJoin() {
     this.navigate(TEAM_BUILDING_JOIN_ROUTE)
 }
+
 
 /**
  * This is the nav Graph for the Team - Building Functionality
@@ -61,8 +74,6 @@ fun NavGraphBuilder.teamNavGraph(
     navController: NavController,
     onTeamRegistered: () -> Unit
 ) {
-
-    // TODO: Navigate to dashboard once team building is done
 
     // Team Building Root Route
     navigation(
@@ -100,7 +111,7 @@ fun NavGraphBuilder.teamNavGraph(
 
             // Team Name and create team api call State
             val teamName = viewModel.teamName.collectAsState().value
-            val createTeamState = viewModel.createTeamApiState.collectAsState().value
+            val createTeamState = viewModel.teamDataState.collectAsState().value
 
             // Create Team
             CreateTeamScreenControl(
@@ -118,14 +129,12 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // State Variables
-            val createTeamState = viewModel.createTeamApiState.collectAsState().value
-
+            val createTeamState = viewModel.teamDataState.collectAsState().value
 
             // Team QR Generating Screen
             RegisterTeamScreenControl(
-                createTeamState = createTeamState,
+                teamDataState = createTeamState,
                 setEvent = viewModel::uiListener,
-                registerTeamState = createTeamState,
                 onTeamRegistered = onTeamRegistered
             )
         }
@@ -138,7 +147,7 @@ fun NavGraphBuilder.teamNavGraph(
 
             // State Variables
             val installState = viewModel.qrInstallerState.collectAsState().value
-            val teamJoiningApiState = viewModel.teamJoiningApiState.collectAsState().value
+            val teamJoiningApiState = viewModel.teamDataState.collectAsState().value
 
             // Join Screen
             JoinTeamScreenControl(
