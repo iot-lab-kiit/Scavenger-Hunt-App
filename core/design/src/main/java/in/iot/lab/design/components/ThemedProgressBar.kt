@@ -1,4 +1,4 @@
-package `in`.iot.lab.dashboard.ui.screen.team.components
+package `in`.iot.lab.design.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
@@ -24,7 +24,10 @@ fun ThemedProgressBar(
             drawLine(
                 color,
                 Offset(size.height / 2, size.height / 2 - size.height * off),
-                Offset(size.width * prog - size.height / 2, size.height / 2 - size.height * off),
+                Offset(
+                    size.height / 2 + (size.width - size.height) * prog,
+                    size.height / 2 - size.height * off
+                ),
                 size.height * thic, StrokeCap.Round
             )
         }
