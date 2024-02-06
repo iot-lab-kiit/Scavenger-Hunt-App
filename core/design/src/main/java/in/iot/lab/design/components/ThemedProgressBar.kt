@@ -1,4 +1,4 @@
-package `in`.iot.lab.dashboard.ui.screen.team.components
+package `in`.iot.lab.design.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
