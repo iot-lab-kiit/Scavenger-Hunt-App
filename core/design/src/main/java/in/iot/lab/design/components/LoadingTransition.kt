@@ -86,7 +86,7 @@ fun LoadingTransition(
 
     // Default Text Style
     val textStyle = TextStyle(
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onBackground,
         fontSize = 18.sp,
         fontFamily = FontFamily(Font(R.font.orbitron_regular)),
         textAlign = TextAlign.Center,
@@ -131,49 +131,51 @@ fun LoadingTransition(
             indexB = index.toInt() % list.size
     }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    AppScreen {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
 
 
-        // Progress Bar
-        ThemedProgressBar(
-            progress = progress,
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-            colorScheme = RedProgressTheme
-        )
+            // Progress Bar
+            ThemedProgressBar(
+                progress = progress,
+                modifier = modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                colorScheme = RedProgressTheme
+            )
 
-        // Box which shows the Texts
-        Box(modifier.fillMaxWidth()) {
+            // Box which shows the Texts
+            Box(modifier.fillMaxWidth()) {
 
-            // First Text Field
-            androidx.compose.animation.AnimatedVisibility(
-                modifier = modifier.fillMaxWidth(),
-                visible = sudo,
-                enter = slideIn(initialOffset = { IntOffset(0, -it.height) }) + fadeIn(),
-                exit = slideOut(targetOffset = { IntOffset(0, it.height / 2) }) + fadeOut()
-            ) {
-                Text(
-                    text = list[indexA],
-                    style = textStyle
-                )
-            }
+                // First Text Field
+                androidx.compose.animation.AnimatedVisibility(
+                    modifier = modifier.fillMaxWidth(),
+                    visible = sudo,
+                    enter = slideIn(initialOffset = { IntOffset(0, -it.height) }) + fadeIn(),
+                    exit = slideOut(targetOffset = { IntOffset(0, it.height / 2) }) + fadeOut()
+                ) {
+                    Text(
+                        text = list[indexA],
+                        style = textStyle
+                    )
+                }
 
-            // Second Text Field
-            androidx.compose.animation.AnimatedVisibility(
-                modifier = modifier.fillMaxWidth(),
-                visible = !sudo,
-                enter = slideIn(initialOffset = { IntOffset(0, -it.height) }) + fadeIn(),
-                exit = slideOut(targetOffset = { IntOffset(0, it.height / 2) }) + fadeOut()
-            ) {
-                Text(
-                    text = list[indexB],
-                    style = textStyle
-                )
+                // Second Text Field
+                androidx.compose.animation.AnimatedVisibility(
+                    modifier = modifier.fillMaxWidth(),
+                    visible = !sudo,
+                    enter = slideIn(initialOffset = { IntOffset(0, -it.height) }) + fadeIn(),
+                    exit = slideOut(targetOffset = { IntOffset(0, it.height / 2) }) + fadeOut()
+                ) {
+                    Text(
+                        text = list[indexB],
+                        style = textStyle
+                    )
+                }
             }
         }
     }

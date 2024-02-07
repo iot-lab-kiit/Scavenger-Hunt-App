@@ -1,12 +1,14 @@
 package `in`.iot.lab.design.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import `in`.iot.lab.design.theme.background
 
 
 /**
@@ -18,15 +20,29 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun AppScreen(
     modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
+    floatingActionButton: @Composable () -> Unit = {},
+    snackbarHost: @Composable () -> Unit = {},
     contentAlignment: Alignment = Alignment.Center,
     body: @Composable () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .background(Color(0xff11151c))
-            .fillMaxSize(),
-        contentAlignment = contentAlignment
+    Scaffold(
+        modifier = modifier,
+        topBar = topBar,
+        bottomBar = bottomBar,
+        floatingActionButton = floatingActionButton,
+        snackbarHost = snackbarHost,
+        containerColor = background,
+        contentColor = MaterialTheme.colorScheme.onSurface,
     ) {
-        body()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            contentAlignment = contentAlignment
+        ) {
+            body()
+        }
     }
 }
