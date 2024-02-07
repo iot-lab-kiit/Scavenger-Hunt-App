@@ -42,40 +42,69 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 07"
+    private val userFirebaseId = "UID 01"
     private var userId = ""
     private var teamId: String? = null
 
-    private val _teamData =
-        MutableStateFlow<UserRegistrationState<RemoteTeam>>(UserRegistrationState.Idle)
+
+    /**
+     * This variable checks the Registration state of the user which is then used to decide if the
+     * user is registered or in a team or is neither of them
+     */
+    private val _registrationState =
+        MutableStateFlow<UserRegistrationState>(UserRegistrationState.Idle)
+    val registrationState = _registrationState.asStateFlow()
+
+
+    /**
+     * This is the team Data which can be used in the overall App i.e in all the screens of the
+     * Team Building Screens
+     */
+    private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val teamData = _teamData.asStateFlow()
 
 
+    /**
+     * This function is used to get the user's registration details
+     */
     private fun getUserRegistrationData() {
 
-        if (_teamData.value is UserRegistrationState.Loading)
+        // Checking if already an api call is done
+        if (_registrationState.value is UserRegistrationState.Loading)
             return
 
-        _teamData.value = UserRegistrationState.Loading
+        // Toggling the Loading State for the Loading UI
+        _registrationState.value = UserRegistrationState.Loading
 
         viewModelScope.launch {
+
+            // Fetching the User's Data to get the teamId from the User DB
             val response = repository
                 .getUserById(userFirebaseId)
                 .toUiState()
 
+            // Checking if the Api call is successful or not
             if (response is UiState.Success) {
+
+                // Setting the User Id and the Team Id
                 userId = response.data.id!!
                 teamId = response.data.team
 
+                // Checking if the Team id is null
                 if (response.data.team == null) {
-                    _teamData.value = UserRegistrationState.NotRegistered(null)
+
+                    // Null means that the user is not in a team currently (Not Registered)
+                    _registrationState.value = UserRegistrationState.NotRegistered
                     return@launch
                 }
 
+                // Fetching the Team Data if the Team Id is not null
                 _teamData.value = repository
-                    .getTeamById(teamId = teamId!!)
+                    .getTeamById(teamId!!)
                     .toUiState()
-                    .toUserRegistrationState()
+
+                // Setting the Registration State accordingly
+                _registrationState.value = _teamData.value.toUserRegistrationState()
             }
         }
     }

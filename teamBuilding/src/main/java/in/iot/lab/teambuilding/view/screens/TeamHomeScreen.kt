@@ -31,8 +31,6 @@ import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
-import `in`.iot.lab.network.data.models.team.RemoteTeam
-import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.teambuilding.view.components.ConfirmDialogUI
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
@@ -76,7 +74,7 @@ private fun DefaultPreview2() {
 
 @Composable
 internal fun TeamHomeScreenControl(
-    userState: UserRegistrationState<RemoteTeam>,
+    userState: UserRegistrationState,
     navigateToCreate: () -> Unit,
     navigateToJoin: () -> Unit,
     navigateToRegister: () -> Unit,
