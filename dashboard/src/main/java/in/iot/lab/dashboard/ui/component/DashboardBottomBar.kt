@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import `in`.iot.lab.dashboard.ui.navigation.DashboardRoutes
+import `in`.iot.lab.dashboard.ui.navigation.DashboardOptions
 
 @Composable
 internal fun DashboardBottomBar(
@@ -43,9 +43,9 @@ internal fun DashboardBottomBar(
     modifier: Modifier = Modifier
 ) {
     val screens = mutableListOf(
-        DashboardRoutes.Team,
-        DashboardRoutes.Play,
-        DashboardRoutes.Leaderboard
+        DashboardOptions.Team,
+        DashboardOptions.Play,
+        DashboardOptions.Leaderboard
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()

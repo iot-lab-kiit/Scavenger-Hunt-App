@@ -1,5 +1,6 @@
 package `in`.iot.lab.dashboard.ui.screen.team
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +52,7 @@ internal fun TeamRoute(
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 internal fun TeamScreen(
     mainQuests: Int = 10,
@@ -66,7 +68,7 @@ internal fun TeamScreen(
         floatingActionButton = {
             PrimaryButton(
                 modifier = Modifier
-                    .padding(bottom = 110.dp)
+                    .padding(bottom = 10.dp)
                     .size(70.dp),
                 onClick = {},
                 contentPadding = PaddingValues(10.dp, 0.dp)
