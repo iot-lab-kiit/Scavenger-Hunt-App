@@ -13,6 +13,7 @@ import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
+import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
@@ -43,7 +44,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 06"
+    private val userFirebaseId = "UID 13"
     private var userId = ""
     private var teamId: String? = null
 
@@ -166,7 +167,10 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
             _teamData.value = repository
-                .joinTeam()
+                .joinTeam(
+                    updateTeam = UpdateTeamBody(userId = userFirebaseId),
+                    teamId = teamId
+                )
                 .toUiState()
         }
     }

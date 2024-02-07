@@ -153,7 +153,8 @@ fun NavGraphBuilder.teamNavGraph(
             JoinTeamScreenControl(
                 installState = installState,
                 teamJoiningApiState = teamJoiningApiState,
-                navController = navController,
+                popBackStack = navController::popBackStack,
+                onJoiningTeam = navController::navigateToRegister,
                 setEvent = viewModel::uiListener
             )
         }

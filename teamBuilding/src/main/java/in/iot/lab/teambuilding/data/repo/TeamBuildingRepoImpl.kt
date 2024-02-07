@@ -5,6 +5,7 @@ import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
 import `in`.iot.lab.network.utils.NetworkUtil.getResponseState
 import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
+import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import `in`.iot.lab.teambuilding.data.remote.TeamBuildingApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -45,8 +46,15 @@ class TeamBuildingRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun joinTeam(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+    override suspend fun joinTeam(
+        updateTeam: UpdateTeamBody,
+        teamId: String
+    ): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.updateTeam(teamId, updateTeam)
+            }
+        }
     }
 
     override suspend fun registerTeam(): ResponseState<RemoteTeam> {

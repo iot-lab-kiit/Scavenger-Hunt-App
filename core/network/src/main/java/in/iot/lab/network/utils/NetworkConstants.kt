@@ -13,7 +13,7 @@ object NetworkConstants {
     const val GET_ALL_TEAMS_ENDPOINT = "/team"
     const val GET_TEAM_BY_ID_ENDPOINT = "/team/{id}"
     const val CREATE_TEAM_ENDPOINT = "/team"
-    const val UPDATE_TEAM_ENDPOINT = "/team/{id}"
+    const val UPDATE_TEAM_ENDPOINT = "/team/t/{id}"
     const val DELETE_TEAM_ENDPOINT = "/team/{id}"
 
     // User Endpoints
