@@ -1,8 +1,12 @@
 package `in`.iot.lab.dashboard.ui.screen
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -17,7 +21,12 @@ internal fun DashboardScreen(navController: NavHostController = rememberNavContr
     Scaffold(
         bottomBar = { DashboardBottomBar(navController) }
     ) {
-        DashboardNavGraph(navController)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = it.calculateBottomPadding())
+        ) {
+            DashboardNavGraph(navController)
+        }
     }
 }
 
