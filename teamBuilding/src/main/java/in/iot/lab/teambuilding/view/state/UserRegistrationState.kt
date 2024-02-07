@@ -1,6 +1,6 @@
 package `in`.iot.lab.teambuilding.view.state
 
-import `in`.iot.lab.network.data.models.user.RemoteUser
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 
 
@@ -20,7 +20,7 @@ sealed interface UserRegistrationState<out T> {
     data object Loading : UserRegistrationState<Nothing>
     data class Registered<T>(val userData: T) : UserRegistrationState<T>
     data class InTeam<T>(val userData: T) : UserRegistrationState<T>
-    data class NotRegistered<T>(val userData: T) : UserRegistrationState<T>
+    data class NotRegistered<T>(val userData: T?) : UserRegistrationState<T>
 
     data class Error(val message: String) : UserRegistrationState<Nothing>
 }
@@ -30,7 +30,7 @@ sealed interface UserRegistrationState<out T> {
  * This Extension function of [UiState] is made to convert the [UiState] object to a
  * [UserRegistrationState] object and use that to define the User's registration and team status.
  */
-fun UiState<RemoteUser>.toUserRegistrationState(): UserRegistrationState<RemoteUser> {
+fun UiState<RemoteTeam>.toUserRegistrationState(): UserRegistrationState<RemoteTeam> {
     return when (this) {
         is UiState.Idle -> {
             UserRegistrationState.Idle
@@ -41,15 +41,13 @@ fun UiState<RemoteUser>.toUserRegistrationState(): UserRegistrationState<RemoteU
         }
 
         is UiState.Success -> {
-            val userData = this.data
 
-            if (userData.team != null) {
-                if (userData.team!!.isRegistered == true)
-                    UserRegistrationState.Registered(userData)
-                else
-                    UserRegistrationState.InTeam(userData)
-            } else
-                UserRegistrationState.NotRegistered(userData)
+            val teamData = this.data
+
+            if (teamData.isRegistered == true)
+                UserRegistrationState.Registered(teamData)
+            else
+                UserRegistrationState.InTeam(teamData)
         }
 
         is UiState.Failed -> {

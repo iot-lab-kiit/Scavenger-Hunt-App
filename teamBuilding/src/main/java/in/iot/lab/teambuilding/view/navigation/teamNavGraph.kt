@@ -89,7 +89,7 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // User Registration State
-            val userState = viewModel.userRegistrationState.collectAsState().value
+            val userState = viewModel.teamData.collectAsState().value
 
             // Team Home screen
             TeamHomeScreenControl(

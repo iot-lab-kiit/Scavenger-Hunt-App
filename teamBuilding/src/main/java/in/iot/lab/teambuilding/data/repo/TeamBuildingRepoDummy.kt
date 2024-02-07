@@ -36,15 +36,13 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
 
             "3.2" -> {
                 ResponseState.Success(
-                    getUser(1).copy(team = getUnRegisteredTeam(1))
+                    getUser(1)
                 )
             }
 
             "3.3" -> {
                 ResponseState.Success(
-                    getUser(1).copy(
-                        team = RemoteTeam(isRegistered = true)
-                    )
+                    getUser(1)
                 )
             }
 
@@ -69,7 +67,7 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
         return ResponseState.Success(getUnRegisteredTeam(1).copy(isRegistered = true))
     }
 
-    override suspend fun getTeamById(): ResponseState<RemoteTeam> {
+    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(getUnRegisteredTeam(3))
     }

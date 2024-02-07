@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
-import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.installer.ModuleInstaller
@@ -34,35 +33,50 @@ import javax.inject.Named
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
-    @Named("testing") private val repository: TeamBuildingRepo,
+    @Named("production") private val repository: TeamBuildingRepo,
     firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner,
     private val moduleInstaller: ModuleInstaller
 ) : ViewModel() {
 
-    // Firebase UID
-    private val userFirebaseId = firebase.currentUser?.uid ?: ""
 
-    private val _userRegistrationState =
-        MutableStateFlow<UserRegistrationState<RemoteUser>>(UserRegistrationState.Idle)
-    val userRegistrationState = _userRegistrationState.asStateFlow()
+    // Firebase UID
+//    private val userFirebaseId = firebase.currentUser?.uid ?: ""
+    private val userFirebaseId = "UID 07"
+    private var userId = ""
+    private var teamId: String? = null
+
+    private val _teamData =
+        MutableStateFlow<UserRegistrationState<RemoteTeam>>(UserRegistrationState.Idle)
+    val teamData = _teamData.asStateFlow()
 
 
     private fun getUserRegistrationData() {
 
-        // Checking if the Api is already called
-        if (_userRegistrationState.value is UserRegistrationState.Loading)
+        if (_teamData.value is UserRegistrationState.Loading)
             return
 
-        // Declaring the Loading State
-        _userRegistrationState.value = UserRegistrationState.Loading
+        _teamData.value = UserRegistrationState.Loading
 
         viewModelScope.launch {
-            _userRegistrationState.value = repository
-//                .getUserById(userFirebaseId)
-                .getUserById("3.1")
+            val response = repository
+                .getUserById(userFirebaseId)
                 .toUiState()
-                .toUserRegistrationState()
+
+            if (response is UiState.Success) {
+                userId = response.data.id!!
+                teamId = response.data.team
+
+                if (response.data.team == null) {
+                    _teamData.value = UserRegistrationState.NotRegistered(null)
+                    return@launch
+                }
+
+                _teamData.value = repository
+                    .getTeamById(teamId = teamId!!)
+                    .toUiState()
+                    .toUserRegistrationState()
+            }
         }
     }
 
@@ -158,7 +172,7 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
             _teamDataState.value = repository
-                .getTeamById()
+                .getTeamById("")
                 .toUiState()
         }
     }
