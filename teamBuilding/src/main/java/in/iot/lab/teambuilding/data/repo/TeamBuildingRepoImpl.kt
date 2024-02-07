@@ -3,7 +3,7 @@ package `in`.iot.lab.teambuilding.data.repo
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
-import `in`.iot.lab.network.utils.NetworkUtil.getRetrofitResponseState
+import `in`.iot.lab.network.utils.NetworkUtil.getResponseState
 import `in`.iot.lab.teambuilding.data.remote.TeamBuildingApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,7 +22,7 @@ class TeamBuildingRepoImpl @Inject constructor(
 
     override suspend fun getUserById(userId: String): ResponseState<RemoteUser> {
         return withContext(Dispatchers.IO) {
-            getRetrofitResponseState {
+            getResponseState {
                 apiService.getUserById(userId = userId)
             }
         }

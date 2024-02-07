@@ -1,9 +1,9 @@
 package `in`.iot.lab.teambuilding.data.remote
 
+import `in`.iot.lab.network.data.models.Response
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.utils.NetworkConstants
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
