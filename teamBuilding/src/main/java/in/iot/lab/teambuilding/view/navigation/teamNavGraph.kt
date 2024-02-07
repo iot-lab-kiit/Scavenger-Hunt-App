@@ -111,7 +111,7 @@ fun NavGraphBuilder.teamNavGraph(
 
             // Team Name and create team api call State
             val teamName = viewModel.teamName.collectAsState().value
-            val createTeamState = viewModel.teamDataState.collectAsState().value
+            val createTeamState = viewModel.teamData.collectAsState().value
 
             // Create Team
             CreateTeamScreenControl(
@@ -129,7 +129,7 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // State Variables
-            val createTeamState = viewModel.teamDataState.collectAsState().value
+            val createTeamState = viewModel.teamData.collectAsState().value
 
             // Team QR Generating Screen
             RegisterTeamScreenControl(
@@ -147,7 +147,7 @@ fun NavGraphBuilder.teamNavGraph(
 
             // State Variables
             val installState = viewModel.qrInstallerState.collectAsState().value
-            val teamJoiningApiState = viewModel.teamDataState.collectAsState().value
+            val teamJoiningApiState = viewModel.teamData.collectAsState().value
 
             // Join Screen
             JoinTeamScreenControl(

@@ -4,7 +4,10 @@ import `in`.iot.lab.network.data.models.Response
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.utils.NetworkConstants
+import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 
@@ -30,5 +33,14 @@ interface TeamBuildingApiService {
     @GET(NetworkConstants.GET_TEAM_BY_ID_ENDPOINT)
     suspend fun getTeamById(
         @Path("id") teamId: String
+    ): Response<RemoteTeam>
+
+
+    /**
+     * This function creates a team [RemoteTeam] in the backend and returns the Team Created.
+     */
+    @POST(NetworkConstants.CREATE_TEAM_ENDPOINT)
+    suspend fun createTeam(
+        @Body teamData: CreateTeamBody
     ): Response<RemoteTeam>
 }

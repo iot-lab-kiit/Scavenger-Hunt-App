@@ -4,6 +4,7 @@ package `in`.iot.lab.teambuilding.data.repo
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
+import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -52,7 +53,7 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
         }
     }
 
-    override suspend fun createTeam(): ResponseState<RemoteTeam> {
+    override suspend fun createTeam(teamData: CreateTeamBody): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(createNewTeam(1))
     }
@@ -77,11 +78,7 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
             id = "Test User Id $number",
             uid = "Test User Uid $number",
             name = "Test User Name $number",
-            email = "Test user email $number",
-            token = null,
-            team = null,
-            isLead = false,
-            v = null
+            email = "Test user email $number"
         )
     }
 

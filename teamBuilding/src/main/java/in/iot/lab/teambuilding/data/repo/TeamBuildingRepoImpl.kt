@@ -4,6 +4,7 @@ import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
 import `in`.iot.lab.network.utils.NetworkUtil.getResponseState
+import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
 import `in`.iot.lab.teambuilding.data.remote.TeamBuildingApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,6 +21,9 @@ class TeamBuildingRepoImpl @Inject constructor(
 ) : TeamBuildingRepo {
 
 
+    /**
+     * This function fetches the [RemoteUser] object by taking the user's UID
+     */
     override suspend fun getUserById(userId: String): ResponseState<RemoteUser> {
         return withContext(Dispatchers.IO) {
             getResponseState {
@@ -28,8 +32,17 @@ class TeamBuildingRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun createTeam(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+
+    /**
+     * This function creates a team using [CreateTeamBody] object and returns the [RemoteTeam]
+     * object which is created by the backend.
+     */
+    override suspend fun createTeam(teamData: CreateTeamBody): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.createTeam(teamData)
+            }
+        }
     }
 
     override suspend fun joinTeam(): ResponseState<RemoteTeam> {
@@ -40,6 +53,10 @@ class TeamBuildingRepoImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+
+    /**
+     * This function fetches the team data [RemoteTeam] by using the team's Id.
+     */
     override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
         return withContext(Dispatchers.IO) {
             getResponseState {

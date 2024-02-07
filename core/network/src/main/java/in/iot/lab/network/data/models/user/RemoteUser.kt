@@ -12,8 +12,6 @@ data class RemoteUser(
     val name: String? = null,
     @SerializedName("email")
     val email: String? = null,
-    @SerializedName("token")
-    val token: String? = null,
     @SerializedName("team")
     val team: String? = null,
     @SerializedName("isLead")
