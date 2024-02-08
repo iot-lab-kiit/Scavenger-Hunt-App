@@ -9,12 +9,16 @@ import `in`.iot.lab.network.utils.NetworkStatusCodes.DEFAULT_URL_ENTERED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.INTERNAL_SERVER_ERROR
 import `in`.iot.lab.network.utils.NetworkStatusCodes.STATUS_OK
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_ALREADY_EXISTS
+import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_ALREADY_REGISTERED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_CREATED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_INVALID_MAIN_QUEST
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_INVALID_SIDE_QUEST
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_INVALID_SIZE
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_REGISTERED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_UPDATED
+import `in`.iot.lab.network.utils.NetworkStatusCodes.TOKEN_INVALID
+import `in`.iot.lab.network.utils.NetworkStatusCodes.TOKEN_MISSING
+import `in`.iot.lab.network.utils.NetworkStatusCodes.USER_ALREADY_LEAD
 import `in`.iot.lab.network.utils.NetworkStatusCodes.USER_AUTHORIZED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.USER_CREATED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.USER_NOT_AUTHORIZED
@@ -40,10 +44,7 @@ object NetworkUtil {
             val response = request()
             onSuccess()
 
-            if (response.data == null)
-                ResponseState.NoDataFound
-            else
-                checkApiResponseStatusCode(response)
+            checkApiResponseStatusCode(response)
         } catch (exception: IOException) {
             ResponseState.NoInternet
         } catch (e: Exception) {
@@ -58,7 +59,7 @@ object NetworkUtil {
         return when (response.status) {
 
             STATUS_OK, USER_CREATED, USER_AUTHORIZED, USER_UPDATED, DEFAULT_URL_ENTERED,
-            TEAM_CREATED, TEAM_UPDATED, TEAM_REGISTERED, DATA_DELETED -> ResponseState.Success(data = response.data)
+            TEAM_CREATED, TEAM_UPDATED, TEAM_REGISTERED, DATA_DELETED -> ResponseState.Success(data = response.data!!)
 
             USER_NOT_AUTHORIZED -> ResponseState.UserNotAuthorized
             TEAM_ALREADY_EXISTS -> ResponseState.TeamAlreadyExists
@@ -67,6 +68,10 @@ object NetworkUtil {
             TEAM_INVALID_SIDE_QUEST -> ResponseState.TeamInvalidSideQuest
             DATA_NOT_FOUND -> ResponseState.NoDataFound
             INTERNAL_SERVER_ERROR -> ResponseState.ServerError
+            USER_ALREADY_LEAD -> ResponseState.UserAlreadyLead
+            TEAM_ALREADY_REGISTERED -> ResponseState.TeamAlreadyRegistered
+            TOKEN_MISSING -> ResponseState.TokenMissing
+            TOKEN_INVALID -> ResponseState.TokenInvalid
             else -> ResponseState.Error(Exception("Unknown Error Occurred !!"))
         }
     }
@@ -108,6 +113,22 @@ object NetworkUtil {
 
             is ResponseState.TeamInvalidSideQuest -> {
                 UiState.Failed("Invalid Side Quest Scanned")
+            }
+
+            is ResponseState.UserAlreadyLead -> {
+                UiState.Failed("User is already lead of a team")
+            }
+
+            is ResponseState.TeamAlreadyRegistered -> {
+                UiState.Failed("Team is already registered.")
+            }
+
+            is ResponseState.TokenMissing -> {
+                UiState.Failed("Token Missing!! Restart the App")
+            }
+
+            is ResponseState.TokenInvalid -> {
+                UiState.Failed("Token Invalid!! Restart the App or clear data.")
             }
 
             is ResponseState.Success -> {

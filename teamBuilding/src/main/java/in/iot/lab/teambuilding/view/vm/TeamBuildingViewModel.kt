@@ -44,7 +44,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 06"
+    private val userFirebaseId = "UID 09"
     private var userId = ""
     private var teamId: String? = null
 
@@ -170,6 +170,10 @@ class TeamBuildingViewModel @Inject constructor(
                     )
                 )
                 .toUiState()
+
+            // Updating Team Id after fetching.
+            if (_teamData.value is UiState.Success)
+                teamId = (_teamData.value as UiState.Success<RemoteTeam>).data.id
         }
     }
 
@@ -177,7 +181,7 @@ class TeamBuildingViewModel @Inject constructor(
     /**
      * This function calls the api to Add Team members to the Team
      */
-    private fun joinTeam(teamId: String) {
+    private fun joinTeam(joinTeamId: String) {
 
         // Checking if one request is already sent to the Server
         if (_teamData.value is UiState.Loading)
@@ -189,9 +193,13 @@ class TeamBuildingViewModel @Inject constructor(
             _teamData.value = repository
                 .joinTeam(
                     updateTeam = UpdateTeamBody(userId = userFirebaseId),
-                    teamId = teamId
+                    teamId = joinTeamId
                 )
                 .toUiState()
+
+            // Updating Team Id after fetching.
+            if (_teamData.value is UiState.Success)
+                teamId = joinTeamId
         }
     }
 
@@ -208,7 +216,14 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
             _teamData.value = repository
-                .registerTeam()
+                .registerTeam(
+                    updateTeam = UpdateTeamBody
+                        (
+                        userId = userFirebaseId,
+                        isRegistered = true
+                    ),
+                    teamId = teamId!!
+                )
                 .toUiState()
         }
     }

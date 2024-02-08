@@ -64,7 +64,7 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
         return ResponseState.Success(getUnRegisteredTeam(2))
     }
 
-    override suspend fun registerTeam(): ResponseState<RemoteTeam> {
+    override suspend fun registerTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(getUnRegisteredTeam(1).copy(isRegistered = true))
     }
