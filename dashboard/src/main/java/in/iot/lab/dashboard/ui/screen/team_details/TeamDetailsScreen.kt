@@ -163,35 +163,35 @@ private fun TeamDetailsScreenPreview() {
                 answer = "This is a hint",
                 campus = 1,
                 question = "What is this?",
-                type = 2
+                type = "main"
             ),
             RemoteHint(
                 id = "2",
                 answer = "This is a hint",
                 campus = 1,
                 question = "What is this?",
-                type = 2
+                type = "main"
             ),
             RemoteHint(
                 id = "3",
                 answer = "This is a hint",
                 campus = 1,
                 question = "What is this?",
-                type = 2
+                type = "main"
             ),
             RemoteHint(
                 id = "4",
                 answer = "This is a hint",
                 campus = 1,
                 question = "What is this?",
-                type = 2
+                type = "main"
             ),
             RemoteHint(
                 id = "5",
                 answer = "This is a hint",
                 campus = 1,
                 question = "What is this?",
-                type = 2
+                type = "main"
             )
         )
     )
