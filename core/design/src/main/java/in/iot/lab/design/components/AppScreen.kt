@@ -8,7 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import `in`.iot.lab.design.theme.background
 
 
 /**
@@ -33,7 +32,7 @@ fun AppScreen(
         bottomBar = bottomBar,
         floatingActionButton = floatingActionButton,
         snackbarHost = snackbarHost,
-        containerColor = background,
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onSurface,
     ) {
         Box(
