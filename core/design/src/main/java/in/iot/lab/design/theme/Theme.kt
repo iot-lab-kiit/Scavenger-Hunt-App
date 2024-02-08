@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 
-private val LightColors = lightColorScheme(
+private val defaultColors = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -42,9 +42,8 @@ private val LightColors = lightColorScheme(
 )
 
 @Composable
-fun ScavengerHuntTheme(
-    content: @Composable() () -> Unit
-) {
+fun ScavengerHuntTheme(content: @Composable () -> Unit) {
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -53,7 +52,7 @@ fun ScavengerHuntTheme(
         }
     }
     MaterialTheme(
-        colorScheme = LightColors,
+        colorScheme = defaultColors,
         typography = Typography,
         content = content
     )

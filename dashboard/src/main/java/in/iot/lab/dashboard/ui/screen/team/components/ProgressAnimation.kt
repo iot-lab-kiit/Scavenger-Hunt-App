@@ -34,9 +34,9 @@ import kotlin.math.tan
 
 @Composable
 fun ProgressAnimation(
+    modifier: Modifier = Modifier,
     mainProgressStatus: List<Boolean>,
     subsidiaryProgressStatus: List<Boolean>,
-    modifier: Modifier = Modifier,
     fontSize: TextUnit = 12.sp,
 ) {
     val textMeasurer = rememberTextMeasurer()
