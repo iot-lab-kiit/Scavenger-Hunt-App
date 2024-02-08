@@ -33,11 +33,16 @@ private fun DefaultPreview1() {
 }
 
 
+/**
+ * This function is used to show the points scored.
+ *
+ * @param text This is the point that the user team has gathered.
+ */
 @Composable
 fun AppPointsUI(text: String) {
 
     PrimaryButton(
-        modifier = Modifier.padding(4.dp),
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
         onClick = {},
         contentPadding = PaddingValues(4.dp),
         content = {
