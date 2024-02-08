@@ -4,5 +4,5 @@ import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.ResponseState
 
 interface DashboardRepository {
-    suspend fun getTeamById(id: String): ResponseState<RemoteTeam>
+    suspend fun getCurrentUserTeam(): ResponseState<RemoteTeam>
 }
