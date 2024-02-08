@@ -3,13 +3,18 @@ package `in`.iot.lab.design.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
@@ -37,6 +42,10 @@ fun ButtonPreview() {
             ) {
                 Text(text = "Button")
             }
+
+            NextButton {
+
+            }
         }
     }
 }
@@ -48,7 +57,7 @@ fun PrimaryButton(
     enabled: Boolean = true,
     shape: RoundedCornerShape = RoundedCornerShape(percent = 50),
     contentPadding: PaddingValues = PaddingValues(25.dp, 0.dp),
-    content: @Composable() (RowScope.() -> Unit)
+    content: @Composable (RowScope.() -> Unit)
 ) {
     Button(
         modifier = modifier,
@@ -74,7 +83,7 @@ fun SecondaryButton(
     enabled: Boolean = true,
     shape: RoundedCornerShape = RoundedCornerShape(percent = 50),
     contentPadding: PaddingValues = PaddingValues(25.dp, 0.dp),
-    content: @Composable() (RowScope.() -> Unit)
+    content: @Composable (RowScope.() -> Unit)
 ) {
     Button(
         modifier = modifier,
@@ -90,4 +99,26 @@ fun SecondaryButton(
         shape = shape,
         content = content
     )
+}
+
+
+@Composable
+fun NextButton(
+    modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Filled.KeyboardArrowRight,
+    contentDescription: String = "Next Button",
+    onClick: () -> Unit
+) {
+
+    PrimaryButton(
+        modifier = modifier.size(24.dp),
+        onClick = onClick,
+        contentPadding = PaddingValues(0.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription
+        )
+    }
 }
