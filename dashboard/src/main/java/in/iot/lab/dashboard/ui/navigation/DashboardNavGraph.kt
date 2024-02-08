@@ -10,17 +10,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import `in`.iot.lab.dashboard.R
-import `in`.iot.lab.dashboard.ui.screen.leaderboard.LeaderboardScreen
 import `in`.iot.lab.dashboard.ui.screen.play.PlayScreen
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
 import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
+import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
+import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
 
 
 const val TEAM_ROUTE = "team_route"
 const val TEAM_DETAILS_ROUTE = "team_details_route"
 const val PLAY_ROUTE = "play_route"
-const val LEADERBOARD_ROUTE = "leaderboard_route"
 
 
 sealed class DashboardOptions(
@@ -46,7 +46,7 @@ sealed class DashboardOptions(
     )
 
     data object Leaderboard : DashboardOptions(
-        route = LEADERBOARD_ROUTE,
+        route = LEADERBOARD_ROOT_ROUTE,
         icon = R.drawable.ic_leaderboard_outline,
         selectedIcon = R.drawable.ic_leaderboard
     )
@@ -60,9 +60,6 @@ fun NavController.navigateToTeamDetails(navOptions: NavOptions) =
 
 fun NavController.navigateToPlay(navOptions: NavOptions) =
     navigate(DashboardOptions.Play.route, navOptions)
-
-fun NavController.navigateToLeaderboard(navOptions: NavOptions) =
-    navigate(DashboardOptions.Leaderboard.route, navOptions)
 
 @Composable
 internal fun DashboardNavGraph(
@@ -89,8 +86,7 @@ internal fun DashboardNavGraph(
         composable(DashboardOptions.Play.route) {
             PlayScreen()
         }
-        composable(DashboardOptions.Leaderboard.route) {
-            LeaderboardScreen()
-        }
+
+        leaderBoardNavGraph { }
     }
 }
