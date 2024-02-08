@@ -65,6 +65,10 @@ dependencies {
 
     // ----------------------------------------------------------------------------
 
+
+    // LeaderBoard module dependency
+    implementation(project(":leaderBoard"))
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
 

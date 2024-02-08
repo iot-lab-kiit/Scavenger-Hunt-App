@@ -46,6 +46,11 @@ class TeamBuildingRepoImpl @Inject constructor(
         }
     }
 
+
+    /**
+     * This function updates the team using the [UpdateTeamBody] object and returns the updated team
+     * [RemoteTeam] object
+     */
     override suspend fun joinTeam(
         updateTeam: UpdateTeamBody,
         teamId: String
@@ -57,8 +62,20 @@ class TeamBuildingRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun registerTeam(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+
+    /**
+     * This function is used to register the Team and it returns the [RemoteTeam] object from the
+     * backend.
+     */
+    override suspend fun registerTeam(
+        updateTeam: UpdateTeamBody,
+        teamId: String
+    ): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.updateTeam(teamId, updateTeam)
+            }
+        }
     }
 
 

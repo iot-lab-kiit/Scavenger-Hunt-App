@@ -11,6 +11,6 @@ interface TeamBuildingRepo {
     suspend fun getUserById(userId: String): ResponseState<RemoteUser>
     suspend fun createTeam(teamData: CreateTeamBody): ResponseState<RemoteTeam>
     suspend fun joinTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam>
-    suspend fun registerTeam(): ResponseState<RemoteTeam>
+    suspend fun registerTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam>
     suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam>
 }
