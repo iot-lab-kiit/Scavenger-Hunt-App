@@ -8,7 +8,7 @@ data class RemoteHint(
     @SerializedName("question")
     val question: String? = null,
     @SerializedName("type")
-    val type: Int? = null,
+    val type: String? = null,
     @SerializedName("answer")
     val answer: String? = null,
     @SerializedName("campus")

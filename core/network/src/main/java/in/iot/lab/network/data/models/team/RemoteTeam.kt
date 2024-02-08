@@ -2,7 +2,6 @@ package `in`.iot.lab.network.data.models.team
 
 import com.google.gson.annotations.SerializedName
 import `in`.iot.lab.network.data.models.hint.RemoteHint
-import `in`.iot.lab.network.data.models.route.RemoteRoute
 import `in`.iot.lab.network.data.models.user.RemoteUser
 
 data class RemoteTeam(
@@ -24,8 +23,6 @@ data class RemoteTeam(
     val mainQuest: List<RemoteHint>? = null,
     @SerializedName("sideQuest")
     val sideQuest: List<RemoteHint>? = null,
-    @SerializedName("route")
-    val route: RemoteRoute? = null,
     @SerializedName("isRegistered")
     val isRegistered: Boolean? = null
 )
