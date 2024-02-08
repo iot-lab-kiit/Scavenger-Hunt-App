@@ -1,5 +1,6 @@
 package `in`.iot.lab.dashboard.data.repository
 
+import com.google.firebase.auth.FirebaseAuth
 import `in`.iot.lab.dashboard.data.remote.TeamApiService
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.ResponseState
@@ -9,12 +10,18 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DashboardRepositoryImpl @Inject constructor(
-    private val teamApiService: TeamApiService
+    private val teamApiService: TeamApiService,
+    private val auth: FirebaseAuth
 ) : DashboardRepository {
-    override suspend fun getTeamById(id: String): ResponseState<RemoteTeam> {
+    override suspend fun getCurrentUserTeam(): ResponseState<RemoteTeam> {
         return withContext(Dispatchers.IO) {
             NetworkUtil.getResponseState {
-                teamApiService.getTeamById(id)
+//                if (auth.currentUser == null) {
+//                    ResponseState.UserNotAuthorized
+//                }
+//                val userId = auth.currentUser!!.uid
+                val result = teamApiService.getTeamByUserId("UID 04")
+                result
             }
         }
     }

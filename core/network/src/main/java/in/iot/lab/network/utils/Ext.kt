@@ -1,4 +1,4 @@
-package `in`.iot.lab.authorization.data.utils
+package `in`.iot.lab.network.utils
 
 import com.google.android.gms.tasks.Task
 import kotlin.coroutines.resume
