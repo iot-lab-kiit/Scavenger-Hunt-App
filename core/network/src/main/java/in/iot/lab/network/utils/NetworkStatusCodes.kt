@@ -18,4 +18,8 @@ object NetworkStatusCodes {
     const val TEAM_INVALID_SIDE_QUEST = 14
     const val DATA_NOT_FOUND = 15
     const val INTERNAL_SERVER_ERROR = 16
+    const val USER_ALREADY_LEAD = 17
+    const val TEAM_ALREADY_REGISTERED = 18
+    const val TOKEN_MISSING = 19
+    const val TOKEN_INVALID = 20
 }

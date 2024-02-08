@@ -6,5 +6,5 @@ data class Response<T>(
     @SerializedName("state")
     val status: Int,
     @SerializedName("data")
-    val data: T
+    val data: T?
 )

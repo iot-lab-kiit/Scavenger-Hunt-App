@@ -143,7 +143,7 @@ fun NavGraphBuilder.teamNavGraph(
         composable(TEAM_BUILDING_JOIN_ROUTE) {
 
             // View Model
-            val viewModel = hiltViewModel<TeamBuildingViewModel>()
+            val viewModel = it.getViewModel<TeamBuildingViewModel>(navController = navController)
 
             // State Variables
             val installState = viewModel.qrInstallerState.collectAsState().value
