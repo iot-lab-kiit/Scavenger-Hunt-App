@@ -13,7 +13,7 @@ class DashboardRepositoryImpl @Inject constructor(
 ) : DashboardRepository {
     override suspend fun getTeamById(id: String): ResponseState<RemoteTeam> {
         return withContext(Dispatchers.IO) {
-            NetworkUtil.getRetrofitResponseState {
+            NetworkUtil.getResponseState {
                 teamApiService.getTeamById(id)
             }
         }
