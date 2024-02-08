@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -20,6 +23,7 @@ import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
+import `in`.iot.lab.design.theme.background
 import `in`.iot.lab.leaderboard.view.components.HeaderText
 import `in`.iot.lab.leaderboard.view.components.LeaderBoardCardItem
 import `in`.iot.lab.leaderboard.view.event.LeaderBoardEvent
@@ -116,15 +120,24 @@ fun LeaderBoardScreenControl(
  *
  * @param teamList This contains the list of teams in the leaderboard.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LeaderBoardScreenSuccess(teamList: List<RemoteTeam>) {
 
     // App Scaffold
     AppScreen(
         topBar = {
-            HeaderText(
-                text = "LEADERBOARD",
-                modifier = Modifier.fillMaxWidth()
+            TopAppBar(
+                title = {
+                    HeaderText(
+                        text = "LEADERBOARD",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = background,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                ),
             )
         },
         contentAlignment = Alignment.TopCenter
