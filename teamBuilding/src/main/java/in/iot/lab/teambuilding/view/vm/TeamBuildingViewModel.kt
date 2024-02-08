@@ -44,7 +44,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 13"
+    private val userFirebaseId = "UID 06"
     private var userId = ""
     private var teamId: String? = null
 
@@ -93,7 +93,7 @@ class TeamBuildingViewModel @Inject constructor(
                 teamId = response.data.team
 
                 // Checking if the Team id is null
-                if (response.data.team == null) {
+                if (teamId == null) {
 
                     // Null means that the user is not in a team currently (Not Registered)
                     _registrationState.value = UserRegistrationState.NotRegistered
@@ -109,6 +109,26 @@ class TeamBuildingViewModel @Inject constructor(
                 _registrationState.value = _teamData.value.toUserRegistrationState()
             } else if (response is UiState.Failed)
                 _registrationState.value = UserRegistrationState.Error(response.message)
+        }
+    }
+
+
+    /**
+     * This function fetches the Team Data by using the Team Id
+     */
+    private fun getTeamById() {
+
+        // Checking if the Api state is already loading
+        if (_teamData.value is UiState.Loading)
+            return
+
+        // Setting the Loading State
+        _teamData.value = UiState.Loading
+
+        viewModelScope.launch {
+            _teamData.value = repository
+                .getTeamById(teamId!!)
+                .toUiState()
         }
     }
 
@@ -189,24 +209,6 @@ class TeamBuildingViewModel @Inject constructor(
         viewModelScope.launch {
             _teamData.value = repository
                 .registerTeam()
-                .toUiState()
-        }
-    }
-
-
-    /**
-     * This function fetches the Team Data by using the Team Id
-     */
-    private fun getTeamById() {
-
-        if (_teamData.value is UiState.Loading)
-            return
-
-        _teamData.value = UiState.Loading
-
-        viewModelScope.launch {
-            _teamData.value = repository
-                .getTeamById("")
                 .toUiState()
         }
     }
