@@ -1,6 +1,6 @@
 package `in`.iot.lab.teambuilding.view.state
 
-import `in`.iot.lab.network.data.models.user.RemoteUser
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 
 
@@ -15,14 +15,13 @@ import `in`.iot.lab.network.state.UiState
  * @property NotRegistered This means that the user is not registered yet and haven't joined any
  * team too.
  */
-sealed interface UserRegistrationState<out T> {
-    data object Idle : UserRegistrationState<Nothing>
-    data object Loading : UserRegistrationState<Nothing>
-    data class Registered<T>(val userData: T) : UserRegistrationState<T>
-    data class InTeam<T>(val userData: T) : UserRegistrationState<T>
-    data class NotRegistered<T>(val userData: T) : UserRegistrationState<T>
-
-    data class Error(val message: String) : UserRegistrationState<Nothing>
+sealed interface UserRegistrationState {
+    data object Idle : UserRegistrationState
+    data object Loading : UserRegistrationState
+    data object Registered : UserRegistrationState
+    data object InTeam : UserRegistrationState
+    data object NotRegistered : UserRegistrationState
+    data class Error(val message: String) : UserRegistrationState
 }
 
 
@@ -30,7 +29,7 @@ sealed interface UserRegistrationState<out T> {
  * This Extension function of [UiState] is made to convert the [UiState] object to a
  * [UserRegistrationState] object and use that to define the User's registration and team status.
  */
-fun UiState<RemoteUser>.toUserRegistrationState(): UserRegistrationState<RemoteUser> {
+fun UiState<RemoteTeam>.toUserRegistrationState(): UserRegistrationState {
     return when (this) {
         is UiState.Idle -> {
             UserRegistrationState.Idle
@@ -41,15 +40,13 @@ fun UiState<RemoteUser>.toUserRegistrationState(): UserRegistrationState<RemoteU
         }
 
         is UiState.Success -> {
-            val userData = this.data
 
-            if (userData.team != null) {
-                if (userData.team!!.isRegistered == true)
-                    UserRegistrationState.Registered(userData)
-                else
-                    UserRegistrationState.InTeam(userData)
-            } else
-                UserRegistrationState.NotRegistered(userData)
+            val teamData = this.data
+
+            if (teamData.isRegistered == true)
+                UserRegistrationState.Registered
+            else
+                UserRegistrationState.InTeam
         }
 
         is UiState.Failed -> {

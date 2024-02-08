@@ -28,7 +28,8 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 internal fun JoinTeamScreenControl(
     installState: ModuleInstallerState,
     teamJoiningApiState: UiState<RemoteTeam>,
-    navController: NavController,
+    popBackStack: () -> Unit,
+    onJoiningTeam: () -> Unit,
     setEvent: (TeamBuildingEvent) -> Unit
 ) {
 
@@ -55,7 +56,7 @@ internal fun JoinTeamScreenControl(
                 // Failure Screen
                 ErrorDialog(
                     text = installState.exception.message.toString(),
-                    onCancel = { navController.popBackStack() }
+                    onCancel = popBackStack
                 ) {
                     setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
                 }
@@ -81,8 +82,7 @@ internal fun JoinTeamScreenControl(
 
             // Api call is successful
             is UiState.Success<*> -> {
-
-                TODO("Change screens")
+                onJoiningTeam()
             }
 
             // Api Call Failed
@@ -91,7 +91,7 @@ internal fun JoinTeamScreenControl(
                 // Failure Screen
                 ErrorDialog(
                     text = teamJoiningApiState.message,
-                    onCancel = { navController.popBackStack() }
+                    onCancel = popBackStack
                 ) {
                     setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
                 }

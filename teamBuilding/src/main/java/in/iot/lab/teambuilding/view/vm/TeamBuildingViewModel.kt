@@ -6,13 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
-import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.installer.ModuleInstaller
 import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
+import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
+import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 import `in`.iot.lab.teambuilding.view.state.UserRegistrationState
@@ -34,35 +35,100 @@ import javax.inject.Named
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
-    @Named("testing") private val repository: TeamBuildingRepo,
+    @Named("production") private val repository: TeamBuildingRepo,
     firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner,
     private val moduleInstaller: ModuleInstaller
 ) : ViewModel() {
 
+
     // Firebase UID
-    private val userFirebaseId = firebase.currentUser?.uid ?: ""
+//    private val userFirebaseId = firebase.currentUser?.uid ?: ""
+    private val userFirebaseId = "UID 06"
+    private var userId = ""
+    private var teamId: String? = null
 
-    private val _userRegistrationState =
-        MutableStateFlow<UserRegistrationState<RemoteUser>>(UserRegistrationState.Idle)
-    val userRegistrationState = _userRegistrationState.asStateFlow()
+
+    /**
+     * This variable checks the Registration state of the user which is then used to decide if the
+     * user is registered or in a team or is neither of them
+     */
+    private val _registrationState =
+        MutableStateFlow<UserRegistrationState>(UserRegistrationState.Idle)
+    val registrationState = _registrationState.asStateFlow()
 
 
+    /**
+     * This is the team Data which can be used in the overall App i.e in all the screens of the
+     * Team Building Screens
+     */
+    private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
+    val teamData = _teamData.asStateFlow()
+
+
+    /**
+     * This function is used to get the user's registration details
+     */
     private fun getUserRegistrationData() {
 
-        // Checking if the Api is already called
-        if (_userRegistrationState.value is UserRegistrationState.Loading)
+        // Checking if already an api call is done
+        if (_registrationState.value is UserRegistrationState.Loading)
             return
 
-        // Declaring the Loading State
-        _userRegistrationState.value = UserRegistrationState.Loading
+        // Toggling the Loading State for the Loading UI
+        _registrationState.value = UserRegistrationState.Loading
 
         viewModelScope.launch {
-            _userRegistrationState.value = repository
-//                .getUserById(userFirebaseId)
-                .getUserById("3.1")
+
+            // Fetching the User's Data to get the teamId from the User DB
+            val response = repository
+                .getUserById(userFirebaseId)
                 .toUiState()
-                .toUserRegistrationState()
+
+            // Checking if the Api call is successful or not
+            if (response is UiState.Success) {
+
+                // Setting the User Id and the Team Id
+                userId = response.data.id!!
+                teamId = response.data.team
+
+                // Checking if the Team id is null
+                if (teamId == null) {
+
+                    // Null means that the user is not in a team currently (Not Registered)
+                    _registrationState.value = UserRegistrationState.NotRegistered
+                    return@launch
+                }
+
+                // Fetching the Team Data if the Team Id is not null
+                _teamData.value = repository
+                    .getTeamById(teamId!!)
+                    .toUiState()
+
+                // Setting the Registration State accordingly
+                _registrationState.value = _teamData.value.toUserRegistrationState()
+            } else if (response is UiState.Failed)
+                _registrationState.value = UserRegistrationState.Error(response.message)
+        }
+    }
+
+
+    /**
+     * This function fetches the Team Data by using the Team Id
+     */
+    private fun getTeamById() {
+
+        // Checking if the Api state is already loading
+        if (_teamData.value is UiState.Loading)
+            return
+
+        // Setting the Loading State
+        _teamData.value = UiState.Loading
+
+        viewModelScope.launch {
+            _teamData.value = repository
+                .getTeamById(teamId!!)
+                .toUiState()
         }
     }
 
@@ -83,27 +149,26 @@ class TeamBuildingViewModel @Inject constructor(
 
 
     /**
-     * This variable is used to define the create team api call state
-     */
-    private val _teamDataState = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
-    val teamDataState = _teamDataState.asStateFlow()
-
-
-    /**
      * This function creates the team and returns the Team UID to generate the QR Code
      */
     private fun createTeamApi() {
 
         // Checking if the api is already queued at the moment
-        if (_teamDataState.value is UiState.Loading)
+        if (_teamData.value is UiState.Loading)
             return
 
         // Changing State to Loading
-        _teamDataState.value = UiState.Loading
+        _teamData.value = UiState.Loading
 
         viewModelScope.launch {
-            _teamDataState.value = repository
-                .createTeam()
+            _teamData.value = repository
+                .createTeam(
+                    CreateTeamBody(
+                        teamName = _teamName.value,
+                        teamLead = userId,
+                        teamMembers = listOf(userId)
+                    )
+                )
                 .toUiState()
         }
     }
@@ -115,14 +180,17 @@ class TeamBuildingViewModel @Inject constructor(
     private fun joinTeam(teamId: String) {
 
         // Checking if one request is already sent to the Server
-        if (_teamDataState.value is UiState.Loading)
+        if (_teamData.value is UiState.Loading)
             return
 
-        _teamDataState.value = UiState.Loading
+        _teamData.value = UiState.Loading
 
         viewModelScope.launch {
-            _teamDataState.value = repository
-                .joinTeam()
+            _teamData.value = repository
+                .joinTeam(
+                    updateTeam = UpdateTeamBody(userId = userFirebaseId),
+                    teamId = teamId
+                )
                 .toUiState()
         }
     }
@@ -133,32 +201,14 @@ class TeamBuildingViewModel @Inject constructor(
      */
     private fun registerTeam() {
 
-        if (_teamDataState.value is UiState.Loading)
+        if (_teamData.value is UiState.Loading)
             return
 
-        _teamDataState.value = UiState.Loading
+        _teamData.value = UiState.Loading
 
         viewModelScope.launch {
-            _teamDataState.value = repository
+            _teamData.value = repository
                 .registerTeam()
-                .toUiState()
-        }
-    }
-
-
-    /**
-     * This function fetches the Team Data by using the Team Id
-     */
-    private fun getTeamById() {
-
-        if (_teamDataState.value is UiState.Loading)
-            return
-
-        _teamDataState.value = UiState.Loading
-
-        viewModelScope.launch {
-            _teamDataState.value = repository
-                .getTeamById()
                 .toUiState()
         }
     }
@@ -213,7 +263,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // User Cancelled The Scanner Scan
                 is QrScannerState.Cancelled -> {
-                    _teamDataState.value = UiState.Failed("User Cancelled QR Scanner")
+                    _teamData.value = UiState.Failed("User Cancelled QR Scanner")
                 }
 
                 // Scanner Scan is successful
@@ -223,7 +273,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // Scanner scan is a failure
                 is QrScannerState.Failure -> {
-                    _teamDataState.value = UiState.Failed(it.exception.message.toString())
+                    _teamData.value = UiState.Failed(it.exception.message.toString())
                 }
 
                 else -> {
