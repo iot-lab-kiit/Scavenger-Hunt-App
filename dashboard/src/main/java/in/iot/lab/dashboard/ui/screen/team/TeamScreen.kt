@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import `in`.iot.lab.dashboard.R
+import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.design.theme.background
@@ -38,7 +39,7 @@ internal fun TeamRoute(
             TeamScreen(
                 team = data,
                 onNavigateToTeamDetails = onNavigateToTeamDetails,
-                mainQuests = data.route?.hints?.size ?: 0,
+                mainQuests = data.mainQuest?.size ?: 0,
                 // TODO: Add sideQuests here, currently its not implemented in the RemoteTeam model
                 sideQuests = 10,
                 mainQuestProgress = data.numMain ?: 0,
@@ -47,6 +48,9 @@ internal fun TeamRoute(
         }
         is UiState.Loading -> {
             CircularProgressIndicator()
+        }
+        is UiState.Failed -> {
+            ErrorDialog(text = (teamState as UiState.Failed).message)
         }
         else -> {}
     }
