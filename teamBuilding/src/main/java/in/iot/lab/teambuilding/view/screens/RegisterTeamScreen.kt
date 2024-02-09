@@ -84,7 +84,7 @@ internal fun RegisterTeamScreenControl(
         is UiState.Failed -> {
             ErrorDialog(
                 text = teamDataState.message,
-                onCancel = {}
+                onCancel = { setEvent(TeamBuildingEvent.Helper.OnClickInRegisterScreen) }
             ) { setEvent(TeamBuildingEvent.NetworkIO.GetTeamData) }
         }
     }

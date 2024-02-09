@@ -44,7 +44,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 08"
+    private val userFirebaseId = "UID 25"
     private var userId = ""
     private var teamId: String? = null
 
@@ -101,9 +101,12 @@ class TeamBuildingViewModel @Inject constructor(
                 }
 
                 // Fetching the Team Data if the Team Id is not null
-                _teamData.value = repository
+                val teamDataResponse = repository
                     .getTeamById(teamId!!)
                     .toUiState()
+
+                if (response !is UiState.Loading)
+                    _teamData.value = teamDataResponse
 
                 // Setting the Registration State accordingly
                 _registrationState.value = _teamData.value.toUserRegistrationState()
@@ -203,11 +206,15 @@ class TeamBuildingViewModel @Inject constructor(
         }
     }
 
+    private var tempTeamData: UiState<RemoteTeam> = UiState.Idle
+
 
     /**
      * This function calls the api to registers the Team in the backend.
      */
     private fun registerTeam() {
+
+        tempTeamData = _teamData.value
 
         if (_teamData.value is UiState.Loading)
             return
@@ -226,6 +233,11 @@ class TeamBuildingViewModel @Inject constructor(
                 )
                 .toUiState()
         }
+    }
+
+
+    private fun onCancelInRegisterScreenClick() {
+        _teamData.value = tempTeamData
     }
 
 
@@ -330,6 +342,10 @@ class TeamBuildingViewModel @Inject constructor(
 
             is TeamBuildingEvent.NetworkIO.GetTeamData -> {
                 getTeamById()
+            }
+
+            is TeamBuildingEvent.Helper.OnClickInRegisterScreen -> {
+                onCancelInRegisterScreenClick()
             }
         }
     }
