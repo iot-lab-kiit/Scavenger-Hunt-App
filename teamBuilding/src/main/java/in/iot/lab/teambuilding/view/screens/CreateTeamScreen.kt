@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -113,8 +112,6 @@ private fun CreateTeamIdleScreen(
 
             // Matrix and Scavenger Hunt Image Header
             TheMatrixHeaderUI()
-
-            Spacer(modifier = Modifier.height(150.dp))
 
             // Outlined Text Field for inputting team name
             TeamBuildingOutlinedTextField(
