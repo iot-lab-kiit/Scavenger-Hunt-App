@@ -1,7 +1,9 @@
 package `in`.iot.lab.design.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
@@ -37,4 +39,8 @@ fun TheMatrixHeaderUI() {
         painter = painterResource(id = R.drawable.scavenger_hunt),
         contentDescription = "Scavenger Hunt text",
     )
+
+    // HardCoded Modifier
+    Spacer(Modifier.height(150.dp))
+
 }
