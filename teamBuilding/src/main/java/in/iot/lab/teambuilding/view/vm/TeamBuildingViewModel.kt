@@ -8,8 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
-import `in`.iot.lab.qrcode.installer.ModuleInstaller
-import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
@@ -30,21 +28,18 @@ import javax.inject.Named
  *
  * @param qrCodeScanner This is the [QrCodeScanner] object which is used to Scan QR Codes and get
  * the Team ID.
- * @param moduleInstaller This is the Module which check if the QR Code Scanner Module is downloaded
- * and downloads if its not previously downloaded.
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
     @Named("production") private val repository: TeamBuildingRepo,
     firebase: FirebaseAuth,
-    private val qrCodeScanner: QrCodeScanner,
-    private val moduleInstaller: ModuleInstaller
+    private val qrCodeScanner: QrCodeScanner
 ) : ViewModel() {
 
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 25"
+    private val userFirebaseId = "UID 26"
     private var userId = ""
     private var teamId: String? = null
 
@@ -242,46 +237,6 @@ class TeamBuildingViewModel @Inject constructor(
 
 
     /**
-     * This variable is used to define the QR Scanner Download state
-     */
-    private val _qrInstallerState =
-        MutableStateFlow<ModuleInstallerState>(ModuleInstallerState.Idle)
-    val qrInstallerState = _qrInstallerState.asStateFlow()
-
-
-    /**
-     * This function is used to  check if the scanner is already downloaded or not and if its not
-     * downloaded then we start to download the [QrCodeScanner] module.
-     */
-    private fun checkScannerModule() {
-
-        // Checking if the module is already downloaded
-        moduleInstaller.checkAvailability {
-
-            // updating the Module Installer State
-            _qrInstallerState.value = it
-
-            when (it) {
-
-                // Is Already Installed
-                is ModuleInstallerState.IsAvailable -> {
-                    startScanner()
-                }
-
-                // Is Install Successful
-                is ModuleInstallerState.InstallSuccessful -> {
-                    startScanner()
-                }
-
-                else -> {
-                    // Do Nothing
-                }
-            }
-        }
-    }
-
-
-    /**
      * This function starts the [QrCodeScanner] scanner and start to scan for QR Codes.
      */
     private fun startScanner() {
@@ -329,7 +284,7 @@ class TeamBuildingViewModel @Inject constructor(
             }
 
             is TeamBuildingEvent.ScannerIO.CheckScannerAvailability -> {
-                checkScannerModule()
+                startScanner()
             }
 
             is TeamBuildingEvent.NetworkIO.CreateTeamApiCall -> {

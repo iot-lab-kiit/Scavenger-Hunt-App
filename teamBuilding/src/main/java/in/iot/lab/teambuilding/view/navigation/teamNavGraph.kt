@@ -184,12 +184,10 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController = navController)
 
             // State Variables
-            val installState = viewModel.qrInstallerState.collectAsState().value
             val teamJoiningApiState = viewModel.teamData.collectAsState().value
 
             // Join Screen
             JoinTeamScreenControl(
-                installState = installState,
                 teamJoiningApiState = teamJoiningApiState,
                 popBackStack = navController::popBackStack,
                 onJoiningTeam = navController::navigateToRegister,

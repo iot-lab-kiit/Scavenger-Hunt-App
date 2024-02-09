@@ -1,7 +1,6 @@
 package `in`.iot.lab.playgame.view.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -53,12 +52,8 @@ fun PlayGameNavGraph(
         // Scanner Screen
         composable(PLAY_GAME_SCANNER_ROUTE) {
 
-            // State Variables
-            val installState = viewModel.qrInstallerState.collectAsState().value
-
             // Scanner Screen
             PlayScannerScreenControl(
-                installState = installState,
                 popBackStack = navController::popBackStack,
                 setEvent = viewModel::uiListener
             )

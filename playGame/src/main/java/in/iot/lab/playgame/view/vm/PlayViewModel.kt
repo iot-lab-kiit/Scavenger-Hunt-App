@@ -3,60 +3,15 @@ package `in`.iot.lab.playgame.view.vm
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
-import `in`.iot.lab.qrcode.installer.ModuleInstaller
-import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 
 @HiltViewModel
 class PlayViewModel @Inject constructor(
-    private val qrCodeScanner: QrCodeScanner,
-    private val moduleInstaller: ModuleInstaller
+    private val qrCodeScanner: QrCodeScanner
 ) : ViewModel() {
-
-
-    /**
-     * This variable is used to define the QR Scanner Download state
-     */
-    private val _qrInstallerState =
-        MutableStateFlow<ModuleInstallerState>(ModuleInstallerState.Idle)
-    val qrInstallerState = _qrInstallerState.asStateFlow()
-
-
-    /**
-     * This function is used to  check if the scanner is already downloaded or not and if its not
-     * downloaded then we start to download the [QrCodeScanner] module.
-     */
-    private fun checkScannerModule() {
-
-        // Checking if the module is already downloaded
-        moduleInstaller.checkAvailability {
-
-            // updating the Module Installer State
-            _qrInstallerState.value = it
-
-            when (it) {
-
-                // Is Already Installed
-                is ModuleInstallerState.IsAvailable -> {
-                    startScanner()
-                }
-
-                // Is Install Successful
-                is ModuleInstallerState.InstallSuccessful -> {
-                    startScanner()
-                }
-
-                else -> {
-                    // Do Nothing
-                }
-            }
-        }
-    }
 
 
     /**
@@ -99,7 +54,7 @@ class PlayViewModel @Inject constructor(
         when (event) {
 
             is PlayGameEvent.ScannerIO.CheckScannerAvailability -> {
-                checkScannerModule()
+                startScanner()
             }
         }
     }
