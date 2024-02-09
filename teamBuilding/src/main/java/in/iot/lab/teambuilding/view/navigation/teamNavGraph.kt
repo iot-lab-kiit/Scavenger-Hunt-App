@@ -89,7 +89,7 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // User Registration State
-            val userState = viewModel.userRegistrationState.collectAsState().value
+            val userState = viewModel.registrationState.collectAsState().value
 
             // Team Home screen
             TeamHomeScreenControl(
@@ -111,7 +111,7 @@ fun NavGraphBuilder.teamNavGraph(
 
             // Team Name and create team api call State
             val teamName = viewModel.teamName.collectAsState().value
-            val createTeamState = viewModel.teamDataState.collectAsState().value
+            val createTeamState = viewModel.teamData.collectAsState().value
 
             // Create Team
             CreateTeamScreenControl(
@@ -129,7 +129,7 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // State Variables
-            val createTeamState = viewModel.teamDataState.collectAsState().value
+            val createTeamState = viewModel.teamData.collectAsState().value
 
             // Team QR Generating Screen
             RegisterTeamScreenControl(
@@ -143,17 +143,18 @@ fun NavGraphBuilder.teamNavGraph(
         composable(TEAM_BUILDING_JOIN_ROUTE) {
 
             // View Model
-            val viewModel = hiltViewModel<TeamBuildingViewModel>()
+            val viewModel = it.getViewModel<TeamBuildingViewModel>(navController = navController)
 
             // State Variables
             val installState = viewModel.qrInstallerState.collectAsState().value
-            val teamJoiningApiState = viewModel.teamDataState.collectAsState().value
+            val teamJoiningApiState = viewModel.teamData.collectAsState().value
 
             // Join Screen
             JoinTeamScreenControl(
                 installState = installState,
                 teamJoiningApiState = teamJoiningApiState,
-                navController = navController,
+                popBackStack = navController::popBackStack,
+                onJoiningTeam = navController::navigateToRegister,
                 setEvent = viewModel::uiListener
             )
         }

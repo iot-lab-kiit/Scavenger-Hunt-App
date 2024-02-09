@@ -2,11 +2,10 @@ package `in`.iot.lab.authorization.domain.usecase
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
-import `in`.iot.lab.authorization.data.utils.await
 import `in`.iot.lab.authorization.domain.repository.AuthRepository
 import `in`.iot.lab.network.state.ResponseState
 import `in`.iot.lab.network.state.UiState
-import kotlinx.coroutines.delay
+import `in`.iot.lab.network.utils.await
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -21,15 +20,18 @@ class SignInUseCase @Inject constructor(
             if (result.data != null) {
                 val userIdToken = auth.currentUser!!.getIdToken(false).await().token!!
                 val postAuthApiResult = repository.authenticateUserOnServer(userIdToken)
-                // TODO: Remove this delay once the server is ready
-                delay(2000)
-                if (postAuthApiResult is ResponseState.Success && postAuthApiResult.data.user != null) {
-                    emit(UiState.Success(result))
-                } else {
-                    // Logout the user if the server authentication fails as we are navigating
-                    // to teamBuilding screen based on if the current user is not or not
-                    repository.logout()
-                    emit(UiState.Failed("Something went wrong"))
+                when (postAuthApiResult) {
+                    is ResponseState.Success -> {
+                        emit(UiState.Success(result))
+                    }
+                    is ResponseState.Error -> {
+                        repository.logout()
+                        emit(UiState.Failed(postAuthApiResult.exception.message.toString()))
+                    }
+                    else -> {
+                        repository.logout()
+                        emit(UiState.Failed("Something Went Wrong"))
+                    }
                 }
             } else {
                 emit(UiState.Failed("Something went wrong"))

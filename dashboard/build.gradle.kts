@@ -65,6 +65,13 @@ dependencies {
 
     // ----------------------------------------------------------------------------
 
+
+    // LeaderBoard module dependency
+    implementation(project(":leaderBoard"))
+
+    // Play Game module dependency
+    implementation(project(":playGame"))
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
@@ -77,4 +84,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-auth")
 }

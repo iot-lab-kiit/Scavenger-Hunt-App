@@ -1,7 +1,7 @@
 package `in`.iot.lab.network.data.models.user
 
 import com.google.gson.annotations.SerializedName
-import `in`.iot.lab.network.data.models.team.RemoteTeam
+
 
 data class RemoteUser(
     @SerializedName("_id")
@@ -12,10 +12,8 @@ data class RemoteUser(
     val name: String? = null,
     @SerializedName("email")
     val email: String? = null,
-    @SerializedName("token")
-    val token: String? = null,
     @SerializedName("team")
-    val team: RemoteTeam? = null,
+    val team: String? = null,
     @SerializedName("isLead")
     val isLead: Boolean? = null,
     @SerializedName("__v")

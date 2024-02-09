@@ -47,9 +47,21 @@ object NetworkModule {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
+        // Authorization Token
+        val header = "admin0"
+
+        // HTTP Client with bearer token
         return OkHttpClient
             .Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor { chain ->
+                val request = chain
+                    .request()
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer $header")
+                    .build()
+                chain.proceed(request)
+            }
             .build()
     }
 

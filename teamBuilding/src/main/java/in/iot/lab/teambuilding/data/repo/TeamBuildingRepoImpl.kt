@@ -3,7 +3,9 @@ package `in`.iot.lab.teambuilding.data.repo
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
-import `in`.iot.lab.network.utils.NetworkUtil.getRetrofitResponseState
+import `in`.iot.lab.network.utils.NetworkUtil.getResponseState
+import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
+import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import `in`.iot.lab.teambuilding.data.remote.TeamBuildingApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,27 +22,71 @@ class TeamBuildingRepoImpl @Inject constructor(
 ) : TeamBuildingRepo {
 
 
+    /**
+     * This function fetches the [RemoteUser] object by taking the user's UID
+     */
     override suspend fun getUserById(userId: String): ResponseState<RemoteUser> {
         return withContext(Dispatchers.IO) {
-            getRetrofitResponseState {
+            getResponseState {
                 apiService.getUserById(userId = userId)
             }
         }
     }
 
-    override suspend fun createTeam(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+
+    /**
+     * This function creates a team using [CreateTeamBody] object and returns the [RemoteTeam]
+     * object which is created by the backend.
+     */
+    override suspend fun createTeam(teamData: CreateTeamBody): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.createTeam(teamData)
+            }
+        }
     }
 
-    override suspend fun joinTeam(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+
+    /**
+     * This function updates the team using the [UpdateTeamBody] object and returns the updated team
+     * [RemoteTeam] object
+     */
+    override suspend fun joinTeam(
+        updateTeam: UpdateTeamBody,
+        teamId: String
+    ): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.updateTeam(teamId, updateTeam)
+            }
+        }
     }
 
-    override suspend fun registerTeam(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+
+    /**
+     * This function is used to register the Team and it returns the [RemoteTeam] object from the
+     * backend.
+     */
+    override suspend fun registerTeam(
+        updateTeam: UpdateTeamBody,
+        teamId: String
+    ): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.updateTeam(teamId, updateTeam)
+            }
+        }
     }
 
-    override suspend fun getTeamById(): ResponseState<RemoteTeam> {
-        TODO("Not yet implemented")
+
+    /**
+     * This function fetches the team data [RemoteTeam] by using the team's Id.
+     */
+    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.getTeamById(teamId)
+            }
+        }
     }
 }

@@ -1,15 +1,63 @@
 package `in`.iot.lab.dashboard.ui.navigation
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import `in`.iot.lab.dashboard.ui.screen.leaderboard.LeaderboardScreen
-import `in`.iot.lab.dashboard.ui.screen.play.PlayScreen
+import androidx.navigation.navOptions
+import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
 import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
+import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
+import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
+import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
+import `in`.iot.lab.playgame.view.navigation.PlayGameNavGraph
+
+
+const val TEAM_ROUTE = "team_route"
+const val TEAM_DETAILS_ROUTE = "team_details_route"
+
+
+sealed class DashboardOptions(
+    val route: String,
+    @DrawableRes val icon: Int = 0,
+    @DrawableRes val selectedIcon: Int = 0
+) {
+    data object Team : DashboardOptions(
+        route = TEAM_ROUTE,
+        icon = R.drawable.ic_group_outline,
+        selectedIcon = R.drawable.ic_group
+    ) {
+        // Was testing something
+        data object TeamDetails : DashboardOptions(
+            route = TEAM_DETAILS_ROUTE
+        )
+    }
+
+    data object Play : DashboardOptions(
+        route = PLAY_GAME_ROOT_ROUTE,
+        icon = R.drawable.ic_home_outline,
+        selectedIcon = R.drawable.ic_home
+    )
+
+    data object Leaderboard : DashboardOptions(
+        route = LEADERBOARD_ROOT_ROUTE,
+        icon = R.drawable.ic_leaderboard_outline,
+        selectedIcon = R.drawable.ic_leaderboard
+    )
+}
+
+fun NavController.navigateToTeam(navOptions: NavOptions) =
+    navigate(DashboardOptions.Team.route, navOptions)
+
+fun NavController.navigateToTeamDetails(navOptions: NavOptions) =
+    navigate(DashboardOptions.Team.TeamDetails.route, navOptions)
+
 
 @Composable
 internal fun DashboardNavGraph(
@@ -19,27 +67,25 @@ internal fun DashboardNavGraph(
     NavHost(
         navController = navController,
         route = DASHBOARD_ROOT,
-        startDestination = DashboardRoutes.Team.route
+        startDestination = DashboardOptions.Team.route
     ) {
-        composable(DashboardRoutes.Team.route) {
+        composable(DashboardOptions.Team.route) {
             TeamRoute(
                 viewModel = teamViewModel,
-                onNavigateToTeamDetails = {
-                    navController.navigate(TEAM_DETAILS_ROUTE)
-                }
+                onNavigateToTeamDetails = { navController.navigateToTeamDetails(navOptions = navOptions { }) }
             )
         }
-        composable(TEAM_DETAILS_ROUTE) {
+        composable(DashboardOptions.Team.TeamDetails.route) {
             TeamDetailsRoute(
                 viewModel = teamViewModel,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = navController::popBackStack
             )
         }
-        composable(DashboardRoutes.Play.route) {
-            PlayScreen()
+
+        composable(PLAY_GAME_ROOT_ROUTE) {
+            PlayGameNavGraph { }
         }
-        composable(DashboardRoutes.Leaderboard.route) {
-            LeaderboardScreen()
-        }
+
+        leaderBoardNavGraph { }
     }
 }

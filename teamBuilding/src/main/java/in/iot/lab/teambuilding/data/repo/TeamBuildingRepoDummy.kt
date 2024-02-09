@@ -4,6 +4,8 @@ package `in`.iot.lab.teambuilding.data.repo
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
+import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
+import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -36,15 +38,13 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
 
             "3.2" -> {
                 ResponseState.Success(
-                    getUser(1).copy(team = getUnRegisteredTeam(1))
+                    getUser(1)
                 )
             }
 
             "3.3" -> {
                 ResponseState.Success(
-                    getUser(1).copy(
-                        team = RemoteTeam(isRegistered = true)
-                    )
+                    getUser(1)
                 )
             }
 
@@ -54,22 +54,22 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
         }
     }
 
-    override suspend fun createTeam(): ResponseState<RemoteTeam> {
+    override suspend fun createTeam(teamData: CreateTeamBody): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(createNewTeam(1))
     }
 
-    override suspend fun joinTeam(): ResponseState<RemoteTeam> {
+    override suspend fun joinTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(getUnRegisteredTeam(2))
     }
 
-    override suspend fun registerTeam(): ResponseState<RemoteTeam> {
+    override suspend fun registerTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(getUnRegisteredTeam(1).copy(isRegistered = true))
     }
 
-    override suspend fun getTeamById(): ResponseState<RemoteTeam> {
+    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
         delay(4000)
         return ResponseState.Success(getUnRegisteredTeam(3))
     }
@@ -79,11 +79,7 @@ class TeamBuildingRepoDummy @Inject constructor() : TeamBuildingRepo {
             id = "Test User Id $number",
             uid = "Test User Uid $number",
             name = "Test User Name $number",
-            email = "Test user email $number",
-            token = null,
-            team = null,
-            isLead = false,
-            v = null
+            email = "Test user email $number"
         )
     }
 
