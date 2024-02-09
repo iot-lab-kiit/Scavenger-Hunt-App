@@ -1,24 +1,17 @@
 package `in`.iot.lab.teambuilding.view.screens
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.AppTopBar
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
-import `in`.iot.lab.design.components.PrimaryButton
-import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.components.TeamDetailsCard
 import `in`.iot.lab.design.components.TeamMember
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
@@ -26,6 +19,7 @@ import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.qrcode.generator.QrGenerator
+import `in`.iot.lab.teambuilding.view.components.TwoButtonLayout
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 
 
@@ -64,8 +58,11 @@ private fun DefaultPreview() {
 internal fun RegisterTeamScreenControl(
     teamDataState: UiState<RemoteTeam>,
     setEvent: (TeamBuildingEvent) -> Unit,
-    onTeamRegistered: () -> Unit
+    onTeamRegistered: () -> Unit,
+    onBackPress: () -> Unit
 ) {
+
+    BackHandler { onBackPress() }
 
     when (teamDataState) {
 
@@ -108,8 +105,6 @@ private fun RegisterTeamSuccessScreen(
 
     // Default App Background
     AppScreen(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter,
         topBar = {
 
             // Team Name Header App Bar.
@@ -119,7 +114,6 @@ private fun RegisterTeamSuccessScreen(
 
         // Parent Composable UI
         LazyColumn(
-            modifier = Modifier.padding(top = 40.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -149,31 +143,12 @@ private fun RegisterTeamSuccessScreen(
 
             // Register and reload Button
             item {
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                TwoButtonLayout(
+                    onRegisterClick = {
+                        setEvent(TeamBuildingEvent.NetworkIO.RegisterTeamApiCall)
+                    }
                 ) {
-
-                    // Register Button
-                    PrimaryButton(
-                        modifier = Modifier.weight(1f),
-                        enabled = true,
-                        onClick = { setEvent(TeamBuildingEvent.NetworkIO.RegisterTeamApiCall) }
-                    ) {
-                        Text(text = "REGISTER")
-                    }
-
-                    // Reload Button
-                    SecondaryButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            setEvent(TeamBuildingEvent.NetworkIO.GetTeamData)
-                        }
-                    ) {
-                        Text(text = "Reload")
-                    }
+                    setEvent(TeamBuildingEvent.NetworkIO.GetTeamData)
                 }
             }
         }

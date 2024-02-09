@@ -1,10 +1,12 @@
 package `in`.iot.lab.teambuilding.view.navigation
 
+import android.app.Activity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -14,7 +16,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
-import `in`.iot.lab.design.animation.navigation.entry.appFadeInTransition
 import `in`.iot.lab.design.animation.navigation.exit.appFadeOutTransition
 import `in`.iot.lab.design.animation.navigation.entry.appPopEnterSlideAnimation
 import `in`.iot.lab.design.animation.navigation.entry.appEntrySlideInTransition
@@ -93,7 +94,7 @@ fun NavGraphBuilder.teamNavGraph(
         // Home Routes
         composable(
             TEAM_BUILDING_HOME_ROUTE,
-            enterTransition = { appFadeInTransition() },
+            enterTransition = { EnterTransition.None },
             exitTransition = { appExitSlideOutTransition() },
             popEnterTransition = { appPopEnterSlideAnimation() },
             popExitTransition = { appFadeOutTransition() }
@@ -105,6 +106,8 @@ fun NavGraphBuilder.teamNavGraph(
             // User Registration State
             val userState = viewModel.registrationState.collectAsState().value
 
+            val context = LocalContext.current as Activity
+
             // Team Home screen
             TeamHomeScreenControl(
                 userState = userState,
@@ -113,7 +116,7 @@ fun NavGraphBuilder.teamNavGraph(
                 navigateToCreate = navController::navigateToCreate,
                 setEvent = viewModel::uiListener,
                 onTeamRegistered = onTeamRegistered,
-                onBackPress = navController::popBackStack
+                onBackPress = { context.finish() }
             )
         }
 
@@ -145,7 +148,7 @@ fun NavGraphBuilder.teamNavGraph(
         // Register Screen
         composable(
             TEAM_BUILDING_REGISTER_ROUTE,
-            enterTransition = { appEntrySlideInTransition() },
+            enterTransition = { EnterTransition.None },
             exitTransition = { appFadeOutTransition() },
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
@@ -157,11 +160,14 @@ fun NavGraphBuilder.teamNavGraph(
             // State Variables
             val createTeamState = viewModel.teamData.collectAsState().value
 
+            val context = LocalContext.current as Activity
+
             // Team QR Generating Screen
             RegisterTeamScreenControl(
                 teamDataState = createTeamState,
                 setEvent = viewModel::uiListener,
-                onTeamRegistered = onTeamRegistered
+                onTeamRegistered = onTeamRegistered,
+                onBackPress = { context.finish() }
             )
         }
 

@@ -1,12 +1,10 @@
 package `in`.iot.lab.teambuilding.view.screens
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.network.data.models.team.RemoteTeam
@@ -21,7 +19,8 @@ import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
  *
  * @param installState This defines the QR Scanner Module Download state
  * @param teamJoiningApiState This defines the Team Joining Api state
- * @param navController This is the nav Controller which helps to navigate to other screen
+ * @param popBackStack This is used to go back to the previous screen
+ * @param onJoiningTeam This is used to navigate to the Register Team
  * @param setEvent This is used to pass events to the View Model from the UI Layer
  */
 @Composable
@@ -38,7 +37,7 @@ internal fun JoinTeamScreenControl(
         setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    AppScreen {
 
         // Checking the QR Module Install State
         when (installState) {
@@ -98,5 +97,4 @@ internal fun JoinTeamScreenControl(
             }
         }
     }
-
 }
