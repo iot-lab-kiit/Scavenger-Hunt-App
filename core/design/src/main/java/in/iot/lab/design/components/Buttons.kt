@@ -91,10 +91,10 @@ fun SecondaryButton(
         contentPadding = contentPadding,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.primary,
+            disabledContainerColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+            disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
         ),
         shape = shape,
         content = content

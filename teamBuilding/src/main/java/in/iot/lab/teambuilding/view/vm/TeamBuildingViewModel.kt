@@ -44,7 +44,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 06"
+    private val userFirebaseId = "UID 08"
     private var userId = ""
     private var teamId: String? = null
 

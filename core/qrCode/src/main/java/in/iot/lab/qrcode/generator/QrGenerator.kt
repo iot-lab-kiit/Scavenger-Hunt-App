@@ -3,6 +3,8 @@ package `in`.iot.lab.qrcode.generator
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,8 +12,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.unit.dp
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
@@ -32,7 +36,6 @@ fun QrGenerator(
     modifier: Modifier = Modifier,
     content: String,
     contentDescription: String? = null,
-    loaderUI: @Composable () -> Unit = { CircularProgressIndicator(modifier) },
     size: Int = 512
 ) {
 
@@ -47,20 +50,25 @@ fun QrGenerator(
     }
 
     // Checking the Various States and showing the UI accordingly
-    when (qrCodeGenerator) {
+    Box(
+        modifier = modifier.size(200.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        when (qrCodeGenerator) {
 
-        // Generating State
-        is QrGeneratorState.Generating -> {
-            loaderUI()
-        }
+            // Generating State
+            is QrGeneratorState.Generating -> {
+                CircularProgressIndicator()
+            }
 
-        // Generation of QR is Completed
-        is QrGeneratorState.Completed -> {
-            Image(
-                modifier = modifier,
-                bitmap = (qrCodeGenerator as QrGeneratorState.Completed).bitmap.asImageBitmap(),
-                contentDescription = contentDescription
-            )
+            // Generation of QR is Completed
+            is QrGeneratorState.Completed -> {
+                Image(
+                    modifier = modifier,
+                    bitmap = (qrCodeGenerator as QrGeneratorState.Completed).bitmap.asImageBitmap(),
+                    contentDescription = contentDescription
+                )
+            }
         }
     }
 }
