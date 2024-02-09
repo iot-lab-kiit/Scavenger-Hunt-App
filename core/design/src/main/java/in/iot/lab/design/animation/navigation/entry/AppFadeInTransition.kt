@@ -6,6 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 
 
-fun appEntryFadeInTransition(): EnterTransition {
+fun appFadeInTransition(): EnterTransition {
     return fadeIn(animationSpec = tween(500))
 }

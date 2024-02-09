@@ -6,6 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 
 
-fun appPopExitFadeAnimation(): ExitTransition {
+fun appFadeOutTransition(): ExitTransition {
     return fadeOut(animationSpec = tween(500, easing = LinearEasing))
 }
