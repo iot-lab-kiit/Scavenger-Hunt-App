@@ -1,5 +1,7 @@
 package `in`.iot.lab.teambuilding.view.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -12,8 +14,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
-import `in`.iot.lab.design.animation.navigation.entry.appEntryFadeInTransition
-import `in`.iot.lab.design.animation.navigation.exit.appPopExitFadeAnimation
+import `in`.iot.lab.design.animation.navigation.entry.appFadeInTransition
+import `in`.iot.lab.design.animation.navigation.exit.appFadeOutTransition
 import `in`.iot.lab.design.animation.navigation.entry.appPopEnterSlideAnimation
 import `in`.iot.lab.design.animation.navigation.entry.appEntrySlideInTransition
 import `in`.iot.lab.design.animation.navigation.exit.appExitSlideOutTransition
@@ -91,10 +93,10 @@ fun NavGraphBuilder.teamNavGraph(
         // Home Routes
         composable(
             TEAM_BUILDING_HOME_ROUTE,
-            enterTransition = { appEntryFadeInTransition() },
+            enterTransition = { appFadeInTransition() },
             exitTransition = { appExitSlideOutTransition() },
             popEnterTransition = { appPopEnterSlideAnimation() },
-            popExitTransition = { appPopExitFadeAnimation() }
+            popExitTransition = { appFadeOutTransition() }
         ) {
 
             // View Model of the graph
@@ -120,7 +122,8 @@ fun NavGraphBuilder.teamNavGraph(
             TEAM_BUILDING_CREATE_ROUTE,
             enterTransition = { appEntrySlideInTransition() },
             exitTransition = { appExitSlideOutTransition() },
-            popExitTransition = { appPopExitSlideOutTransition() }
+            popExitTransition = { appPopExitSlideOutTransition() },
+            popEnterTransition = { EnterTransition.None }
         ) {
 
             // View Model of the graph
@@ -140,7 +143,13 @@ fun NavGraphBuilder.teamNavGraph(
         }
 
         // Register Screen
-        composable(TEAM_BUILDING_REGISTER_ROUTE) {
+        composable(
+            TEAM_BUILDING_REGISTER_ROUTE,
+            enterTransition = { appEntrySlideInTransition() },
+            exitTransition = { appFadeOutTransition() },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
 
             // View Model
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
@@ -157,7 +166,13 @@ fun NavGraphBuilder.teamNavGraph(
         }
 
         // Join Screen Route
-        composable(TEAM_BUILDING_JOIN_ROUTE) {
+        composable(
+            TEAM_BUILDING_JOIN_ROUTE,
+            enterTransition = { appEntrySlideInTransition() },
+            exitTransition = { appExitSlideOutTransition() },
+            popExitTransition = { appPopExitSlideOutTransition() },
+            popEnterTransition = { EnterTransition.None }
+        ) {
 
             // View Model
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController = navController)
