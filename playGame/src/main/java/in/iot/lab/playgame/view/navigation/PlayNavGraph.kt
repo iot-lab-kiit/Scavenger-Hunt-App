@@ -1,17 +1,17 @@
 package `in`.iot.lab.playgame.view.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.compose.rememberNavController
 import `in`.iot.lab.playgame.view.screens.PlayHintScreenControl
 import `in`.iot.lab.playgame.view.screens.PlayScannerScreenControl
+import `in`.iot.lab.playgame.view.vm.PlayViewModel
 
 
 // Play Game Routes
@@ -34,20 +34,34 @@ fun NavController.navigateToPlay(navOptions: NavOptions) {
 /**
  * This function contains the Navigation graph for the Play Game Feature.
  *
+ * @param navController This is the nav controller which would be used for this feature only.
  * @param onBackPress This function is invoked when the user hits back from the play game feature.
  */
-fun NavGraphBuilder.playNavGraph(
+@Composable
+fun PlayGameNavGraph(
+    navController: NavHostController = rememberNavController(),
+    viewModel: PlayViewModel = hiltViewModel(),
     onBackPress: () -> Unit
 ) {
 
-    navigation(
-        route = PLAY_GAME_ROOT_ROUTE,
+    // Nav Graph for the Play Game Feature
+    NavHost(
+        navController = navController,
         startDestination = PLAY_GAME_SCANNER_ROUTE
     ) {
 
         // Scanner Screen
         composable(PLAY_GAME_SCANNER_ROUTE) {
-            PlayScannerScreenControl()
+
+            // State Variables
+            val installState = viewModel.qrInstallerState.collectAsState().value
+
+            // Scanner Screen
+            PlayScannerScreenControl(
+                installState = installState,
+                popBackStack = navController::popBackStack,
+                setEvent = viewModel::uiListener
+            )
         }
 
         // Hints Screen
@@ -55,23 +69,4 @@ fun NavGraphBuilder.playNavGraph(
             PlayHintScreenControl()
         }
     }
-
-}
-
-/**
- * This function creates a [ViewModel] scoped to the Nav Graph so that the same view Model can be
- * used across the whole app.
- *
- * @param navController This is the nav controller which can be used to get the nav graph to scope
- * the View Model to the nav Graph.
- */
-@Composable
-inline fun <reified VM : ViewModel> NavBackStackEntry.getViewModel(
-    navController: NavController
-): VM {
-    val navGraphRoute = destination.parent?.route ?: return hiltViewModel()
-    val parentEntry = remember(this) {
-        navController.getBackStackEntry(navGraphRoute)
-    }
-    return hiltViewModel(parentEntry)
 }

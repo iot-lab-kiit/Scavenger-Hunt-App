@@ -16,7 +16,7 @@ import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
 import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
 import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
-import `in`.iot.lab.playgame.view.navigation.playNavGraph
+import `in`.iot.lab.playgame.view.navigation.PlayGameNavGraph
 
 
 const val TEAM_ROUTE = "team_route"
@@ -81,7 +81,10 @@ internal fun DashboardNavGraph(
                 onBackClick = navController::popBackStack
             )
         }
-        playNavGraph { }
+
+        composable(PLAY_GAME_ROOT_ROUTE) {
+            PlayGameNavGraph { }
+        }
 
         leaderBoardNavGraph { }
     }
