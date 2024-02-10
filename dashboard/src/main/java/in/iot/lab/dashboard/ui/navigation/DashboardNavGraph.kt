@@ -7,11 +7,13 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
@@ -65,7 +67,13 @@ internal fun DashboardNavGraph(
 ) {
 
     val context = LocalContext.current as Activity
-
+    val onBackPressed: () -> Unit = {
+        with(navController) {
+            if (currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                popBackStack()
+            }
+        }
+    }
     NavHost(
         navController = navController,
         route = DASHBOARD_ROOT,
@@ -90,7 +98,7 @@ internal fun DashboardNavGraph(
         composable(TEAM_DETAILS_ROUTE) {
             TeamDetailsRoute(
                 viewModel = teamViewModel,
-                onBackClick = navController::popBackStack,
+                onBackClick = onBackPressed,
                 onTryAgainClick = teamViewModel::getTeamByUserUid,
                 onCancelClick = { context.finish() }
             )
@@ -98,7 +106,12 @@ internal fun DashboardNavGraph(
 
         // Play Game Screen
         composable(PLAY_GAME_ROOT_ROUTE) {
-            PlayGameNavGraph { }
+            PlayGameNavGraph(
+                onCancelClick = {
+                    navController.navigateToTeam(navOptions {})
+                },
+                onBackPress = {}
+            )
         }
 
         // Leaderboard Screen
