@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val brand = Color(0xFFCC2936)
 val background = Color(0xFF11151C)
 val foreground = Color(0xFFF1F2EB)
+val darkBackGround = Color(0xFF010010)
 
 //
 val md_theme_light_primary = brand

@@ -66,7 +66,10 @@ fun PlayGameNavGraph(
 
         // Hints Screen
         composable(PLAY_GAME_HINT_ROUTE) {
-            PlayHintScreenControl()
+
+            val hintData = viewModel.hintData.collectAsState().value
+
+            PlayHintScreenControl(hintData = hintData)
         }
     }
 }

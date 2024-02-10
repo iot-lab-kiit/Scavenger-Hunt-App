@@ -33,6 +33,7 @@ import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.design.R
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
+import `in`.iot.lab.design.theme.darkBackGround
 
 
 // Preview Function
@@ -118,7 +119,7 @@ private fun PlayHintSuccessScreen(hintData: RemoteHint) {
             width = 2.5.dp,
             color = MaterialTheme.colorScheme.primary
         ),
-        colors = CardDefaults.outlinedCardColors(containerColor = Color(0xFF010010))
+        colors = CardDefaults.outlinedCardColors(containerColor = darkBackGround)
     ) {
         Column(
             modifier = Modifier

@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppBackgroundImage
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
@@ -114,7 +113,6 @@ private fun CreateTeamIdleScreen(
             ConfirmDialogUI(
                 text = "Are you Sure you want to Continue? You won't be able to Join " +
                         "Another Team after Joining one.",
-                imageId = R.drawable.server_error,
                 onDismiss = { isCreateTeamLast = false }
             ) {
                 setEvent(TeamBuildingEvent.NetworkIO.CreateTeamApiCall)
