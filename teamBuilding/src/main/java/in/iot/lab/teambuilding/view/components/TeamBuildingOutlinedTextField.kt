@@ -39,7 +39,7 @@ internal fun TeamBuildingOutlinedTextField(
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
         focusedLabelColor = MaterialTheme.colorScheme.primary,
-        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
         focusedTextColor = MaterialTheme.colorScheme.onPrimary
     ),
     onValueChange: (String) -> Unit

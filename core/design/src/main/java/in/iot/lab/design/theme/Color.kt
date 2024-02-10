@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val brand = Color(0xFFCC2936)
 val background = Color(0xFF11151C)
 val foreground = Color(0xFFF1F2EB)
+val darkBackGround = Color(0xFF010010)
 
 //
 val md_theme_light_primary = brand
@@ -25,8 +26,8 @@ val md_theme_light_onError = Color(0xFFFFFFFF)
 val md_theme_light_onErrorContainer = Color(0xFF410002)
 val md_theme_light_background = background
 val md_theme_light_onBackground = foreground
-val md_theme_light_surface = Color(0xFFFDFBFF)
-val md_theme_light_onSurface = Color(0xFF001B3D)
+val md_theme_light_surface = background
+val md_theme_light_onSurface = foreground
 val md_theme_light_surfaceVariant = Color(0xFFF4DDDC)
 val md_theme_light_onSurfaceVariant = Color(0xFF534342)
 val md_theme_light_outline = Color(0xFF857372)

@@ -1,6 +1,7 @@
 package `in`.iot.lab.design.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +25,7 @@ fun AppScreen(
     floatingActionButton: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     contentAlignment: Alignment = Alignment.Center,
-    body: @Composable () -> Unit
+    body: @Composable BoxScope.() -> Unit
 ) {
     Scaffold(
         modifier = modifier,

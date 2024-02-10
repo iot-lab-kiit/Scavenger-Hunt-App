@@ -3,6 +3,7 @@ package `in`.iot.lab.design.components
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -73,7 +76,7 @@ fun ErrorDialog(
     modifier: Modifier = Modifier,
     title: String = "Whoops !!",
     text: String = "No Internet connection was found. Check your connection or try again.",
-    imageId: Int = R.drawable.server_error,
+    imageId: Int = R.drawable.error_image,
     onCancel: () -> Unit = {},
     onTryAgain: () -> Unit = {}
 ) {
@@ -93,8 +96,17 @@ fun ErrorDialog(
                 dismissOnClickOutside = false
             )
         ) {
-            Card(shape = RoundedCornerShape(8.dp),) {
-            // Dialog Contents which would be shown inside the Dialog
+            OutlinedCard(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.outlinedCardColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                border = BorderStroke(
+                    width = 2.5.dp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                // Dialog Contents which would be shown inside the Dialog
                 DialogContent(
                     modifier = modifier,
                     imageId = imageId,
@@ -136,7 +148,7 @@ private fun DialogContent(
 ) {
 
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -146,6 +158,7 @@ private fun DialogContent(
             painter = painterResource(id = imageId),
             contentDescription = null,
             modifier = Modifier
+                .padding(start = 64.dp)
                 .height(180.dp)
                 .fillMaxWidth()
         )

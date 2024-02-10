@@ -22,13 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.components.SecondaryButton
+import `in`.iot.lab.design.R
 
 
 @Composable
 fun ConfirmDialogUI(
     modifier: Modifier = Modifier,
     text: String,
-    @DrawableRes imageId: Int,
+    @DrawableRes imageId: Int = R.drawable.error_image,
     onDismiss: () -> Unit,
     onContinue: () -> Unit
 ) {

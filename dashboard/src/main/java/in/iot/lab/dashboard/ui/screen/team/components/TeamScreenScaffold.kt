@@ -1,6 +1,7 @@
 package `in`.iot.lab.dashboard.ui.screen.team.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,7 +30,7 @@ fun TeamScreenScaffoldUI(
     headerText: String,
     onNavigateToTeamDetails: () -> Unit,
     point: String,
-    body: @Composable () -> Unit
+    body: @Composable BoxScope.() -> Unit
 ) {
 
     // Scaffold

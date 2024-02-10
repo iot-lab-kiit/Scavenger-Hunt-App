@@ -1,6 +1,8 @@
 package `in`.iot.lab.dashboard.ui.navigation
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -13,6 +15,7 @@ import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
 import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
+import `in`.iot.lab.design.animation.navigation.exit.appFadeOutTransition
 import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
 import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
@@ -67,7 +70,11 @@ internal fun DashboardNavGraph(
     NavHost(
         navController = navController,
         route = DASHBOARD_ROOT,
-        startDestination = DashboardOptions.Team.route
+        startDestination = DashboardOptions.Team.route,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popExitTransition = { appFadeOutTransition() },
+        popEnterTransition = { EnterTransition.None }
     ) {
         composable(DashboardOptions.Team.route) {
             TeamRoute(
