@@ -6,6 +6,8 @@ object NetworkConstants {
 //    const val BASE_URL = "http://14.139.221.186:5000"
     const val BASE_URL = "https://295b-14-139-221-185.ngrok-free.app"
 
+    const val USER_UID = "UID 01"
+
     // Auth ENDPOINT
     const val AUTH_ENDPOINT = "/auth"
 

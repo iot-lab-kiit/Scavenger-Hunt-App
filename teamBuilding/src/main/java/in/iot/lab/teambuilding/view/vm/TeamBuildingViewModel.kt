@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
@@ -39,7 +40,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 01"
+    private val userFirebaseId = NetworkConstants.USER_UID
     private var userId = ""
     private var teamId: String? = null
 
