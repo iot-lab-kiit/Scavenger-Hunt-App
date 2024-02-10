@@ -1,61 +1,118 @@
 package `in`.iot.lab.playgame.view.vm
 
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.iot.lab.network.data.models.hint.RemoteHint
+import `in`.iot.lab.network.data.models.team.RemoteTeam
+import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkUtil.toUiState
+import `in`.iot.lab.network.utils.await
+import `in`.iot.lab.playgame.data.model.UpdatePointRequest
+import `in`.iot.lab.playgame.data.repo.PlayRepo
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
-import `in`.iot.lab.qrcode.installer.ModuleInstaller
-import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class PlayViewModel @Inject constructor(
     private val qrCodeScanner: QrCodeScanner,
-    private val moduleInstaller: ModuleInstaller
+    private val repository: PlayRepo,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
+    private var teamId = ""
+
+    private var userUid: String? = auth.currentUser?.uid
 
     /**
-     * This variable is used to define the QR Scanner Download state
+     * This variable is used to store the teamData.
      */
-    private val _qrInstallerState =
-        MutableStateFlow<ModuleInstallerState>(ModuleInstallerState.Idle)
-    val qrInstallerState = _qrInstallerState.asStateFlow()
+    private val _hintData = MutableStateFlow<UiState<RemoteHint>>(UiState.Idle)
+    val hintData = _hintData.asStateFlow()
 
 
     /**
-     * This function is used to  check if the scanner is already downloaded or not and if its not
-     * downloaded then we start to download the [QrCodeScanner] module.
+     * This variable is used to store the team data.
      */
-    private fun checkScannerModule() {
+    private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
+    val teamData = _teamData.asStateFlow()
 
-        // Checking if the module is already downloaded
-        moduleInstaller.checkAvailability {
+    private var hintId = ""
 
-            // updating the Module Installer State
-            _qrInstallerState.value = it
 
-            when (it) {
+    init {
+        getTeamByUserUid()
+    }
 
-                // Is Already Installed
-                is ModuleInstallerState.IsAvailable -> {
-                    startScanner()
-                }
 
-                // Is Install Successful
-                is ModuleInstallerState.InstallSuccessful -> {
-                    startScanner()
-                }
+    /**
+     * This function fetches the Team Data from the Server.
+     */
+    private fun getTeamByUserUid() {
 
-                else -> {
-                    // Do Nothing
-                }
-            }
+        if (_teamData.value is UiState.Loading)
+            return
+
+        _teamData.value = UiState.Loading
+
+        if (userUid == null) {
+            _teamData.value = UiState.Failed("Data Not Found! Please restart the App Once.")
+            return
         }
+
+        viewModelScope.launch {
+
+            val token = auth.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
+            _teamData.value = repository
+                .getTeamById(userUid!!, bearerToken)
+                .toUiState()
+
+            if (_teamData.value is UiState.Success)
+                teamId = (_teamData.value as UiState.Success<RemoteTeam>).data.id ?: ""
+
+        }
+    }
+
+
+    /**
+     * This function is called after the scanner scans the hint. It updates the points in the
+     * database for the correct hint.
+     */
+    private fun updatePoints(hintId: String) {
+
+        this.hintId = hintId
+
+        if (_hintData.value is UiState.Loading)
+            return
+
+        _hintData.value = UiState.Loading
+
+        viewModelScope.launch {
+
+            val token = auth.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
+            _hintData.value = repository
+                .updateHints(
+                    teamId = teamId,
+                    updatePointRequest = UpdatePointRequest(
+                        score = 100,
+                        hintId = hintId
+                    ),
+                    token = bearerToken
+                ).toUiState()
+        }
+
     }
 
 
@@ -63,22 +120,24 @@ class PlayViewModel @Inject constructor(
      * This function starts the [QrCodeScanner] scanner and start to scan for QR Codes.
      */
     private fun startScanner() {
+
         qrCodeScanner.startScanner {
+
             when (it) {
 
                 // User Cancelled The Scanner Scan
                 is QrScannerState.Cancelled -> {
-                    TODO("Handle Scanner Cancelled State")
+                    _hintData.value = UiState.Failed("User Cancelled the Scanner!")
                 }
 
                 // Scanner Scan is successful
                 is QrScannerState.Success -> {
-                    TODO("Handle Scanner Success State")
+                    updatePoints(hintId = it.code)
                 }
 
                 // Scanner scan is a failure
                 is QrScannerState.Failure -> {
-                    TODO("Handle Scanner Failure State")
+                    _hintData.value = UiState.Failed(it.exception.message.toString())
                 }
 
                 else -> {
@@ -99,7 +158,20 @@ class PlayViewModel @Inject constructor(
         when (event) {
 
             is PlayGameEvent.ScannerIO.CheckScannerAvailability -> {
-                checkScannerModule()
+                startScanner()
+            }
+
+            is PlayGameEvent.NetworkIO.GetTeamData -> {
+                getTeamByUserUid()
+            }
+
+            is PlayGameEvent.NetworkIO.GetHintDetails -> {
+                updatePoints(hintId)
+            }
+
+            is PlayGameEvent.Helper.ResetScanner -> {
+                _hintData.value = UiState.Idle
+                _teamData.value = UiState.Idle
             }
         }
     }

@@ -4,17 +4,15 @@ import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,19 +20,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import `in`.iot.lab.authorization.domain.model.User
 import `in`.iot.lab.design.R
+import `in`.iot.lab.authorization.domain.model.User
+import `in`.iot.lab.design.components.AppBackgroundImage
 import `in`.iot.lab.design.components.AppScreen
-import `in`.iot.lab.design.components.PrimaryButton
+import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
+
 
 @Composable
 internal fun SignInRoute(
@@ -54,67 +56,72 @@ internal fun SignInRoute(
     )
 }
 
-// TODO: Use better UI
+
 @Composable
 internal fun SignInScreen(
     state: SignInState = SignInState(),
     onLoginClicked: () -> Unit = {}
 ) {
     AppScreen {
-        Image(
-            painter = painterResource(id = R.drawable.matrix_background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
-        )
+
+        // Back Ground Image
+        AppBackgroundImage()
+
+
         Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            // Matrix Header
             TheMatrixHeaderUI()
 
-            Spacer(modifier = Modifier.height(150.dp))
-
-            PrimaryButton(
-                onClick = onLoginClicked,
+            // Sign in with google button
+            SecondaryButton(
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 32.dp)
-                    .fillMaxWidth()
-                    .height(height = 56.dp),
-                shape = RoundedCornerShape(16.dp)
+                    .padding(horizontal = 56.dp)
+                    .fillMaxWidth(),
+                onClick = onLoginClicked,
+                shape = RoundedCornerShape(16.dp),
+                contentPadding = PaddingValues(12.dp)
             ) {
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(
-                        painter = painterResource(id = `in`.iot.lab.authorization.R.drawable.ic_google),
-                        contentDescription = "Google Sign In",
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .size(32.dp)
-                    )
+
+                    // Sign in with text
                     Text(
-                        text = "Sign In with Google",
-                        style = MaterialTheme.typography.headlineSmall.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        text = "SIGN IN WITH",
+                        fontStyle = FontStyle(`in`.iot.lab.design.R.font.montserratsemibold),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp
+                    )
+
+                    // Google Logo
+                    Image(
+                        painter = painterResource(id = R.drawable.google),
+                        contentDescription = "Google Sign In",
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
-            if (state.isLoading) {
-                CircularProgressIndicator()
-            }
-            if (state.errorMessage != null) {
-                Text(
-                    text = state.errorMessage,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    )
-                )
-            }
+        }
+
+        // Error Message
+        if (state.errorMessage != null) {
+            ErrorDialog(text = state.errorMessage)
+        }
+
+
+        // Loading State
+        if (state.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 56.dp)
+            )
         }
     }
 }

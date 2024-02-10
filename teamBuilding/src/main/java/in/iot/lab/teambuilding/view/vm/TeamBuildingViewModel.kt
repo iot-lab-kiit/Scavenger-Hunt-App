@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
+import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
-import `in`.iot.lab.qrcode.installer.ModuleInstaller
-import `in`.iot.lab.qrcode.installer.ModuleInstallerState
+import `in`.iot.lab.network.utils.await
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 
 /**
@@ -30,21 +29,17 @@ import javax.inject.Named
  *
  * @param qrCodeScanner This is the [QrCodeScanner] object which is used to Scan QR Codes and get
  * the Team ID.
- * @param moduleInstaller This is the Module which check if the QR Code Scanner Module is downloaded
- * and downloads if its not previously downloaded.
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
-    @Named("production") private val repository: TeamBuildingRepo,
-    firebase: FirebaseAuth,
-    private val qrCodeScanner: QrCodeScanner,
-    private val moduleInstaller: ModuleInstaller
+    private val repository: TeamBuildingRepo,
+    private val firebase: FirebaseAuth,
+    private val qrCodeScanner: QrCodeScanner
 ) : ViewModel() {
 
 
     // Firebase UID
-//    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 06"
+    private val userFirebaseId = firebase.currentUser?.uid ?: ""
     private var userId = ""
     private var teamId: String? = null
 
@@ -56,6 +51,13 @@ class TeamBuildingViewModel @Inject constructor(
     private val _registrationState =
         MutableStateFlow<UserRegistrationState>(UserRegistrationState.Idle)
     val registrationState = _registrationState.asStateFlow()
+
+
+    /**
+     * This variable is used to store the user's data.
+     */
+    private val _userData = MutableStateFlow(RemoteUser())
+    val userData = _userData.asStateFlow()
 
 
     /**
@@ -80,9 +82,12 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             // Fetching the User's Data to get the teamId from the User DB
             val response = repository
-                .getUserById(userFirebaseId)
+                .getUserById(userFirebaseId, bearerToken)
                 .toUiState()
 
             // Checking if the Api call is successful or not
@@ -90,6 +95,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // Setting the User Id and the Team Id
                 userId = response.data.id!!
+                _userData.value = response.data
                 teamId = response.data.team
 
                 // Checking if the Team id is null
@@ -101,9 +107,12 @@ class TeamBuildingViewModel @Inject constructor(
                 }
 
                 // Fetching the Team Data if the Team Id is not null
-                _teamData.value = repository
-                    .getTeamById(teamId!!)
+                val teamDataResponse = repository
+                    .getTeamById(userFirebaseId, bearerToken)
                     .toUiState()
+
+                if (response !is UiState.Loading)
+                    _teamData.value = teamDataResponse
 
                 // Setting the Registration State accordingly
                 _registrationState.value = _teamData.value.toUserRegistrationState()
@@ -126,8 +135,12 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
-                .getTeamById(teamId!!)
+                .getTeamById(userFirebaseId, bearerToken)
                 .toUiState()
         }
     }
@@ -161,13 +174,18 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
                 .createTeam(
                     CreateTeamBody(
                         teamName = _teamName.value,
                         teamLead = userId,
                         teamMembers = listOf(userId)
-                    )
+                    ),
+                    token = bearerToken
                 )
                 .toUiState()
 
@@ -190,10 +208,15 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
                 .joinTeam(
                     updateTeam = UpdateTeamBody(userId = userFirebaseId),
-                    teamId = joinTeamId
+                    teamId = joinTeamId,
+                    token = bearerToken
                 )
                 .toUiState()
 
@@ -203,11 +226,15 @@ class TeamBuildingViewModel @Inject constructor(
         }
     }
 
+    private var tempTeamData: UiState<RemoteTeam> = UiState.Idle
+
 
     /**
      * This function calls the api to registers the Team in the backend.
      */
     private fun registerTeam() {
+
+        tempTeamData = _teamData.value
 
         if (_teamData.value is UiState.Loading)
             return
@@ -215,6 +242,10 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
                 .registerTeam(
                     updateTeam = UpdateTeamBody
@@ -222,50 +253,16 @@ class TeamBuildingViewModel @Inject constructor(
                         userId = userFirebaseId,
                         isRegistered = true
                     ),
-                    teamId = teamId!!
+                    teamId = teamId!!,
+                    token = bearerToken
                 )
                 .toUiState()
         }
     }
 
 
-    /**
-     * This variable is used to define the QR Scanner Download state
-     */
-    private val _qrInstallerState =
-        MutableStateFlow<ModuleInstallerState>(ModuleInstallerState.Idle)
-    val qrInstallerState = _qrInstallerState.asStateFlow()
-
-
-    /**
-     * This function is used to  check if the scanner is already downloaded or not and if its not
-     * downloaded then we start to download the [QrCodeScanner] module.
-     */
-    private fun checkScannerModule() {
-
-        // Checking if the module is already downloaded
-        moduleInstaller.checkAvailability {
-
-            // updating the Module Installer State
-            _qrInstallerState.value = it
-
-            when (it) {
-
-                // Is Already Installed
-                is ModuleInstallerState.IsAvailable -> {
-                    startScanner()
-                }
-
-                // Is Install Successful
-                is ModuleInstallerState.InstallSuccessful -> {
-                    startScanner()
-                }
-
-                else -> {
-                    // Do Nothing
-                }
-            }
-        }
+    private fun onCancelInRegisterScreenClick() {
+        _teamData.value = tempTeamData
     }
 
 
@@ -317,7 +314,7 @@ class TeamBuildingViewModel @Inject constructor(
             }
 
             is TeamBuildingEvent.ScannerIO.CheckScannerAvailability -> {
-                checkScannerModule()
+                startScanner()
             }
 
             is TeamBuildingEvent.NetworkIO.CreateTeamApiCall -> {
@@ -330,6 +327,10 @@ class TeamBuildingViewModel @Inject constructor(
 
             is TeamBuildingEvent.NetworkIO.GetTeamData -> {
                 getTeamById()
+            }
+
+            is TeamBuildingEvent.Helper.OnClickInRegisterScreen -> {
+                onCancelInRegisterScreenClick()
             }
         }
     }

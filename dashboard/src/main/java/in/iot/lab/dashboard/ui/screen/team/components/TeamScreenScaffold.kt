@@ -1,18 +1,10 @@
 package `in`.iot.lab.dashboard.ui.screen.team.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.AppTopBar
-import `in`.iot.lab.design.components.PrimaryButton
 
 
 /**
@@ -29,7 +21,7 @@ fun TeamScreenScaffoldUI(
     headerText: String,
     onNavigateToTeamDetails: () -> Unit,
     point: String,
-    body: @Composable () -> Unit
+    body: @Composable BoxScope.() -> Unit
 ) {
 
     // Scaffold
@@ -42,24 +34,6 @@ fun TeamScreenScaffoldUI(
                 onNextButtonClick = onNavigateToTeamDetails,
                 pointDisplay = point
             )
-        },
-
-        // Floating Action Button UI
-        floatingActionButton = {
-            PrimaryButton(
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-                    .size(70.dp),
-                onClick = {},
-                contentPadding = PaddingValues(10.dp, 0.dp)
-            ) {
-
-                // Map Image
-                Image(
-                    painter = painterResource(id = R.drawable.map),
-                    contentDescription = "Map Icon"
-                )
-            }
         },
 
         contentAlignment = Alignment.TopCenter,

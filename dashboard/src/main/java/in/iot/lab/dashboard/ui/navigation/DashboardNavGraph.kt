@@ -1,18 +1,22 @@
 package `in`.iot.lab.dashboard.ui.navigation
 
+import android.app.Activity
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
 import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
 import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
+import `in`.iot.lab.design.animation.navigation.exit.appFadeOutTransition
 import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
 import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
@@ -32,12 +36,7 @@ sealed class DashboardOptions(
         route = TEAM_ROUTE,
         icon = R.drawable.ic_group_outline,
         selectedIcon = R.drawable.ic_group
-    ) {
-        // Was testing something
-        data object TeamDetails : DashboardOptions(
-            route = TEAM_DETAILS_ROUTE
-        )
-    }
+    )
 
     data object Play : DashboardOptions(
         route = PLAY_GAME_ROOT_ROUTE,
@@ -55,8 +54,8 @@ sealed class DashboardOptions(
 fun NavController.navigateToTeam(navOptions: NavOptions) =
     navigate(DashboardOptions.Team.route, navOptions)
 
-fun NavController.navigateToTeamDetails(navOptions: NavOptions) =
-    navigate(DashboardOptions.Team.TeamDetails.route, navOptions)
+fun NavController.navigateToTeamDetails(navOptions: NavOptions? = null) =
+    navigate(TEAM_DETAILS_ROUTE, navOptions)
 
 
 @Composable
@@ -64,28 +63,45 @@ internal fun DashboardNavGraph(
     navController: NavHostController,
     teamViewModel: TeamScreenViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current as Activity
+
     NavHost(
         navController = navController,
         route = DASHBOARD_ROOT,
-        startDestination = DashboardOptions.Team.route
+        startDestination = DashboardOptions.Team.route,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popExitTransition = { appFadeOutTransition() },
+        popEnterTransition = { EnterTransition.None }
     ) {
+
+        // Team Screen
         composable(DashboardOptions.Team.route) {
             TeamRoute(
                 viewModel = teamViewModel,
-                onNavigateToTeamDetails = { navController.navigateToTeamDetails(navOptions = navOptions { }) }
-            )
-        }
-        composable(DashboardOptions.Team.TeamDetails.route) {
-            TeamDetailsRoute(
-                viewModel = teamViewModel,
-                onBackClick = navController::popBackStack
+                onCancelClick = { context.finish() },
+                onTryAgainClick = teamViewModel::getTeamByUserUid,
+                onNavigateToTeamDetails = navController::navigateToTeamDetails
             )
         }
 
+        // Team Details Screen
+        composable(TEAM_DETAILS_ROUTE) {
+            TeamDetailsRoute(
+                viewModel = teamViewModel,
+                onBackClick = navController::popBackStack,
+                onTryAgainClick = teamViewModel::getTeamByUserUid,
+                onCancelClick = { context.finish() }
+            )
+        }
+
+        // Play Game Screen
         composable(PLAY_GAME_ROOT_ROUTE) {
             PlayGameNavGraph { }
         }
 
+        // Leaderboard Screen
         leaderBoardNavGraph { }
     }
 }

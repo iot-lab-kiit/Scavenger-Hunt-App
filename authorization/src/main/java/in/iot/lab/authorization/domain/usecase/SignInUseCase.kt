@@ -19,15 +19,16 @@ class SignInUseCase @Inject constructor(
             val result = repository.signIn(context)
             if (result.data != null) {
                 val userIdToken = auth.currentUser!!.getIdToken(false).await().token!!
-                val postAuthApiResult = repository.authenticateUserOnServer(userIdToken)
-                when (postAuthApiResult) {
+                when (val postAuthApiResult = repository.authenticateUserOnServer(userIdToken)) {
                     is ResponseState.Success -> {
                         emit(UiState.Success(result))
                     }
+
                     is ResponseState.Error -> {
                         repository.logout()
                         emit(UiState.Failed(postAuthApiResult.exception.message.toString()))
                     }
+
                     else -> {
                         repository.logout()
                         emit(UiState.Failed("Something Went Wrong"))
