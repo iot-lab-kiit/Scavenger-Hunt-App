@@ -12,9 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import `in`.iot.lab.dashboard.ui.screen.team.components.ProgressAnimation
 import `in`.iot.lab.dashboard.ui.screen.team.components.TextAndProgressUI
+import `in`.iot.lab.dashboard.ui.screen.team.components.VanillaProgressAnimation
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 
 
@@ -35,13 +34,12 @@ fun TeamScreenContent(
     ) {
 
         // Progress Animation (Comet Design)
-        ProgressAnimation(
+        VanillaProgressAnimation(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.25f),
             mainProgressStatus = tempMainQuests,
-            subsidiaryProgressStatus = tempSideQuests,
-            fontSize = 20.sp
+            subsidiaryProgressStatus = tempSideQuests
         )
 
         // Spacer between the Comet Animation and the Quest Progress Bars.
