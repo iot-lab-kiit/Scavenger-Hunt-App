@@ -1,5 +1,6 @@
 package `in`.iot.lab.playgame.data.repo
 
+import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.ResponseState
 import `in`.iot.lab.network.utils.NetworkUtil.getResponseState
@@ -22,7 +23,7 @@ class PlayRepoImpl @Inject constructor(
     override suspend fun updateHints(
         teamId: String,
         updatePointRequest: UpdatePointRequest
-    ): ResponseState<RemoteTeam> {
+    ): ResponseState<RemoteHint> {
         return withContext(Dispatchers.IO) {
             getResponseState {
                 apiService.updatePoints(teamId = teamId, updatePointRequest = updatePointRequest)

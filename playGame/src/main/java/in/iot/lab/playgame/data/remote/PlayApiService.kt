@@ -1,7 +1,7 @@
 package `in`.iot.lab.playgame.data.remote
 
 import `in`.iot.lab.network.data.models.Response
-import `in`.iot.lab.network.data.models.team.RemoteTeam
+import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.playgame.data.model.UpdatePointRequest
 import retrofit2.http.Body
@@ -22,6 +22,6 @@ interface PlayApiService {
     suspend fun updatePoints(
         @Path("id") teamId: String,
         @Body updatePointRequest: UpdatePointRequest
-    ): Response<RemoteTeam>
+    ): Response<RemoteHint>
 
 }
