@@ -1,61 +1,61 @@
 package `in`.iot.lab.playgame.view.vm
 
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.iot.lab.network.data.models.hint.RemoteHint
+import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkUtil.toUiState
+import `in`.iot.lab.playgame.data.model.UpdatePointRequest
+import `in`.iot.lab.playgame.data.repo.PlayRepo
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
-import `in`.iot.lab.qrcode.installer.ModuleInstaller
-import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class PlayViewModel @Inject constructor(
     private val qrCodeScanner: QrCodeScanner,
-    private val moduleInstaller: ModuleInstaller
+    private val repository: PlayRepo
 ) : ViewModel() {
 
-
-    /**
-     * This variable is used to define the QR Scanner Download state
-     */
-    private val _qrInstallerState =
-        MutableStateFlow<ModuleInstallerState>(ModuleInstallerState.Idle)
-    val qrInstallerState = _qrInstallerState.asStateFlow()
+    private var teamId = ""
 
 
     /**
-     * This function is used to  check if the scanner is already downloaded or not and if its not
-     * downloaded then we start to download the [QrCodeScanner] module.
+     * This variable is used to store the teamData.
      */
-    private fun checkScannerModule() {
+    private val _hintData = MutableStateFlow<UiState<RemoteHint>>(UiState.Idle)
+    val hintData = _hintData.asStateFlow()
 
-        // Checking if the module is already downloaded
-        moduleInstaller.checkAvailability {
 
-            // updating the Module Installer State
-            _qrInstallerState.value = it
+    /**
+     * This function is called after the scanner scans the hint. It updates the points in the
+     * database for the correct hint.
+     */
+    private fun updatePoints(hintId: String) {
 
-            when (it) {
+        if (_hintData.value is UiState.Loading)
+            return
 
-                // Is Already Installed
-                is ModuleInstallerState.IsAvailable -> {
-                    startScanner()
-                }
+        _hintData.value = UiState.Loading
 
-                // Is Install Successful
-                is ModuleInstallerState.InstallSuccessful -> {
-                    startScanner()
-                }
-
-                else -> {
-                    // Do Nothing
-                }
-            }
+        viewModelScope.launch {
+            _hintData.value = repository
+                .updateHints(
+                    teamId = teamId,
+                    updatePointRequest = UpdatePointRequest(
+                        score = 100,
+                        hintId = hintId
+                    )
+                ).toUiState()
         }
+
     }
 
 
@@ -63,22 +63,24 @@ class PlayViewModel @Inject constructor(
      * This function starts the [QrCodeScanner] scanner and start to scan for QR Codes.
      */
     private fun startScanner() {
+
         qrCodeScanner.startScanner {
+
             when (it) {
 
                 // User Cancelled The Scanner Scan
                 is QrScannerState.Cancelled -> {
-                    TODO("Handle Scanner Cancelled State")
+                    _hintData.value = UiState.Failed("User Cancelled the Scanner!")
                 }
 
                 // Scanner Scan is successful
                 is QrScannerState.Success -> {
-                    TODO("Handle Scanner Success State")
+                    updatePoints(hintId = it.code)
                 }
 
                 // Scanner scan is a failure
                 is QrScannerState.Failure -> {
-                    TODO("Handle Scanner Failure State")
+                    _hintData.value = UiState.Failed(it.exception.message.toString())
                 }
 
                 else -> {
@@ -99,7 +101,7 @@ class PlayViewModel @Inject constructor(
         when (event) {
 
             is PlayGameEvent.ScannerIO.CheckScannerAvailability -> {
-                checkScannerModule()
+                startScanner()
             }
         }
     }

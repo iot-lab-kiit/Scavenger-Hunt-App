@@ -84,6 +84,7 @@ dependencies {
 
     // Implementing the core:design module
     implementation(project(":core:design"))
+    implementation(project(":core:qrCode"))
 
     // Implementing the teamBuilding module
     implementation(project(":teamBuilding"))

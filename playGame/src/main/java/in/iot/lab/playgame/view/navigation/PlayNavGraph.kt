@@ -1,5 +1,7 @@
 package `in`.iot.lab.playgame.view.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,18 +49,22 @@ fun PlayGameNavGraph(
     // Nav Graph for the Play Game Feature
     NavHost(
         navController = navController,
-        startDestination = PLAY_GAME_SCANNER_ROUTE
+        startDestination = PLAY_GAME_SCANNER_ROUTE,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None }
     ) {
 
         // Scanner Screen
         composable(PLAY_GAME_SCANNER_ROUTE) {
 
-            // State Variables
-            val installState = viewModel.qrInstallerState.collectAsState().value
+            val scannerState = viewModel.hintData.collectAsState().value
 
             // Scanner Screen
             PlayScannerScreenControl(
-                installState = installState,
+                scannerState = scannerState,
+                navigateToHints = { navController.navigate(PLAY_GAME_HINT_ROUTE) },
                 popBackStack = navController::popBackStack,
                 setEvent = viewModel::uiListener
             )
@@ -66,7 +72,10 @@ fun PlayGameNavGraph(
 
         // Hints Screen
         composable(PLAY_GAME_HINT_ROUTE) {
-            PlayHintScreenControl()
+
+            val hintData = viewModel.hintData.collectAsState().value
+
+            PlayHintScreenControl(hintData = hintData)
         }
     }
 }

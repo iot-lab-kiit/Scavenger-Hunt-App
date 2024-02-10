@@ -1,51 +1,55 @@
 package `in`.iot.lab.playgame.view.screens
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
+import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.LoadingTransition
+import `in`.iot.lab.network.data.models.hint.RemoteHint
+import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
-import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 
 
 @Composable
 fun PlayScannerScreenControl(
-    installState: ModuleInstallerState,
+    scannerState: UiState<RemoteHint>,
+    navigateToHints: () -> Unit,
     popBackStack: () -> Unit,
     setEvent: (PlayGameEvent) -> Unit
 ) {
 
+    // Starting the Scanner
     LaunchedEffect(Unit) {
         setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    // App Scaffold
+    AppScreen {
 
-        // Checking the QR Module Install State
-        when (installState) {
+        // Checking Scanner States.
+        when (scannerState) {
 
-            // Currently Downloading
-            is ModuleInstallerState.Downloading -> {
-                CircularProgressIndicator()
+            is UiState.Idle -> {
+                // Do Nothing
             }
 
-            // Download Failed
-            is ModuleInstallerState.Failure -> {
+            is UiState.Loading -> {
+                LoadingTransition()
+            }
 
-                // Failure Screen
+            is UiState.Success -> {
+                navigateToHints()
+            }
+
+            is UiState.Failed -> {
                 ErrorDialog(
-                    text = installState.exception.message.toString(),
-                    onCancel = popBackStack
-                ) {
-                    setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
-                }
-            }
-
-            else -> {
-
+                    text = scannerState.message,
+                    onCancel = popBackStack,
+                    onTryAgain = {
+                        setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
+                    }
+                )
             }
         }
     }

@@ -21,16 +21,17 @@ import androidx.compose.ui.unit.dp
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 
 data class TeamMember(
-    val name: String? = null,
+    val name: String? = "",
     val isLead: Boolean? = false
 )
+
 @Composable
 fun TeamDetailsCard(
     modifier: Modifier = Modifier,
     teamMember: List<TeamMember>? = null,
 ) {
     OutlinedCard(
-        modifier = modifier.padding(25.dp),
+        modifier = modifier.padding(24.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -72,22 +73,22 @@ fun TeamDetailsCard(
 @Preview
 fun TeamDetailsCardPreview() {
     val mockTeam = listOf(
-            TeamMember(
-                name = "Member 1",
-                isLead = true
-            ),
-            TeamMember(
-                name = "Member 2",
-            ),
-            TeamMember(
-                name = "Member 3",
-            ),
-            TeamMember(
-                name = "Member 4",
-            ),
-            TeamMember(
-                name = "Member 5",
-            )
+        TeamMember(
+            name = "Member 1",
+            isLead = true
+        ),
+        TeamMember(
+            name = "Member 2",
+        ),
+        TeamMember(
+            name = "Member 3",
+        ),
+        TeamMember(
+            name = "Member 4",
+        ),
+        TeamMember(
+            name = "Member 5",
+        )
     )
     ScavengerHuntTheme {
         AppScreen {

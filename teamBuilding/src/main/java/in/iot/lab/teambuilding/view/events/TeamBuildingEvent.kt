@@ -18,5 +18,6 @@ sealed class TeamBuildingEvent {
 
     sealed class Helper : TeamBuildingEvent() {
         data class SetTeamName(val teamName: String) : Helper()
+        data object OnClickInRegisterScreen : Helper()
     }
 }

@@ -21,7 +21,7 @@ sealed interface ModuleInstallerState {
 
     data object Idle : ModuleInstallerState
     data object IsAvailable : ModuleInstallerState
-    class Downloading(val progress: Int) : ModuleInstallerState
+    data object Downloading : ModuleInstallerState
     data object InstallSuccessful : ModuleInstallerState
     class Failure(val exception: Exception) : ModuleInstallerState
 }

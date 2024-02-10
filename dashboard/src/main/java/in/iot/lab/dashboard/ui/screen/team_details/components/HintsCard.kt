@@ -42,7 +42,7 @@ fun HintsCard(
             color = MaterialTheme.colorScheme.onPrimary
         )
     ) {
-        hints?.forEachIndexed { index, it ->
+        hints?.forEachIndexed { index, _ ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,7 +67,7 @@ fun HintsCard(
                     modifier = Modifier.size(60.dp, 25.dp),
                     onClick = {},
                     contentPadding = PaddingValues(0.dp)
-                    ) {
+                ) {
                     Text(
                         text = "View",
                         style = MaterialTheme.typography.titleSmall.copy(
