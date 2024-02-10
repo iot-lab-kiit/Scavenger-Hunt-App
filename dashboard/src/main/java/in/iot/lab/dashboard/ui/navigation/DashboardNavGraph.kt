@@ -4,7 +4,12 @@ import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -23,11 +28,12 @@ import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
 import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
 import `in`.iot.lab.playgame.view.navigation.PlayGameNavGraph
+import `in`.iot.lab.playgame.view.navigation.navigateToPlay
 
 
 const val TEAM_ROUTE = "team_route"
 const val TEAM_DETAILS_ROUTE = "team_details_route"
-
+const val CREDIT_ROUTE = "credit_route"
 
 sealed class DashboardOptions(
     val route: String,
@@ -40,10 +46,10 @@ sealed class DashboardOptions(
         selectedIcon = R.drawable.ic_group
     )
 
-    data object Play : DashboardOptions(
-        route = PLAY_GAME_ROOT_ROUTE,
-        icon = R.drawable.ic_home_outline,
-        selectedIcon = R.drawable.ic_home
+    data object Credits: DashboardOptions(
+        route = CREDIT_ROUTE,
+        icon = R.drawable.ic_info_outline,
+        selectedIcon = R.drawable.ic_info
     )
 
     data object Leaderboard : DashboardOptions(
@@ -90,7 +96,10 @@ internal fun DashboardNavGraph(
                 viewModel = teamViewModel,
                 onCancelClick = { context.finish() },
                 onTryAgainClick = teamViewModel::getTeamByUserUid,
-                onNavigateToTeamDetails = navController::navigateToTeamDetails
+                onNavigateToTeamDetails = navController::navigateToTeamDetails,
+                onNavigateToPlay = {
+                    navController.navigateToPlay(navOptions {})
+                }
             )
         }
 
@@ -109,10 +118,20 @@ internal fun DashboardNavGraph(
             PlayGameNavGraph(
                 onCancelClick = {
                     navController.navigateToTeam(navOptions {})
-                },
-                onBackPress = {}
+                }
             )
         }
+
+        composable(DashboardOptions.Credits.route) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Credits")
+            }
+        }
+
+        //
 
         // Leaderboard Screen
         leaderBoardNavGraph { }

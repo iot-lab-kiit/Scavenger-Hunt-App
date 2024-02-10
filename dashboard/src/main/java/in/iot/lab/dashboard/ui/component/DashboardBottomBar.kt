@@ -43,9 +43,9 @@ internal fun DashboardBottomBar(
     modifier: Modifier = Modifier
 ) {
     val screens = mutableListOf(
+        DashboardOptions.Leaderboard,
         DashboardOptions.Team,
-        DashboardOptions.Play,
-        DashboardOptions.Leaderboard
+        DashboardOptions.Credits,
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
