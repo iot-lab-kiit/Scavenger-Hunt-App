@@ -26,14 +26,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
-import `in`.iot.lab.network.data.models.hint.RemoteHint
-import `in`.iot.lab.network.state.UiState
-import `in`.iot.lab.design.R
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.design.theme.darkBackGround
+import `in`.iot.lab.network.data.models.hint.RemoteHint
+import `in`.iot.lab.network.state.UiState
 
 
 // Preview Function
@@ -66,7 +66,7 @@ private fun DefaultPreview1() {
 fun PlayHintScreenControl(hintData: UiState<RemoteHint>) {
 
     LaunchedEffect(Unit) {
-        TODO()
+//        TODO()
     }
 
     AppScreen {

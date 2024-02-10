@@ -59,10 +59,13 @@ fun PlayGameNavGraph(
         // Scanner Screen
         composable(PLAY_GAME_SCANNER_ROUTE) {
 
+            //State Variables
             val scannerState = viewModel.hintData.collectAsState().value
+            val teamData = viewModel.teamData.collectAsState().value
 
             // Scanner Screen
             PlayScannerScreenControl(
+                teamData = teamData,
                 scannerState = scannerState,
                 navigateToHints = { navController.navigate(PLAY_GAME_HINT_ROUTE) },
                 popBackStack = navController::popBackStack,

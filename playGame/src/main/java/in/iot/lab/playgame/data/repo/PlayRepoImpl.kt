@@ -31,4 +31,14 @@ class PlayRepoImpl @Inject constructor(
         }
     }
 
+    /**
+     * This function fetches the team data [RemoteTeam] by using the team's Id.
+     */
+    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.getTeamById(teamId)
+            }
+        }
+    }
 }
