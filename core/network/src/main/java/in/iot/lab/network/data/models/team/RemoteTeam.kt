@@ -24,5 +24,9 @@ data class RemoteTeam(
     @SerializedName("sideQuest")
     val sideQuest: List<RemoteHint>? = null,
     @SerializedName("isRegistered")
-    val isRegistered: Boolean? = null
+    val isRegistered: Boolean? = null,
+    @SerializedName("totalMain")
+    val totalMain: Int? = null,
+    @SerializedName("totalSide")
+    val totalSide: Int? = null
 )

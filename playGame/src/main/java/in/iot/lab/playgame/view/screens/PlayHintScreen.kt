@@ -1,6 +1,8 @@
 package `in`.iot.lab.playgame.view.screens
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,9 +15,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -25,6 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
@@ -34,6 +43,7 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.design.theme.darkBackGround
 import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.playgame.view.component.RewardUI
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
 
 
@@ -56,7 +66,8 @@ private fun DefaultPreview1() {
                             "egestas ipsum eu nunc iaculis commodo at ac augue. Integer congue " +
                             "placerat elementum. Sed ultrices nisl a scelerisque varius. Sed " +
                             "et erat eget ex tristique condimentum"
-                )
+                ),
+                {}
             ) {}
         }
     }
@@ -92,7 +103,8 @@ fun PlayHintScreenControl(
                     hintData = hintData.data,
                     onScanAgainClick = {
                         setEvent(PlayGameEvent.Helper.ResetScanner)
-                    }
+                    },
+                    onBackPress = onCancelClick
                 )
             }
 
@@ -115,8 +127,16 @@ fun PlayHintScreenControl(
 @Composable
 private fun PlayHintSuccessScreen(
     hintData: RemoteHint,
-    onScanAgainClick: () -> Unit
+    onScanAgainClick: () -> Unit,
+    onBackPress: () -> Unit
 ) {
+
+    val uriHandler = LocalUriHandler.current
+    var showReward by remember { mutableStateOf(true) }
+
+    BackHandler {
+        if (!showReward) onBackPress()
+    }
 
     OutlinedCard(
         modifier = Modifier
@@ -180,6 +200,21 @@ private fun PlayHintSuccessScreen(
 
             PrimaryButton(onClick = onScanAgainClick) {
                 Text(text = "SCAN AGAIN")
+            }
+        }
+    }
+
+
+    AnimatedVisibility(visible = showReward) {
+        Dialog(
+            onDismissRequest = { showReward = false },
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            )
+        ) {
+            RewardUI(onSkipClick = { showReward = false }) {
+                uriHandler.openUri(hintData.answer ?: "")
             }
         }
     }
