@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,11 +39,10 @@ fun NavController.navigateToPlay(navOptions: NavOptions) {
  * @param onBackPress This function is invoked when the user hits back from the play game feature.
  */
 @Composable
-fun PlayGameNavGraph(
-    navController: NavHostController = rememberNavController(),
-    viewModel: PlayViewModel = hiltViewModel(),
-    onBackPress: () -> Unit
-) {
+fun PlayGameNavGraph(onBackPress: () -> Unit) {
+
+    val navController = rememberNavController()
+    val viewModel: PlayViewModel = hiltViewModel()
 
     // Nav Graph for the Play Game Feature
     NavHost(
@@ -59,10 +57,13 @@ fun PlayGameNavGraph(
         // Scanner Screen
         composable(PLAY_GAME_SCANNER_ROUTE) {
 
+            //State Variables
             val scannerState = viewModel.hintData.collectAsState().value
+            val teamData = viewModel.teamData.collectAsState().value
 
             // Scanner Screen
             PlayScannerScreenControl(
+                teamData = teamData,
                 scannerState = scannerState,
                 navigateToHints = { navController.navigate(PLAY_GAME_HINT_ROUTE) },
                 popBackStack = navController::popBackStack,
@@ -75,7 +76,11 @@ fun PlayGameNavGraph(
 
             val hintData = viewModel.hintData.collectAsState().value
 
-            PlayHintScreenControl(hintData = hintData)
+            PlayHintScreenControl(
+                hintData = hintData,
+                onCancelClick = navController::popBackStack,
+                setEvent = viewModel::uiListener
+            )
         }
     }
 }

@@ -3,9 +3,12 @@ package `in`.iot.lab.playgame.view.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.hint.RemoteHint
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.playgame.data.model.UpdatePointRequest
 import `in`.iot.lab.playgame.data.repo.PlayRepo
@@ -21,11 +24,14 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayViewModel @Inject constructor(
     private val qrCodeScanner: QrCodeScanner,
-    private val repository: PlayRepo
+    private val repository: PlayRepo,
+    auth: FirebaseAuth
 ) : ViewModel() {
 
     private var teamId = ""
 
+    //    private var userUid: String? = auth.currentUser?.uid
+    private var userUid: String? = NetworkConstants.USER_UID
 
     /**
      * This variable is used to store the teamData.
@@ -35,10 +41,53 @@ class PlayViewModel @Inject constructor(
 
 
     /**
+     * This variable is used to store the team data.
+     */
+    private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
+    val teamData = _teamData.asStateFlow()
+
+    private var hintId = ""
+
+
+    init {
+        getTeamByUserUid()
+    }
+
+
+    /**
+     * This function fetches the Team Data from the Server.
+     */
+    private fun getTeamByUserUid() {
+
+        if (_teamData.value is UiState.Loading)
+            return
+
+        _teamData.value = UiState.Loading
+
+        if (userUid == null) {
+            _teamData.value = UiState.Failed("Data Not Found! Please restart the App Once.")
+            return
+        }
+
+        viewModelScope.launch {
+            _teamData.value = repository
+                .getTeamById(userUid!!)
+                .toUiState()
+
+            if (_teamData.value is UiState.Success)
+                teamId = (_teamData.value as UiState.Success<RemoteTeam>).data.id ?: ""
+
+        }
+    }
+
+
+    /**
      * This function is called after the scanner scans the hint. It updates the points in the
      * database for the correct hint.
      */
     private fun updatePoints(hintId: String) {
+
+        this.hintId = hintId
 
         if (_hintData.value is UiState.Loading)
             return
@@ -102,6 +151,14 @@ class PlayViewModel @Inject constructor(
 
             is PlayGameEvent.ScannerIO.CheckScannerAvailability -> {
                 startScanner()
+            }
+
+            is PlayGameEvent.NetworkIO.GetTeamData -> {
+                getTeamByUserUid()
+            }
+
+            is PlayGameEvent.NetworkIO.GetHintDetails -> {
+                updatePoints(hintId)
             }
         }
     }

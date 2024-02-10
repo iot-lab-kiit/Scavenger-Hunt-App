@@ -13,4 +13,10 @@ sealed class PlayGameEvent {
 
         data object CheckScannerAvailability : ScannerIO()
     }
+
+    sealed class NetworkIO : PlayGameEvent() {
+        data object GetTeamData : NetworkIO()
+
+        data object GetHintDetails : NetworkIO()
+    }
 }
