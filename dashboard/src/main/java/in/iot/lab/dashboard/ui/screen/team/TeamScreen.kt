@@ -1,7 +1,6 @@
 package `in`.iot.lab.dashboard.ui.screen.team
 
 
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import `in`.iot.lab.dashboard.ui.screen.team.components.TeamScreenScaffoldUI
 import `in`.iot.lab.design.components.ErrorDialog
+import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
@@ -18,25 +18,30 @@ import `in`.iot.lab.network.state.UiState
 @Composable
 internal fun TeamRoute(
     viewModel: TeamScreenViewModel = hiltViewModel(),
-    onNavigateToTeamDetails: () -> Unit = {}
+    onTryAgainClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onNavigateToTeamDetails: () -> Unit
 ) {
     val teamState by viewModel.teamData.collectAsState()
 
     when (teamState) {
         is UiState.Success -> {
-            val data = (teamState as UiState.Success<RemoteTeam>).data
             TeamScreen(
-                team = data,
+                team = (teamState as UiState.Success<RemoteTeam>).data,
                 onNavigateToTeamDetails = onNavigateToTeamDetails
             )
         }
 
         is UiState.Loading -> {
-            CircularProgressIndicator()
+            LoadingTransition()
         }
 
         is UiState.Failed -> {
-            ErrorDialog(text = (teamState as UiState.Failed).message)
+            ErrorDialog(
+                text = (teamState as UiState.Failed).message,
+                onCancel = onCancelClick,
+                onTryAgain = onTryAgainClick
+            )
         }
 
         else -> {}

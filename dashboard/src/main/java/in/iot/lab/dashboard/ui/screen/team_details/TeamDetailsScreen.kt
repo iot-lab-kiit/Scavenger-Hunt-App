@@ -15,11 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import `in`.iot.lab.design.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
 import `in`.iot.lab.dashboard.ui.screen.team_details.components.HintsCard
+import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.AppTopBar
+import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.design.components.TeamDetailsCard
 import `in`.iot.lab.design.components.TeamMember
@@ -32,18 +33,28 @@ import `in`.iot.lab.network.state.UiState
 @Composable
 internal fun TeamDetailsRoute(
     viewModel: TeamScreenViewModel = hiltViewModel(),
+    onTryAgainClick: () -> Unit,
+    onCancelClick: () -> Unit,
     onBackClick: () -> Unit = {}
 ) {
     val teamState by viewModel.teamData.collectAsState()
 
     when (teamState) {
+        is UiState.Loading -> {
+            LoadingTransition()
+        }
+
         is UiState.Success -> {
             val data = (teamState as UiState.Success<RemoteTeam>).data
             TeamDetailsScreen(team = data, onBackClick = onBackClick)
         }
 
-        is UiState.Loading -> {
-            LoadingTransition()
+        is UiState.Failed -> {
+            ErrorDialog(
+                text = (teamState as UiState.Failed).message,
+                onTryAgain = onTryAgainClick,
+                onCancel = onCancelClick,
+            )
         }
 
         else -> {}
@@ -92,7 +103,9 @@ internal fun TeamDetailsScreen(
             }
 
             // Hint Cards
-            item { HintsCard(hints = team.mainQuest) }
+            item {
+                HintsCard(hints = team.mainQuest)
+            }
         }
     }
 }
@@ -102,32 +115,13 @@ internal fun TeamDetailsScreen(
 private fun TeamDetailsScreenPreview() {
     val mockTeam = RemoteTeam(
         teamName = "Team 1",
-        teamLead = RemoteUser(
-            name = "Member 1",
-            email = ""
-        ),
+        teamLead = RemoteUser(name = "Member 1"),
         teamMembers = listOf(
-            RemoteUser(
-                name = "Member 1",
-                email = "",
-                isLead = true
-            ),
-            RemoteUser(
-                name = "Member 2",
-                email = ""
-            ),
-            RemoteUser(
-                name = "Member 3",
-                email = ""
-            ),
-            RemoteUser(
-                name = "Member 4",
-                email = ""
-            ),
-            RemoteUser(
-                name = "Member 5",
-                email = ""
-            )
+            RemoteUser(name = "Member 1", isLead = true),
+            RemoteUser(name = "Member 2"),
+            RemoteUser(name = "Member 3"),
+            RemoteUser(name = "Member 4"),
+            RemoteUser(name = "Member 5")
         ),
         mainQuest = listOf(
             RemoteHint(

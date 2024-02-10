@@ -10,10 +10,8 @@ import `in`.iot.lab.qrcode.installer.ModuleInstaller
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.teambuilding.data.remote.TeamBuildingApiService
 import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
-import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepoDummy
 import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepoImpl
 import retrofit2.Retrofit
-import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -58,20 +56,7 @@ object TeamBuildingModule {
      */
     @Provides
     @Singleton
-    @Named("production")
     fun providesTeamBuildingRepo(teamBuildingRepoImpl: TeamBuildingRepoImpl): TeamBuildingRepo {
         return teamBuildingRepoImpl
-    }
-
-
-    /**
-     * This provides the dummy repository implementation [TeamBuildingRepoDummy] which helps
-     * in testing.
-     */
-    @Provides
-    @Singleton
-    @Named("testing")
-    fun providesTeamBuildingRepoDummy(): TeamBuildingRepo {
-        return TeamBuildingRepoDummy()
     }
 }

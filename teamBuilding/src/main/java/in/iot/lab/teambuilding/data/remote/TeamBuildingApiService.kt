@@ -32,7 +32,7 @@ interface TeamBuildingApiService {
     /**
      * This function returns the [RemoteTeam] data object by taking the team id.
      */
-    @GET(NetworkConstants.GET_TEAM_BY_ID_ENDPOINT)
+    @GET(NetworkConstants.GET_TEAM_BY_USER_ID)
     suspend fun getTeamById(
         @Path("id") teamId: String
     ): Response<RemoteTeam>
