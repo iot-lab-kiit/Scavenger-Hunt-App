@@ -105,7 +105,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // Fetching the Team Data if the Team Id is not null
                 val teamDataResponse = repository
-                    .getTeamById(teamId!!)
+                    .getTeamById(userFirebaseId)
                     .toUiState()
 
                 if (response !is UiState.Loading)
@@ -133,7 +133,7 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
             _teamData.value = repository
-                .getTeamById(teamId!!)
+                .getTeamById(userFirebaseId)
                 .toUiState()
         }
     }
