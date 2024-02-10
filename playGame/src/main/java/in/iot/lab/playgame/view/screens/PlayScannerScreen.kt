@@ -7,12 +7,14 @@ import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.network.data.models.hint.RemoteHint
+import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
 
 
 @Composable
 fun PlayScannerScreenControl(
+    teamData: UiState<RemoteTeam>,
     scannerState: UiState<RemoteHint>,
     navigateToHints: () -> Unit,
     popBackStack: () -> Unit,
@@ -21,14 +23,13 @@ fun PlayScannerScreenControl(
 
     // Starting the Scanner
     LaunchedEffect(Unit) {
-        setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
+        setEvent(PlayGameEvent.NetworkIO.GetTeamData)
     }
 
     // App Scaffold
     AppScreen {
 
-        // Checking Scanner States.
-        when (scannerState) {
+        when (teamData) {
 
             is UiState.Idle -> {
                 // Do Nothing
@@ -39,12 +40,37 @@ fun PlayScannerScreenControl(
             }
 
             is UiState.Success -> {
-                navigateToHints()
+
+                // Checking Scanner States.
+                when (scannerState) {
+
+                    is UiState.Idle -> {
+                        setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
+                    }
+
+                    is UiState.Loading -> {
+                        LoadingTransition()
+                    }
+
+                    is UiState.Success -> {
+                        navigateToHints()
+                    }
+
+                    is UiState.Failed -> {
+                        ErrorDialog(
+                            text = scannerState.message,
+                            onCancel = popBackStack,
+                            onTryAgain = {
+                                setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
+                            }
+                        )
+                    }
+                }
             }
 
             is UiState.Failed -> {
                 ErrorDialog(
-                    text = scannerState.message,
+                    text = teamData.message,
                     onCancel = popBackStack,
                     onTryAgain = {
                         setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
@@ -52,5 +78,6 @@ fun PlayScannerScreenControl(
                 )
             }
         }
+
     }
 }
