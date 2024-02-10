@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -73,6 +74,8 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
         ) {
 
 
+            val uriHandler = LocalUriHandler.current
+
             // Name
             Text(
                 text = aboutUs.name ?: "Name",
@@ -98,7 +101,7 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
                 aboutUs.githubLink?.let {
                     IconButton(
                         onClick = {
-
+                            uriHandler.openUri(it)
                         }
                     ) {
                         Image(
@@ -113,7 +116,7 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
                 aboutUs.githubLink?.let {
                     IconButton(
                         onClick = {
-
+                            uriHandler.openUri(it)
                         }
                     ) {
                         Image(
@@ -128,7 +131,7 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
                 aboutUs.instagramLink?.let {
                     IconButton(
                         onClick = {
-
+                            uriHandler.openUri(it)
                         }
                     ) {
                         Image(
