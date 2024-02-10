@@ -102,7 +102,7 @@ fun PlayHintScreenControl(
                     text = hintData.message,
                     onCancel = onCancelClick,
                     onTryAgain = {
-                        setEvent(PlayGameEvent.NetworkIO.GetHintDetails)
+                        setEvent(PlayGameEvent.Helper.ResetScanner)
                     }
                 )
             }

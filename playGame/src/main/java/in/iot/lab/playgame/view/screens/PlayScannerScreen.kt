@@ -61,7 +61,7 @@ fun PlayScannerScreenControl(
                             text = scannerState.message,
                             onCancel = popBackStack,
                             onTryAgain = {
-                                setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
+                                setEvent(PlayGameEvent.Helper.ResetScanner)
                             }
                         )
                     }
