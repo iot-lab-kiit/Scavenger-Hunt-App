@@ -19,4 +19,8 @@ sealed class PlayGameEvent {
 
         data object GetHintDetails : NetworkIO()
     }
+
+    sealed class Helper : PlayGameEvent() {
+        data object ResetScanner : PlayGameEvent()
+    }
 }
