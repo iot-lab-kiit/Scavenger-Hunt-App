@@ -7,6 +7,7 @@ import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.playgame.data.model.UpdatePointRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
@@ -22,6 +23,7 @@ interface PlayApiService {
      */
     @PATCH(NetworkConstants.UPDATE_POINTS_ENDPOINT)
     suspend fun updatePoints(
+        @Header("Authorization") token: String,
         @Path("id") teamId: String,
         @Body updatePointRequest: UpdatePointRequest
     ): Response<RemoteHint>
@@ -31,6 +33,7 @@ interface PlayApiService {
      */
     @GET(NetworkConstants.GET_TEAM_BY_USER_ID)
     suspend fun getTeamById(
+        @Header("Authorization") token: String,
         @Path("id") teamId: String
     ): Response<RemoteTeam>
 

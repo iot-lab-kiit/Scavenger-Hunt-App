@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
-import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
+import `in`.iot.lab.network.utils.await
 import `in`.iot.lab.playgame.data.model.UpdatePointRequest
 import `in`.iot.lab.playgame.data.repo.PlayRepo
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
@@ -25,13 +25,12 @@ import javax.inject.Inject
 class PlayViewModel @Inject constructor(
     private val qrCodeScanner: QrCodeScanner,
     private val repository: PlayRepo,
-    auth: FirebaseAuth
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     private var teamId = ""
 
-    //    private var userUid: String? = auth.currentUser?.uid
-    private var userUid: String? = NetworkConstants.USER_UID
+    private var userUid: String? = auth.currentUser?.uid
 
     /**
      * This variable is used to store the teamData.
@@ -70,8 +69,12 @@ class PlayViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+
+            val token = auth.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
-                .getTeamById(userUid!!)
+                .getTeamById(userUid!!, bearerToken)
                 .toUiState()
 
             if (_teamData.value is UiState.Success)
@@ -95,13 +98,18 @@ class PlayViewModel @Inject constructor(
         _hintData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = auth.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _hintData.value = repository
                 .updateHints(
                     teamId = teamId,
                     updatePointRequest = UpdatePointRequest(
                         score = 100,
                         hintId = hintId
-                    )
+                    ),
+                    token = bearerToken
                 ).toUiState()
         }
 

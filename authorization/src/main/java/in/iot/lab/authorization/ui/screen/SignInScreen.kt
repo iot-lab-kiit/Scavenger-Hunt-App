@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import `in`.iot.lab.authorization.R
+import `in`.iot.lab.design.R
 import `in`.iot.lab.authorization.domain.model.User
 import `in`.iot.lab.design.components.AppBackgroundImage
 import `in`.iot.lab.design.components.AppScreen

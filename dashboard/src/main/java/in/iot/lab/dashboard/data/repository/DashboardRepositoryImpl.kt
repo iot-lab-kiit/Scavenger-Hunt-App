@@ -1,5 +1,6 @@
 package `in`.iot.lab.dashboard.data.repository
 
+
 import `in`.iot.lab.dashboard.data.remote.TeamApiService
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.ResponseState
@@ -11,10 +12,17 @@ import javax.inject.Inject
 class DashboardRepositoryImpl @Inject constructor(
     private val teamApiService: TeamApiService
 ) : DashboardRepository {
-    override suspend fun getCurrentUserTeamByUserUid(userUid: String): ResponseState<RemoteTeam> {
+
+    override suspend fun getCurrentUserTeamByUserUid(
+        userUid: String,
+        token: String
+    ): ResponseState<RemoteTeam> {
         return withContext(Dispatchers.IO) {
             getResponseState {
-                teamApiService.getTeamByUserUid(userUid)
+                teamApiService.getTeamByUserUid(
+                    token = token,
+                    id = userUid
+                )
             }
         }
     }
