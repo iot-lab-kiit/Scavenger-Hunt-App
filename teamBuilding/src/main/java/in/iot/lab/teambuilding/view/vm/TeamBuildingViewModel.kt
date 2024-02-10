@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 
 /**
@@ -32,7 +31,7 @@ import javax.inject.Named
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
-    @Named("production") private val repository: TeamBuildingRepo,
+    private val repository: TeamBuildingRepo,
     firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner
 ) : ViewModel() {
