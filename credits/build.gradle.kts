@@ -1,12 +1,14 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+
+
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "in.iot.lab.dashboard"
+    namespace = "in.iot.lab.credits"
     compileSdk = 34
 
     defaultConfig {
@@ -42,9 +44,6 @@ android {
 
 dependencies {
 
-    implementation(project(":core:design"))
-    implementation(project(":core:network"))
-
     // Base Dependencies : -------------------------------------------------------
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -65,29 +64,24 @@ dependencies {
 
     // ----------------------------------------------------------------------------
 
+    //Navigation Dependency :
+    val nav_version = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    // LeaderBoard module dependency
-    implementation(project(":leaderBoard"))
+    // Implementing the Design Module
+    implementation(project(":core:design"))
 
-    // Play Game module dependency
-    implementation(project(":playGame"))
-
-    // Credits Module Dependency
-    implementation(project(":credits"))
-
-    // Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    // Implementing the Core Network Module
+    implementation(project(":core:network"))
 
     // Hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation("com.google.dagger:hilt-android:2.48")
     ksp("com.google.dagger:hilt-compiler:2.48")
 
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
-    implementation("com.google.firebase:firebase-auth")
 }
