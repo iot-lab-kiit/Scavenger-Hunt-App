@@ -1,4 +1,4 @@
-package `in`.iot.lab.onboarding
+package `in`.iot.lab.credits
 
 import org.junit.Test
 
