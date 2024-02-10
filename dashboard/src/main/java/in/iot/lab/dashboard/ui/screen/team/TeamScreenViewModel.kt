@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TeamScreenViewModel @Inject constructor(
     private val repository: DashboardRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val teamData = _teamData.asStateFlow()
@@ -24,6 +24,7 @@ class TeamScreenViewModel @Inject constructor(
     init {
         getTeamById()
     }
+
     fun getTeamById(userId: String = "") {
 
         if (_teamData.value is UiState.Loading)
@@ -44,32 +45,13 @@ class TeamScreenViewModel @Inject constructor(
 // TODO: Only for testing
 private val fakeTeam = RemoteTeam(
     teamName = "Team 1",
-    teamLead = RemoteUser(
-        name = "Member 1",
-        email = ""
-    ),
+    teamLead = RemoteUser(name = "Member 1"),
     teamMembers = listOf(
-        RemoteUser(
-            name = "Member 1",
-            email = "",
-            isLead = true
-        ),
-        RemoteUser(
-            name = "Member 2",
-            email = ""
-        ),
-        RemoteUser(
-            name = "Member 3",
-            email = ""
-        ),
-        RemoteUser(
-            name = "Member 4",
-            email = ""
-        ),
-        RemoteUser(
-            name = "Member 5",
-            email = ""
-        )
+        RemoteUser(name = "Member 1", isLead = true),
+        RemoteUser(name = "Member 2"),
+        RemoteUser(name = "Member 3"),
+        RemoteUser(name = "Member 4"),
+        RemoteUser(name = "Member 5")
     ),
     mainQuest = listOf(
         RemoteHint(
