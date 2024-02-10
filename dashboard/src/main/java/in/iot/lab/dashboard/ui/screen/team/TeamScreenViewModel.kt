@@ -48,11 +48,9 @@ class TeamScreenViewModel @Inject constructor(
             return
         }
 
-        // TODO :- Need to change the implementation
         viewModelScope.launch {
             _teamData.value = repository
                 .getCurrentUserTeamByUserUid(userUid)
-//                .getCurrentUserTeamByUserUId(userUid)
                 .toUiState()
         }
     }
