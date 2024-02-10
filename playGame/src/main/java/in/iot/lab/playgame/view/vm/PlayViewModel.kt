@@ -170,8 +170,7 @@ class PlayViewModel @Inject constructor(
             }
 
             is PlayGameEvent.Helper.ResetScanner -> {
-                _hintData.value = UiState.Idle
-                _teamData.value = UiState.Idle
+                startScanner()
             }
         }
     }
