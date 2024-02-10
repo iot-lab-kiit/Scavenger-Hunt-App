@@ -6,16 +6,10 @@ import com.google.gson.annotations.SerializedName
 data class RemoteUser(
     @SerializedName("_id")
     val id: String? = null,
-    @SerializedName("uid")
-    val uid: String? = null,
     @SerializedName("name")
     val name: String? = null,
-    @SerializedName("email")
-    val email: String? = null,
     @SerializedName("team")
     val team: String? = null,
     @SerializedName("isLead")
-    val isLead: Boolean? = null,
-    @SerializedName("__v")
-    val v: Int? = null
+    val isLead: Boolean? = null
 )

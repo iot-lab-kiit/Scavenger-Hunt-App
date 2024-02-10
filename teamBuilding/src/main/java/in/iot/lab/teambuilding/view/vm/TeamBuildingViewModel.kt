@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 
 /**
@@ -32,7 +32,7 @@ import javax.inject.Named
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
-    @Named("production") private val repository: TeamBuildingRepo,
+    private val repository: TeamBuildingRepo,
     firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner
 ) : ViewModel() {
@@ -40,7 +40,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 01"
+    private val userFirebaseId = NetworkConstants.USER_UID
     private var userId = ""
     private var teamId: String? = null
 
@@ -106,7 +106,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // Fetching the Team Data if the Team Id is not null
                 val teamDataResponse = repository
-                    .getTeamById(teamId!!)
+                    .getTeamById(userFirebaseId)
                     .toUiState()
 
                 if (response !is UiState.Loading)
@@ -134,7 +134,7 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
             _teamData.value = repository
-                .getTeamById(teamId!!)
+                .getTeamById(userFirebaseId)
                 .toUiState()
         }
     }
