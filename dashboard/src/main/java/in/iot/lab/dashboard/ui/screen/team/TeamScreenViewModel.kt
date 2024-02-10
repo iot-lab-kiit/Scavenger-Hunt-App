@@ -7,22 +7,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.dashboard.data.repository.DashboardRepository
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
-import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
+import `in`.iot.lab.network.utils.await
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class TeamScreenViewModel @Inject constructor(
     private val repository: DashboardRepository,
-    auth: FirebaseAuth
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     // User's Firebase UID
-//    private val userUid = auth.currentUser?.uid
-    private val userUid: String? = NetworkConstants.USER_UID
+    private val userUid = auth.currentUser?.uid
 
     // Team Data
     private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
@@ -49,8 +49,12 @@ class TeamScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+
+            val token = auth.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
-                .getCurrentUserTeamByUserUid(userUid)
+                .getCurrentUserTeamByUserUid(userUid, bearerToken)
                 .toUiState()
         }
     }

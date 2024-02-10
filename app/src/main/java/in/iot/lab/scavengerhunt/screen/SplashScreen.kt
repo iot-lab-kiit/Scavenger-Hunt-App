@@ -28,7 +28,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.drawable.ScaleDrawable
 import coil.request.ImageRequest
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
-import `in`.iot.lab.scavengerhunt.R
+import `in`.iot.lab.design.R
 import kotlinx.coroutines.delay
 
 

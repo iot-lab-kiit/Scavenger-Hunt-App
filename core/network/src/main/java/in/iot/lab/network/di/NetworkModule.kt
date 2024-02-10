@@ -8,6 +8,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import `in`.iot.lab.network.di.NetworkModule.provideGson
+import `in`.iot.lab.network.di.NetworkModule.provideGsonConverterFactory
+import `in`.iot.lab.network.di.NetworkModule.provideOkHttpClient
+import `in`.iot.lab.network.di.NetworkModule.provideRetrofit
+import `in`.iot.lab.network.di.NetworkModule.providesFirebaseAuth
 import `in`.iot.lab.network.utils.NetworkConstants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -47,9 +52,6 @@ object NetworkModule {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
-        // Authorization Token
-        val header = "admin0"
-
         // HTTP Client with bearer token
         return OkHttpClient
             .Builder()
@@ -58,7 +60,6 @@ object NetworkModule {
                 val request = chain
                     .request()
                     .newBuilder()
-                    .addHeader("Authorization", "Bearer $header")
                     .build()
                 chain.proceed(request)
             }
@@ -103,7 +104,7 @@ object NetworkModule {
      * @param gsonConverterFactory Gson for serialization and deserialization.
      */
     @Provides
-    // TODO :- Check if @Singleton is affecting this or not if not then add it
+    @Singleton
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory
@@ -121,6 +122,4 @@ object NetworkModule {
      */
     @Provides
     fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
-
-    // TODO :- Add credential Manager Later
 }

@@ -22,11 +22,16 @@ class PlayRepoImpl @Inject constructor(
      */
     override suspend fun updateHints(
         teamId: String,
-        updatePointRequest: UpdatePointRequest
+        updatePointRequest: UpdatePointRequest,
+        token: String
     ): ResponseState<RemoteHint> {
         return withContext(Dispatchers.IO) {
             getResponseState {
-                apiService.updatePoints(teamId = teamId, updatePointRequest = updatePointRequest)
+                apiService.updatePoints(
+                    teamId = teamId,
+                    updatePointRequest = updatePointRequest,
+                    token = token
+                )
             }
         }
     }
@@ -34,10 +39,16 @@ class PlayRepoImpl @Inject constructor(
     /**
      * This function fetches the team data [RemoteTeam] by using the team's Id.
      */
-    override suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam> {
+    override suspend fun getTeamById(
+        teamId: String,
+        token: String
+    ): ResponseState<RemoteTeam> {
         return withContext(Dispatchers.IO) {
             getResponseState {
-                apiService.getTeamById(teamId)
+                apiService.getTeamById(
+                    teamId = teamId,
+                    token = token,
+                )
             }
         }
     }
