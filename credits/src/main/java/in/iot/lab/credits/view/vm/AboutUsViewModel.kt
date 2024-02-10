@@ -27,7 +27,7 @@ class AboutUsViewModel @Inject constructor(
     }
 
 
-    private fun getCreditsData() {
+    fun getCreditsData() {
 
         if (_creditsData.value is UiState.Idle)
             return

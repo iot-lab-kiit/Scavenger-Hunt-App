@@ -72,6 +72,9 @@ dependencies {
     // Play Game module dependency
     implementation(project(":playGame"))
 
+    // Credits Module Dependency
+    implementation(project(":credits"))
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
