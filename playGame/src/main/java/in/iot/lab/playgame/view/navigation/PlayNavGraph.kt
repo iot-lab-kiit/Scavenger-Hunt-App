@@ -42,9 +42,10 @@ fun NavController.navigateToPlay(navOptions: NavOptions) {
 @Composable
 fun PlayGameNavGraph(
     navController: NavHostController = rememberNavController(),
-    viewModel: PlayViewModel = hiltViewModel(),
     onBackPress: () -> Unit
 ) {
+
+    val viewModel: PlayViewModel = hiltViewModel()
 
     // Nav Graph for the Play Game Feature
     NavHost(
@@ -78,7 +79,11 @@ fun PlayGameNavGraph(
 
             val hintData = viewModel.hintData.collectAsState().value
 
-            PlayHintScreenControl(hintData = hintData)
+            PlayHintScreenControl(
+                hintData = hintData,
+                onCancelClick = navController::popBackStack,
+                setEvent = viewModel::uiListener
+            )
         }
     }
 }

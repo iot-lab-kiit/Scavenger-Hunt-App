@@ -46,6 +46,8 @@ class PlayViewModel @Inject constructor(
     private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val teamData = _teamData.asStateFlow()
 
+    private var hintId = ""
+
 
     init {
         getTeamByUserUid()
@@ -84,6 +86,8 @@ class PlayViewModel @Inject constructor(
      * database for the correct hint.
      */
     private fun updatePoints(hintId: String) {
+
+        this.hintId = hintId
 
         if (_hintData.value is UiState.Loading)
             return
@@ -151,6 +155,10 @@ class PlayViewModel @Inject constructor(
 
             is PlayGameEvent.NetworkIO.GetTeamData -> {
                 getTeamByUserUid()
+            }
+
+            is PlayGameEvent.NetworkIO.GetHintDetails -> {
+                updatePoints(hintId)
             }
         }
     }

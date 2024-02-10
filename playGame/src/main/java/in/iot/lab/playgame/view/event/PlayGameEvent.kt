@@ -16,5 +16,7 @@ sealed class PlayGameEvent {
 
     sealed class NetworkIO : PlayGameEvent() {
         data object GetTeamData : NetworkIO()
+
+        data object GetHintDetails : NetworkIO()
     }
 }

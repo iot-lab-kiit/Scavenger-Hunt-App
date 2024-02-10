@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +33,7 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.design.theme.darkBackGround
 import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.playgame.view.event.PlayGameEvent
 
 
 // Preview Function
@@ -63,11 +63,11 @@ private fun DefaultPreview1() {
 
 
 @Composable
-fun PlayHintScreenControl(hintData: UiState<RemoteHint>) {
-
-    LaunchedEffect(Unit) {
-//        TODO()
-    }
+fun PlayHintScreenControl(
+    hintData: UiState<RemoteHint>,
+    onCancelClick: () -> Unit,
+    setEvent: (PlayGameEvent) -> Unit
+) {
 
     AppScreen {
 
@@ -75,7 +75,7 @@ fun PlayHintScreenControl(hintData: UiState<RemoteHint>) {
 
             // Idle State
             is UiState.Idle -> {
-
+                setEvent(PlayGameEvent.NetworkIO.GetHintDetails)
             }
 
             // Loading State
@@ -94,11 +94,9 @@ fun PlayHintScreenControl(hintData: UiState<RemoteHint>) {
             is UiState.Failed -> {
                 ErrorDialog(
                     text = hintData.message,
-                    onCancel = {
-                        TODO()
-                    },
+                    onCancel = onCancelClick,
                     onTryAgain = {
-                        TODO()
+                        setEvent(PlayGameEvent.NetworkIO.GetHintDetails)
                     }
                 )
             }
@@ -157,7 +155,9 @@ private fun PlayHintSuccessScreen(hintData: RemoteHint) {
 
                 // Hint Question Text
                 Text(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     text = hintData.question ?: "Hint Question",
                     style = TextStyle(
                         fontSize = 12.sp,
