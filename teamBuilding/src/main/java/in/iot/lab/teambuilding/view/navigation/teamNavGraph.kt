@@ -158,13 +158,15 @@ fun NavGraphBuilder.teamNavGraph(
             val viewModel = it.getViewModel<TeamBuildingViewModel>(navController)
 
             // State Variables
-            val createTeamState = viewModel.teamData.collectAsState().value
+            val teamData = viewModel.teamData.collectAsState().value
+            val userData = viewModel.userData.collectAsState().value
 
             val context = LocalContext.current as Activity
 
             // Team QR Generating Screen
             RegisterTeamScreenControl(
-                teamDataState = createTeamState,
+                userData = userData,
+                teamDataState = teamData,
                 setEvent = viewModel::uiListener,
                 onTeamRegistered = onTeamRegistered,
                 onBackPress = { context.finish() }
