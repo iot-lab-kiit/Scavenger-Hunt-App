@@ -19,7 +19,7 @@ import `in`.iot.lab.design.R
  * This function is the Header UI which would contain the App name
  */
 @Composable
-fun TheMatrixHeaderUI() {
+fun TheMatrixHeaderUI(applySpacer: Boolean = true) {
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -47,8 +47,9 @@ fun TheMatrixHeaderUI() {
             contentDescription = "Scavenger Hunt text",
         )
     }
-    
-    // HardCoded Modifier
-    Spacer(Modifier.height(150.dp))
 
+    // HardCoded Modifier
+    if (applySpacer) {
+        Spacer(Modifier.height(150.dp))
+    }
 }
