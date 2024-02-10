@@ -29,6 +29,7 @@ import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
+import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.design.theme.darkBackGround
 import `in`.iot.lab.network.data.models.hint.RemoteHint
@@ -56,7 +57,7 @@ private fun DefaultPreview1() {
                             "placerat elementum. Sed ultrices nisl a scelerisque varius. Sed " +
                             "et erat eget ex tristique condimentum"
                 )
-            )
+            ) {}
         }
     }
 }
@@ -87,7 +88,12 @@ fun PlayHintScreenControl(
             is UiState.Success -> {
 
                 // Success Screen
-                PlayHintSuccessScreen(hintData = hintData.data)
+                PlayHintSuccessScreen(
+                    hintData = hintData.data,
+                    onScanAgainClick = {
+                        setEvent(PlayGameEvent.Helper.ResetScanner)
+                    }
+                )
             }
 
             // Error State
@@ -107,7 +113,10 @@ fun PlayHintScreenControl(
 
 
 @Composable
-private fun PlayHintSuccessScreen(hintData: RemoteHint) {
+private fun PlayHintSuccessScreen(
+    hintData: RemoteHint,
+    onScanAgainClick: () -> Unit
+) {
 
     OutlinedCard(
         modifier = Modifier
@@ -167,6 +176,10 @@ private fun PlayHintSuccessScreen(hintData: RemoteHint) {
                         textAlign = TextAlign.Center,
                     )
                 )
+            }
+
+            PrimaryButton(onClick = onScanAgainClick) {
+                Text(text = "SCAN AGAIN")
             }
         }
     }
