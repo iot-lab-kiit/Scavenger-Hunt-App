@@ -4,9 +4,12 @@ import `in`.iot.lab.network.data.models.Response
 import `in`.iot.lab.network.state.ResponseState
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkStatusCodes.DATA_DELETED
+import `in`.iot.lab.network.utils.NetworkStatusCodes.DATA_INITIALIZED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.DATA_NOT_FOUND
 import `in`.iot.lab.network.utils.NetworkStatusCodes.DEFAULT_URL_ENTERED
 import `in`.iot.lab.network.utils.NetworkStatusCodes.INTERNAL_SERVER_ERROR
+import `in`.iot.lab.network.utils.NetworkStatusCodes.INVALID_QUEST
+import `in`.iot.lab.network.utils.NetworkStatusCodes.QUEST_ALREADY_EXISTS
 import `in`.iot.lab.network.utils.NetworkStatusCodes.STATUS_OK
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_ALREADY_EXISTS
 import `in`.iot.lab.network.utils.NetworkStatusCodes.TEAM_ALREADY_REGISTERED
@@ -72,6 +75,9 @@ object NetworkUtil {
             TEAM_ALREADY_REGISTERED -> ResponseState.TeamAlreadyRegistered
             TOKEN_MISSING -> ResponseState.TokenMissing
             TOKEN_INVALID -> ResponseState.TokenInvalid
+            DATA_INITIALIZED -> ResponseState.DataInitialized
+            INVALID_QUEST -> ResponseState.InvalidQuest
+            QUEST_ALREADY_EXISTS -> ResponseState.QuestAlreadyExists
             else -> ResponseState.Error(Exception("Unknown Error Occurred !!"))
         }
     }
@@ -127,8 +133,20 @@ object NetworkUtil {
                 UiState.Failed("Token Missing!! Restart the App")
             }
 
+            is ResponseState.DataInitialized -> {
+                UiState.Failed("Admins : Data is Initialized in the Backend.")
+            }
+
             is ResponseState.TokenInvalid -> {
                 UiState.Failed("Token Invalid!! Restart the App or clear data.")
+            }
+
+            is ResponseState.InvalidQuest -> {
+                UiState.Failed("The Quest you are scanning is Invalid! Try different QR Codes.")
+            }
+
+            is ResponseState.QuestAlreadyExists -> {
+                UiState.Failed("Oops!! This Quest is already scanned by your team.")
             }
 
             is ResponseState.Success -> {
