@@ -8,9 +8,19 @@ import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 
 interface TeamBuildingRepo {
 
-    suspend fun getUserById(userId: String): ResponseState<RemoteUser>
-    suspend fun createTeam(teamData: CreateTeamBody): ResponseState<RemoteTeam>
-    suspend fun joinTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam>
-    suspend fun registerTeam(updateTeam: UpdateTeamBody, teamId: String): ResponseState<RemoteTeam>
-    suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam>
+    suspend fun getUserById(userId: String, token: String): ResponseState<RemoteUser>
+    suspend fun createTeam(teamData: CreateTeamBody, token: String): ResponseState<RemoteTeam>
+    suspend fun joinTeam(
+        updateTeam: UpdateTeamBody,
+        teamId: String,
+        token: String
+    ): ResponseState<RemoteTeam>
+
+    suspend fun registerTeam(
+        updateTeam: UpdateTeamBody,
+        teamId: String,
+        token: String
+    ): ResponseState<RemoteTeam>
+
+    suspend fun getTeamById(teamId: String, token: String): ResponseState<RemoteTeam>
 }

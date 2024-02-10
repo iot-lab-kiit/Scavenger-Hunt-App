@@ -26,6 +26,9 @@ sealed interface ResponseState<out T> {
     data object TeamAlreadyRegistered : ResponseState<Nothing>
     data object TokenMissing : ResponseState<Nothing>
     data object TokenInvalid : ResponseState<Nothing>
+    data object DataInitialized : ResponseState<Nothing>
+    data object InvalidQuest : ResponseState<Nothing>
+    data object QuestAlreadyExists : ResponseState<Nothing>
     data class Success<T>(val data: T) : ResponseState<T>
     data class Error(val exception: Exception) : ResponseState<Nothing>
 }

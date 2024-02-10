@@ -22,4 +22,7 @@ object NetworkStatusCodes {
     const val TEAM_ALREADY_REGISTERED = 18
     const val TOKEN_MISSING = 19
     const val TOKEN_INVALID = 20
+    const val DATA_INITIALIZED = 21
+    const val INVALID_QUEST = 22
+    const val QUEST_ALREADY_EXISTS = 23
 }

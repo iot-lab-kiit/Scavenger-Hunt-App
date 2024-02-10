@@ -1,5 +1,6 @@
 package `in`.iot.lab.authorization.data.repository
 
+
 import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -10,15 +11,19 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import `in`.iot.lab.authorization.data.remote.ApiService
+import `in`.iot.lab.authorization.domain.model.AuthRequest
 import `in`.iot.lab.authorization.domain.model.AuthResponse
 import `in`.iot.lab.authorization.domain.model.AuthResult
 import `in`.iot.lab.authorization.domain.model.User
 import `in`.iot.lab.authorization.domain.model.toUser
 import `in`.iot.lab.authorization.domain.repository.AuthRepository
-import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.ResponseState
+import `in`.iot.lab.network.utils.NetworkUtil.getResponseState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
@@ -42,20 +47,13 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun authenticateUserOnServer(token: String): ResponseState<AuthResponse> {
-//        return withContext(Dispatchers.IO) {
-//            getResponseState {
-//                apiService.postAuthentication(
-//                    AuthRequest(
-//                        token = token
-//                    )
-//                )
-//            }
-//        }
-//        // TODO: Remove this once the server is ready
-        return ResponseState.Success(AuthResponse(
-            message = "Success",
-            user = RemoteUser()
-        ))
+        return withContext(Dispatchers.IO) {
+            getResponseState {
+                apiService.postAuthentication(
+                    AuthRequest(token = token)
+                )
+            }
+        }
     }
 
     private suspend fun handleSignIn(result: GetCredentialResponse): AuthResult {

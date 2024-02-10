@@ -8,6 +8,7 @@ import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
 import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -25,6 +26,7 @@ interface TeamBuildingApiService {
      */
     @GET(NetworkConstants.GET_USER_BY_ID_ENDPOINT)
     suspend fun getUserById(
+        @Header("Authorization") token: String,
         @Path("id") userId: String
     ): Response<RemoteUser>
 
@@ -34,6 +36,7 @@ interface TeamBuildingApiService {
      */
     @GET(NetworkConstants.GET_TEAM_BY_USER_ID)
     suspend fun getTeamById(
+        @Header("Authorization") token: String,
         @Path("id") teamId: String
     ): Response<RemoteTeam>
 
@@ -43,6 +46,7 @@ interface TeamBuildingApiService {
      */
     @POST(NetworkConstants.CREATE_TEAM_ENDPOINT)
     suspend fun createTeam(
+        @Header("Authorization") token: String,
         @Body teamData: CreateTeamBody
     ): Response<RemoteTeam>
 
@@ -55,6 +59,7 @@ interface TeamBuildingApiService {
      */
     @PATCH(NetworkConstants.UPDATE_TEAM_ENDPOINT)
     suspend fun updateTeam(
+        @Header("Authorization") token: String,
         @Path("id") teamId: String,
         @Body updateTeam: UpdateTeamBody
     ): Response<RemoteTeam>

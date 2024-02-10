@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
-import `in`.iot.lab.network.utils.NetworkConstants
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
+import `in`.iot.lab.network.utils.await
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
 import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
@@ -33,14 +33,13 @@ import javax.inject.Inject
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
     private val repository: TeamBuildingRepo,
-    firebase: FirebaseAuth,
+    private val firebase: FirebaseAuth,
     private val qrCodeScanner: QrCodeScanner
 ) : ViewModel() {
 
 
     // Firebase UID
-//    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = NetworkConstants.USER_UID
+    private val userFirebaseId = firebase.currentUser?.uid ?: ""
     private var userId = ""
     private var teamId: String? = null
 
@@ -83,9 +82,12 @@ class TeamBuildingViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             // Fetching the User's Data to get the teamId from the User DB
             val response = repository
-                .getUserById(userFirebaseId)
+                .getUserById(userFirebaseId, bearerToken)
                 .toUiState()
 
             // Checking if the Api call is successful or not
@@ -106,7 +108,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // Fetching the Team Data if the Team Id is not null
                 val teamDataResponse = repository
-                    .getTeamById(userFirebaseId)
+                    .getTeamById(userFirebaseId, bearerToken)
                     .toUiState()
 
                 if (response !is UiState.Loading)
@@ -133,8 +135,12 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
-                .getTeamById(userFirebaseId)
+                .getTeamById(userFirebaseId, bearerToken)
                 .toUiState()
         }
     }
@@ -168,13 +174,18 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
                 .createTeam(
                     CreateTeamBody(
                         teamName = _teamName.value,
                         teamLead = userId,
                         teamMembers = listOf(userId)
-                    )
+                    ),
+                    token = bearerToken
                 )
                 .toUiState()
 
@@ -197,10 +208,15 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
                 .joinTeam(
                     updateTeam = UpdateTeamBody(userId = userFirebaseId),
-                    teamId = joinTeamId
+                    teamId = joinTeamId,
+                    token = bearerToken
                 )
                 .toUiState()
 
@@ -226,6 +242,10 @@ class TeamBuildingViewModel @Inject constructor(
         _teamData.value = UiState.Loading
 
         viewModelScope.launch {
+
+            val token = firebase.currentUser!!.getIdToken(false).await().token
+            val bearerToken = "Bearer $token"
+
             _teamData.value = repository
                 .registerTeam(
                     updateTeam = UpdateTeamBody
@@ -233,7 +253,8 @@ class TeamBuildingViewModel @Inject constructor(
                         userId = userFirebaseId,
                         isRegistered = true
                     ),
-                    teamId = teamId!!
+                    teamId = teamId!!,
+                    token = bearerToken
                 )
                 .toUiState()
         }

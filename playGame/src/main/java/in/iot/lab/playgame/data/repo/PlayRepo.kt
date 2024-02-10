@@ -9,8 +9,12 @@ interface PlayRepo {
 
     suspend fun updateHints(
         teamId: String,
-        updatePointRequest: UpdatePointRequest
+        updatePointRequest: UpdatePointRequest,
+        token: String
     ): ResponseState<RemoteHint>
 
-    suspend fun getTeamById(teamId: String): ResponseState<RemoteTeam>
+    suspend fun getTeamById(
+        teamId: String,
+        token: String
+    ): ResponseState<RemoteTeam>
 }
