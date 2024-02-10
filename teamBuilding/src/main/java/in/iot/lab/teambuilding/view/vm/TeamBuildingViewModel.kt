@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.team.RemoteTeam
+import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.qrcode.scanner.QrCodeScanner
@@ -39,7 +40,7 @@ class TeamBuildingViewModel @Inject constructor(
 
     // Firebase UID
 //    private val userFirebaseId = firebase.currentUser?.uid ?: ""
-    private val userFirebaseId = "UID 26"
+    private val userFirebaseId = "UID 06"
     private var userId = ""
     private var teamId: String? = null
 
@@ -51,6 +52,13 @@ class TeamBuildingViewModel @Inject constructor(
     private val _registrationState =
         MutableStateFlow<UserRegistrationState>(UserRegistrationState.Idle)
     val registrationState = _registrationState.asStateFlow()
+
+
+    /**
+     * This variable is used to store the user's data.
+     */
+    private val _userData = MutableStateFlow(RemoteUser())
+    val userData = _userData.asStateFlow()
 
 
     /**
@@ -85,6 +93,7 @@ class TeamBuildingViewModel @Inject constructor(
 
                 // Setting the User Id and the Team Id
                 userId = response.data.id!!
+                _userData.value = response.data
                 teamId = response.data.team
 
                 // Checking if the Team id is null
