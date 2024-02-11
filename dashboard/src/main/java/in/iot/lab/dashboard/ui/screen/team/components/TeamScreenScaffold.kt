@@ -49,7 +49,7 @@ fun TeamScreenScaffoldUI(
         floatingActionButton = {
             PrimaryButton(
                 modifier = Modifier
-                    .padding(bottom = 10.dp)
+                    .padding(bottom = 40.dp)
                     .size(70.dp),
                 onClick = onNavigateToPlay,
                 contentPadding = PaddingValues(10.dp, 0.dp)

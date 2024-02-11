@@ -53,6 +53,10 @@ sealed class DashboardOptions(
         icon = R.drawable.ic_leaderboard_outline,
         selectedIcon = R.drawable.ic_leaderboard
     )
+
+    companion object {
+        val optionList = listOf(Leaderboard, Team, Credits)
+    }
 }
 
 fun NavController.navigateToTeam(navOptions: NavOptions) =

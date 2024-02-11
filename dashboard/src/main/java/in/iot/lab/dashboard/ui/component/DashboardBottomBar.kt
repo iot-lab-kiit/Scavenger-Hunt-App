@@ -38,15 +38,13 @@ import `in`.iot.lab.dashboard.ui.navigation.DashboardOptions
 @Composable
 internal fun DashboardBottomBar(
     navController: NavController,
-    height: Dp = 100.dp,
-    curvatureDepth: Dp = 35.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    height: Dp = 76.dp,
+    curvatureDepth: Dp = 35.dp
 ) {
-    val screens = mutableListOf(
-        DashboardOptions.Leaderboard,
-        DashboardOptions.Team,
-        DashboardOptions.Credits,
-    )
+
+    // Screen List
+    val screens = DashboardOptions.optionList
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -55,9 +53,15 @@ internal fun DashboardBottomBar(
 
     val currentAlign = remember { mutableListOf(0, 1, 2) }
 
-    val alignments = screens.mapIndexed { index, screen ->
-        val xw: Float by animateFloatAsState(-1 + 2 * currentAlign.indexOf(index) / (screens.size - 1f))
-        val yw: Float by animateFloatAsState(if (currentAlign.indexOf(index) == screens.size / 2) 0f else 0.5f)
+    val alignments = List(screens.size) { index ->
+        val xw: Float by animateFloatAsState(
+            -1 + 2 * currentAlign.indexOf(index) / (screens.size - 1f),
+            label = ""
+        )
+        val yw: Float by animateFloatAsState(
+            if (currentAlign.indexOf(index) == screens.size / 2) 0f else 0.5f,
+            label = ""
+        )
         BiasAlignment(xw, yw)
     }.toMutableList()
 
@@ -83,9 +87,6 @@ internal fun DashboardBottomBar(
                             val heap = CornerSize(curvatureDepth).toPx(size, density)
                             path.moveTo(0f, size.height)
                             path.lineTo(0f, heap)
-//                        // Good for debugging
-//                        path.lineTo(size.width / 2, 0f)
-//                        path.lineTo(size.width, heap)
                             path.cubicTo(
                                 size.width / 3,
                                 0f,
@@ -114,8 +115,6 @@ internal fun DashboardBottomBar(
                             contentDescription = "icon-$index",
                             modifier = modifier
                                 .clickable {
-//                                    currentAlign.remove(index)
-//                                    currentAlign.add(screens.size / 2, index)
                                     if (currentDestination?.route != screen.route) {
                                         navController.navigate(screen.route) {
                                             popUpTo(navController.graph.startDestinationId) {
