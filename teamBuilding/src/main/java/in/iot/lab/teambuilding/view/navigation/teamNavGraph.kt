@@ -141,7 +141,8 @@ fun NavGraphBuilder.teamNavGraph(
                 teamName = teamName,
                 createTeamState = createTeamState,
                 setEvent = viewModel::uiListener,
-                onNavigateToRegistration = navController::navigateToRegister
+                onNavigateToRegistration = navController::navigateToRegister,
+                onNavigateToHome = navController::navigateToTeamBuilding
             )
         }
 

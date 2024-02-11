@@ -58,7 +58,8 @@ internal fun CreateTeamScreenControl(
     teamName: String,
     createTeamState: UiState<RemoteTeam>,
     setEvent: (TeamBuildingEvent) -> Unit,
-    onNavigateToRegistration: () -> Unit
+    onNavigateToRegistration: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
 
     // Default Background
@@ -87,7 +88,7 @@ internal fun CreateTeamScreenControl(
 
             // Failed State
             is UiState.Failed -> {
-                ErrorDialog(onCancel = {}) {
+                ErrorDialog(onCancel = onNavigateToHome) {
                     setEvent(TeamBuildingEvent.NetworkIO.CreateTeamApiCall)
                 }
             }

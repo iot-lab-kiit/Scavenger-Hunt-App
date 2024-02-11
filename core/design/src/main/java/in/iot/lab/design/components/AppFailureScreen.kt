@@ -51,7 +51,10 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 private fun DefaultPreview() {
     ScavengerHuntTheme {
         AppScreen {
-            ErrorDialog()
+            ErrorDialog(
+                onCancel = {},
+                onTryAgain = {}
+            )
         }
     }
 }
@@ -77,8 +80,8 @@ fun ErrorDialog(
     title: String = "Whoops !!",
     text: String = "No Internet connection was found. Check your connection or try again.",
     imageId: Int = R.drawable.error_image,
-    onCancel: () -> Unit = {},
-    onTryAgain: () -> Unit = {}
+    onCancel: () -> Unit,
+    onTryAgain: () -> Unit
 ) {
 
     // This variable says if the dialog is Visible or not
