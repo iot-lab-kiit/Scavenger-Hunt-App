@@ -193,10 +193,15 @@ fun ProgressAnimation(
 
 @Composable
 fun VanillaProgressAnimation(
-    mainProgressStatus: List<Boolean>,
-    subsidiaryProgressStatus: List<Boolean>,
+    mainQuestsDone: Int,
+    totalMain: Int,
+    sideQuestDone: Int,
+    totalSide: Int,
     modifier: Modifier = Modifier
 ) {
+    val mainProgressStatus = (0 until totalMain).map { it < mainQuestsDone }.toList()
+    val subsidiaryProgressStatus =
+        (0 until totalSide).map { it < sideQuestDone }.shuffled().toList()
     val arcRatio = .6f
 
     val trailColors = listOf(

@@ -73,14 +73,18 @@ internal fun TeamScreen(
     ) {
 
         // Temp value so the compiler don't complain
-        val tempMainQuests: List<Boolean> = remember { (1..10).map { Math.random() < .5 }.toList() }
-        val tempSideQuests: List<Boolean> = remember { (1..10).map { Math.random() < .5 }.toList() }
+        val mainQuestsDone = 5
+        val sideQuestDone = 5
+        val totalMain = 10
+        val totalSide = 10
 
         // Team Screen Contents are here !!
         TeamScreenContent(
-            tempMainQuests = tempMainQuests,
-            tempSideQuests = tempSideQuests,
-            team = team
+            team = team,
+            mainQuestsDone,
+            totalMain,
+            sideQuestDone,
+            totalSide
         )
     }
 }
