@@ -14,6 +14,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
+import `in`.iot.lab.credits.view.navigation.ABOUT_US_ROUTE
+import `in`.iot.lab.credits.view.navigation.aboutUsNavGraph
 import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
@@ -23,11 +25,11 @@ import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
 import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
 import `in`.iot.lab.playgame.view.navigation.PlayGameNavGraph
+import `in`.iot.lab.playgame.view.navigation.navigateToPlay
 
 
 const val TEAM_ROUTE = "team_route"
 const val TEAM_DETAILS_ROUTE = "team_details_route"
-
 
 sealed class DashboardOptions(
     val route: String,
@@ -40,10 +42,10 @@ sealed class DashboardOptions(
         selectedIcon = R.drawable.ic_group
     )
 
-    data object Play : DashboardOptions(
-        route = PLAY_GAME_ROOT_ROUTE,
-        icon = R.drawable.ic_home_outline,
-        selectedIcon = R.drawable.ic_home
+    data object Credits : DashboardOptions(
+        route = ABOUT_US_ROUTE,
+        icon = R.drawable.ic_group_outline,
+        selectedIcon = R.drawable.ic_group
     )
 
     data object Leaderboard : DashboardOptions(
@@ -90,7 +92,10 @@ internal fun DashboardNavGraph(
                 viewModel = teamViewModel,
                 onCancelClick = { context.finish() },
                 onTryAgainClick = teamViewModel::getTeamByUserUid,
-                onNavigateToTeamDetails = navController::navigateToTeamDetails
+                onNavigateToTeamDetails = navController::navigateToTeamDetails,
+                onNavigateToPlay = {
+                    navController.navigateToPlay(navOptions {})
+                }
             )
         }
 
@@ -109,10 +114,11 @@ internal fun DashboardNavGraph(
             PlayGameNavGraph(
                 onCancelClick = {
                     navController.navigateToTeam(navOptions {})
-                },
-                onBackPress = {}
+                }
             )
         }
+
+        aboutUsNavGraph(navController) { }
 
         // Leaderboard Screen
         leaderBoardNavGraph { }

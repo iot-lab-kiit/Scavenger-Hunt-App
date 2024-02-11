@@ -20,7 +20,8 @@ internal fun TeamRoute(
     viewModel: TeamScreenViewModel = hiltViewModel(),
     onTryAgainClick: () -> Unit,
     onCancelClick: () -> Unit,
-    onNavigateToTeamDetails: () -> Unit
+    onNavigateToTeamDetails: () -> Unit,
+    onNavigateToPlay: () -> Unit
 ) {
     val teamState by viewModel.teamData.collectAsState()
 
@@ -28,7 +29,8 @@ internal fun TeamRoute(
         is UiState.Success -> {
             TeamScreen(
                 team = (teamState as UiState.Success<RemoteTeam>).data,
-                onNavigateToTeamDetails = onNavigateToTeamDetails
+                onNavigateToTeamDetails = onNavigateToTeamDetails,
+                onNavigateToPlay = onNavigateToPlay
             )
         }
 
@@ -51,14 +53,16 @@ internal fun TeamRoute(
 @Composable
 internal fun TeamScreen(
     team: RemoteTeam,
-    onNavigateToTeamDetails: () -> Unit = {}
+    onNavigateToTeamDetails: () -> Unit = {},
+    onNavigateToPlay: () -> Unit = {}
 ) {
 
     // Custom Scaffold used for this Screen
     TeamScreenScaffoldUI(
         headerText = team.teamName ?: "Team Name",
         onNavigateToTeamDetails = onNavigateToTeamDetails,
-        point = team.score?.toString() ?: "0"
+        point = team.score?.toString() ?: "0",
+        onNavigateToPlay = onNavigateToPlay
     ) {
 
         // Temp value so the compiler don't complain

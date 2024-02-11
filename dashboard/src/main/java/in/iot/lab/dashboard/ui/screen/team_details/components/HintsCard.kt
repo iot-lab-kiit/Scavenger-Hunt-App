@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,9 @@ fun HintsCard(
     modifier: Modifier = Modifier,
     hints: List<RemoteHint>? = null,
 ) {
+
+    val uriHandler = LocalUriHandler.current
+
     Card(
         modifier = modifier.padding(25.dp),
         colors = CardDefaults.outlinedCardColors(
@@ -65,7 +69,9 @@ fun HintsCard(
                 )
                 SecondaryButton(
                     modifier = Modifier.size(60.dp, 25.dp),
-                    onClick = {},
+                    onClick = {
+                        uriHandler.openUri(hints[index].answer ?: "")
+                    },
                     contentPadding = PaddingValues(0.dp)
                 ) {
                     Text(
