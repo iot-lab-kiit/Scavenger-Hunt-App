@@ -18,21 +18,15 @@ class AboutUsViewModel @Inject constructor(
     private val repository: AboutUsRepo
 ) : ViewModel() {
 
-    private val _creditsData = MutableStateFlow<UiState<RemoteAboutUs>>(UiState.Idle)
+    private val _creditsData = MutableStateFlow<UiState<List<RemoteAboutUs>>>(UiState.Idle)
     val creditsData = _creditsData.asStateFlow()
-
-
-    init {
-        getCreditsData()
-    }
-
 
     fun getCreditsData() {
 
-        if (_creditsData.value is UiState.Idle)
+        if (_creditsData.value is UiState.Loading)
             return
 
-        _creditsData.value = UiState.Idle
+        _creditsData.value = UiState.Loading
 
         viewModelScope.launch {
 

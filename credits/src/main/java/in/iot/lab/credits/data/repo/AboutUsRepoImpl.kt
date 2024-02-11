@@ -12,7 +12,7 @@ class AboutUsRepoImpl @Inject constructor(
     private val apiService: AboutUsApiService
 ) : AboutUsRepo {
 
-    override suspend fun getCredits(): ResponseState<RemoteAboutUs> {
+    override suspend fun getCredits(): ResponseState<List<RemoteAboutUs>> {
         return withContext(Dispatchers.IO) {
             getResponseState {
                 apiService.getCredits()

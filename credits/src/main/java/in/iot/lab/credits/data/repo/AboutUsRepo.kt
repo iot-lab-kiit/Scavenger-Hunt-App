@@ -5,5 +5,5 @@ import `in`.iot.lab.network.state.ResponseState
 
 interface AboutUsRepo {
 
-    suspend fun getCredits(): ResponseState<RemoteAboutUs>
+    suspend fun getCredits(): ResponseState<List<RemoteAboutUs>>
 }

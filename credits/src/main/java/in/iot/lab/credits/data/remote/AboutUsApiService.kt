@@ -8,6 +8,6 @@ import retrofit2.http.GET
 interface AboutUsApiService {
 
     @GET(NetworkConstants.GET_CREDITS_ENDPOINT)
-    suspend fun getCredits(): Response<RemoteAboutUs>
+    suspend fun getCredits(): Response<List<RemoteAboutUs>>
 
 }

@@ -4,12 +4,7 @@ import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -19,6 +14,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
+import `in`.iot.lab.credits.view.navigation.ABOUT_US_ROUTE
+import `in`.iot.lab.credits.view.navigation.aboutUsNavGraph
 import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
@@ -33,7 +30,6 @@ import `in`.iot.lab.playgame.view.navigation.navigateToPlay
 
 const val TEAM_ROUTE = "team_route"
 const val TEAM_DETAILS_ROUTE = "team_details_route"
-const val CREDIT_ROUTE = "credit_route"
 
 sealed class DashboardOptions(
     val route: String,
@@ -46,10 +42,10 @@ sealed class DashboardOptions(
         selectedIcon = R.drawable.ic_group
     )
 
-    data object Credits: DashboardOptions(
-        route = CREDIT_ROUTE,
-        icon = R.drawable.ic_info_outline,
-        selectedIcon = R.drawable.ic_info
+    data object Credits : DashboardOptions(
+        route = ABOUT_US_ROUTE,
+        icon = R.drawable.ic_group_outline,
+        selectedIcon = R.drawable.ic_group
     )
 
     data object Leaderboard : DashboardOptions(
@@ -122,16 +118,7 @@ internal fun DashboardNavGraph(
             )
         }
 
-        composable(DashboardOptions.Credits.route) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Credits")
-            }
-        }
-
-        //
+        aboutUsNavGraph(navController) { }
 
         // Leaderboard Screen
         leaderBoardNavGraph { }
