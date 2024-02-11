@@ -31,7 +31,7 @@ fun TeamScreenContent(team: RemoteTeam) {
             mainQuestsDone = team.numMain ?: 0,
             totalMain = team.totalMain,
             sideQuestDone = team.numSide ?: 0,
-            totalSide = team.totalSide,
+            totalSide = team.numSide ?: 0,
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.25f),

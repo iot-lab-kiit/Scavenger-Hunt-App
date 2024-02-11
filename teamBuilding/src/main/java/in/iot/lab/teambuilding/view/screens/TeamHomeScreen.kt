@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -112,7 +113,7 @@ internal fun TeamHomeScreenControl(
 
             // User Team is Registered State
             is UserRegistrationState.Registered -> {
-                onTeamRegistered()
+                LaunchedEffect(Unit) { onTeamRegistered() }
             }
 
             // Error State

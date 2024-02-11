@@ -1,5 +1,6 @@
 package `in`.iot.lab.authorization.ui.screen
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -62,6 +63,9 @@ internal fun SignInScreen(
     state: SignInState = SignInState(),
     onLoginClicked: () -> Unit = {}
 ) {
+
+    val context = LocalContext.current as Activity
+
     AppScreen {
 
         // Back Ground Image
@@ -111,7 +115,11 @@ internal fun SignInScreen(
 
         // Error Message
         if (state.errorMessage != null) {
-            ErrorDialog(text = state.errorMessage)
+            ErrorDialog(
+                text = state.errorMessage,
+                onCancel = { context.finish() },
+                onTryAgain = onLoginClicked
+            )
         }
 
 

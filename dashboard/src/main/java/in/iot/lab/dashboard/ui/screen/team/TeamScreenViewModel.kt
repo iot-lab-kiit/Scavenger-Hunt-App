@@ -28,10 +28,6 @@ class TeamScreenViewModel @Inject constructor(
     private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val teamData = _teamData.asStateFlow()
 
-//    init {
-//        getTeamByUserUid()
-//    }
-
 
     /**
      * This function fetches the Team Data from the Server.
