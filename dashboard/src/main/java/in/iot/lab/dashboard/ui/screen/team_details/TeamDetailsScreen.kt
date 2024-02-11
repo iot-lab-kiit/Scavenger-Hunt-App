@@ -104,7 +104,12 @@ internal fun TeamDetailsScreen(
 
             // Hint Cards
             item {
-                HintsCard(hints = team.mainQuest)
+
+                val hintList : MutableList<RemoteHint> = mutableListOf()
+                team.mainQuest?.let { hintList.addAll(it) }
+                team.sideQuest?.let { hintList.addAll(it) }
+
+                HintsCard(hints = hintList)
             }
         }
     }
