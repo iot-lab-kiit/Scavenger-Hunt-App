@@ -145,8 +145,8 @@ private fun TeamHomeNotRegisteredScreen(
         Dialog(onDismissRequest = { isJoinLast = false }) {
 
             ConfirmDialogUI(
-                text = "Are you Sure you want to Continue? You won't be able to Join " +
-                        "more than one team.",
+                text = "Are you sure you want to continue? You won't be able to" +
+                        " join another team after joining this one.",
                 onDismiss = { isJoinLast = false },
                 onContinue = navigateToJoin
             )
