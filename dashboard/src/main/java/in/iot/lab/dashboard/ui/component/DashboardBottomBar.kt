@@ -1,10 +1,11 @@
 package `in`.iot.lab.dashboard.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +34,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import `in`.iot.lab.dashboard.ui.navigation.DashboardOptions
+import `in`.iot.lab.design.components.PrimaryButton
 
 @Composable
 internal fun DashboardBottomBar(
@@ -108,27 +109,33 @@ internal fun DashboardBottomBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = modifier.align(alignments[index])
                     ) {
-                        Icon(
-                            painter = painterResource(
-                                id = if (currentDestination?.route == screen.route) screen.selectedIcon else screen.icon
-                            ),
-                            contentDescription = "icon-$index",
-                            modifier = modifier
-                                .clickable {
-                                    if (currentDestination?.route != screen.route) {
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
+
+                        PrimaryButton(
+                            modifier = Modifier.size(56.dp),
+                            contentPadding = PaddingValues(8.dp),
+                            onClick = {
+                                if (currentDestination?.route != screen.route) {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
                                         }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
                                 }
-                                .padding(10.dp)
-                                .size(45.dp),
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
+                            }
+                        ) {
+                            Image(
+                                painter = painterResource(
+                                    id = if (currentDestination?.route == screen.route)
+                                        screen.selectedIcon
+                                    else
+                                        screen.icon
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp),
+                            )
+                        }
                     }
                 }
             }
