@@ -28,9 +28,9 @@ class TeamScreenViewModel @Inject constructor(
     private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val teamData = _teamData.asStateFlow()
 
-    init {
-        getTeamByUserUid()
-    }
+//    init {
+//        getTeamByUserUid()
+//    }
 
 
     /**

@@ -2,6 +2,7 @@ package `in`.iot.lab.dashboard.ui.screen.team
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -24,6 +25,12 @@ internal fun TeamRoute(
     onNavigateToPlay: () -> Unit
 ) {
     val teamState by viewModel.teamData.collectAsState()
+
+    // Fetching the Team Data
+    LaunchedEffect(Unit) {
+        viewModel.getTeamByUserUid()
+
+    }
 
     when (teamState) {
         is UiState.Success -> {
