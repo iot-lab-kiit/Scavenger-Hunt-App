@@ -29,7 +29,7 @@ import `in`.iot.lab.design.R
 fun ConfirmDialogUI(
     modifier: Modifier = Modifier,
     text: String,
-    @DrawableRes imageId: Int = R.drawable.error_image,
+    @DrawableRes imageId: Int = R.drawable.confirm_png,
     onDismiss: () -> Unit,
     onContinue: () -> Unit
 ) {
