@@ -90,39 +90,39 @@ object NetworkUtil {
     fun <T> ResponseState<T>.toUiState(): UiState<T> {
         return when (this) {
             is ResponseState.NoInternet -> {
-                UiState.Failed("Your Internet is not working please check and try again Later !!")
+                UiState.Failed("Oh no! Internet error! Try again~")
             }
 
             is ResponseState.NoDataFound -> {
-                UiState.Failed("There are No Records in the Database! Try again later")
+                UiState.Failed("There are no records in the database! Try again later")
             }
 
             is ResponseState.ServerError -> {
-                UiState.Failed("There are some issues with the server! Please Try again after sometime")
+                UiState.Failed("Oh shoot! Servers are down! Try again in a bit!")
             }
 
             is ResponseState.UserNotAuthorized -> {
-                UiState.Failed("User Not Authorized")
+                UiState.Failed("User not authorized")
             }
 
             is ResponseState.TeamAlreadyExists -> {
-                UiState.Failed("Team Already Exists")
+                UiState.Failed("Team already exists")
             }
 
             is ResponseState.TeamInvalidSize -> {
-                UiState.Failed("Invalid Team Size. Team should have 3 to 5 members")
+                UiState.Failed("Invalid team size. Team should have 3 to 5 members")
             }
 
             is ResponseState.TeamInvalidMainQuest -> {
-                UiState.Failed("Invalid Main Quest Scanned")
+                UiState.Failed("Invalid main quest scanned")
             }
 
             is ResponseState.TeamInvalidSideQuest -> {
-                UiState.Failed("Invalid Side Quest Scanned")
+                UiState.Failed("Invalid side quest scanned")
             }
 
             is ResponseState.UserAlreadyLead -> {
-                UiState.Failed("User is already lead of a team")
+                UiState.Failed("User is already a leader of a team")
             }
 
             is ResponseState.TeamAlreadyRegistered -> {
@@ -130,23 +130,23 @@ object NetworkUtil {
             }
 
             is ResponseState.TokenMissing -> {
-                UiState.Failed("Token Missing!! Restart the App")
+                UiState.Failed("Token missing!! Restart the app")
             }
 
             is ResponseState.DataInitialized -> {
-                UiState.Failed("Admins : Data is Initialized in the Backend.")
+                UiState.Failed("Admins : Data is initialized in the backend.")
             }
 
             is ResponseState.TokenInvalid -> {
-                UiState.Failed("Token Invalid!! Restart the App or clear data.")
+                UiState.Failed("Token invalid!! Restart the app or clear data.")
             }
 
             is ResponseState.InvalidQuest -> {
-                UiState.Failed("The Quest you are scanning is Invalid! Try different QR Codes.")
+                UiState.Failed("The quest you are scanning is Invalid! Try different QR codes.")
             }
 
             is ResponseState.QuestAlreadyExists -> {
-                UiState.Failed("Oops!! This Quest is already scanned by your team.")
+                UiState.Failed("Oops!! This quest is already scanned by your team.")
             }
 
             is ResponseState.Success -> {
