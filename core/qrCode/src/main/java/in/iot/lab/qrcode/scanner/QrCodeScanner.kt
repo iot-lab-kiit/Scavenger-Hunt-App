@@ -21,7 +21,6 @@ class QrCodeScanner(context: Context) {
     private val qrCodeOptions: GmsBarcodeScannerOptions = GmsBarcodeScannerOptions.Builder()
         .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
         .enableAutoZoom()
-        .allowManualInput()
         .build()
 
 
