@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import `in`.iot.lab.dashboard.ui.screen.team.components.TeamScreenScaffoldUI
@@ -72,20 +71,9 @@ internal fun TeamScreen(
         onNavigateToPlay = onNavigateToPlay
     ) {
 
-        // Temp value so the compiler don't complain
-        val mainQuestsDone = 5
-        val sideQuestDone = 5
-        val totalMain = 10
-        val totalSide = 10
 
         // Team Screen Contents are here !!
-        TeamScreenContent(
-            team = team,
-            mainQuestsDone,
-            totalMain,
-            sideQuestDone,
-            totalSide
-        )
+        TeamScreenContent(team = team)
     }
 }
 

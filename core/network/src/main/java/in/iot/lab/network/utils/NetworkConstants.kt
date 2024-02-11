@@ -3,7 +3,7 @@ package `in`.iot.lab.network.utils
 object NetworkConstants {
 
     // Base Url
-    const val BASE_URL = "http://14.139.221.186:5463"
+    const val BASE_URL = "https://8a70-103-161-223-11.ngrok-free.app"
 
     // Auth ENDPOINT
     const val AUTH_ENDPOINT = "/auth"
