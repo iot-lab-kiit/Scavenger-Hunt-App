@@ -36,7 +36,7 @@ fun HintsCard(
     val uriHandler = LocalUriHandler.current
 
     Card(
-        modifier = modifier.padding(25.dp),
+        modifier = modifier.padding(horizontal = 24.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onPrimary,
