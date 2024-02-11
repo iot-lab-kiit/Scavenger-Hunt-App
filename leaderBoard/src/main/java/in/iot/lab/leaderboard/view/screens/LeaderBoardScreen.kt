@@ -163,11 +163,17 @@ fun LeaderBoardScreenSuccess(teamList: List<RemoteTeam>) {
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
 
-                items(teamList.size) {
+                if (teamList.isNotEmpty())
+                    item {
+                        LeaderBoardCardItem(team = teamList[0], isTopTeam = true)
+                    }
 
-                    // Each leader board entry card
-                    LeaderBoardCardItem(team = teamList[it])
-                }
+                if (teamList.size > 1)
+                    items(teamList.size - 1) {
+
+                        // Each leader board entry card
+                        LeaderBoardCardItem(team = teamList[it + 1])
+                    }
             }
         }
     }
