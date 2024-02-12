@@ -30,40 +30,9 @@ class AboutUsViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val response = repository
+            _creditsData.value = repository
                 .getCredits()
                 .toUiState()
-
-            val filteredList: MutableList<RemoteAboutUs> = mutableListOf()
-            filteredList.add(hardCodedData())
-            var indexPriyanshu = 0
-
-            if (response is UiState.Success) {
-                response.data.forEachIndexed { index, remoteAboutUs ->
-                    remoteAboutUs.name?.let {
-                        if (it.contains("Priyanshu"))
-                            indexPriyanshu = index
-                        else if (it.contains("Anirban")) {
-                            // Do Nothing
-                        } else
-                            filteredList.add(remoteAboutUs)
-                    }
-                }
-                filteredList.add(response.data[indexPriyanshu])
-
-                _creditsData.value = UiState.Success(filteredList)
-            } else
-                _creditsData.value = response
         }
-    }
-
-    private fun hardCodedData(): RemoteAboutUs {
-        return RemoteAboutUs(
-            name = "Anirban Basak",
-            designation = "Organiser , App Developer , Smartest Person Alive",
-            instagramLink = null,
-            githubLink = "https://github.com/basakjeet08",
-            linkedIn = "https://www.linkedin.com/in/anirban-basak-b96055249/"
-        )
     }
 }
