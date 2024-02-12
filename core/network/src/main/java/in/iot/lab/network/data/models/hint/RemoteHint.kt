@@ -12,5 +12,7 @@ data class RemoteHint(
     @SerializedName("answer")
     val answer: String? = null,
     @SerializedName("campus")
-    val campus: Int? = null
+    val campus: Int? = null,
+    @SerializedName("imageURL")
+    val image: String? = null
 )
