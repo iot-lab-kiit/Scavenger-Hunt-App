@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import `in`.iot.lab.design.R
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 
 data class TeamMember(
@@ -31,7 +32,7 @@ fun TeamDetailsCard(
     teamMember: List<TeamMember>? = null,
 ) {
     OutlinedCard(
-        modifier = modifier.padding(24.dp),
+        modifier = modifier.padding(horizontal = 24.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -56,7 +57,7 @@ fun TeamDetailsCard(
                 if (it.isLead == true) {
                     Image(
                         modifier = Modifier.weight(1f),
-                        painter = painterResource(id = `in`.iot.lab.design.R.drawable.crown),
+                        painter = painterResource(id = R.drawable.crown),
                         contentDescription = "Team Lead",
                     )
                 }
