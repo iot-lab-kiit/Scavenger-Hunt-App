@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -124,17 +125,13 @@ private fun AboutUsSuccessScreen(aboutUsData: List<RemoteAboutUs>) {
             textAlign = TextAlign.Center
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-            items(aboutUsData) {
-                CreditsCard(aboutUs = it)
+            items(aboutUsData.size) {
+                CreditsCard(aboutUs = aboutUsData[it])
             }
 
-            item(span = { GridItemSpan(2) }) {
+            item {
                 Spacer(modifier = Modifier.height(56.dp))
             }
         }

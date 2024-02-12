@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import `in`.iot.lab.credits.data.models.RemoteAboutUs
 import `in`.iot.lab.design.R
-import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 
 
@@ -40,23 +39,23 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 @Composable
 private fun DefaultPreview1() {
     ScavengerHuntTheme {
-        AppScreen {
-            CreditsCard(
-                aboutUs = RemoteAboutUs(
-                    name = "Anirban Basak",
-                    designation = "Android Developer",
-                    instagramLink = "Link",
-                    githubLink = "Link",
-                    linkedIn = "Link"
-                )
+        CreditsCard(
+            aboutUs = RemoteAboutUs(
+                name = "Anirban BasakXXXXXX XXXXXX XXXXXXXXX XXXXXXXXX XXXXXXXX",
+                designation = "Android Developer",
+                githubLink = "Link",
             )
-        }
+        )
     }
 }
 
 
 @Composable
 fun CreditsCard(aboutUs: RemoteAboutUs) {
+
+    val uriHandler = LocalUriHandler.current
+
+    // Bordered Card
     OutlinedCard(
         border = BorderStroke(
             width = 3.dp,
@@ -65,37 +64,41 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
         shape = RoundedCornerShape(16.dp)
     ) {
 
-        Column(
+        // Parent Row
+        Row(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
-
-            val uriHandler = LocalUriHandler.current
-
-            // Name
-            Text(
-                text = aboutUs.name ?: "Name",
-                fontSize = 18.sp,
-                fontFamily = FontFamily((Font(R.font.montaga_regular)))
-            )
-
-            // Designation / Role
-            Text(
-                text = aboutUs.designation ?: "Designation",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 12.sp,
-                fontFamily = FontFamily((Font(R.font.montserrat_regular)))
-            )
-
-            // Icons for socials
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+            // Keeps the Name and the Designation
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
             ) {
+
+                // Name
+                Text(
+                    text = aboutUs.name ?: "Name",
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily((Font(R.font.montaga_regular)))
+                )
+
+                // Designation / Role
+                Text(
+                    text = aboutUs.designation ?: "Designation",
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily((Font(R.font.montserrat_regular)))
+                )
+            }
+
+
+            // Composable containing the Github and LinkedIn Icons
+            Row(verticalAlignment = Alignment.CenterVertically) {
 
                 // Github Icon
                 aboutUs.githubLink?.let {
@@ -113,7 +116,7 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
                 }
 
                 // Linked In Icon
-                aboutUs.githubLink?.let {
+                aboutUs.linkedIn?.let {
                     IconButton(
                         onClick = {
                             uriHandler.openUri(it)
@@ -123,21 +126,6 @@ fun CreditsCard(aboutUs: RemoteAboutUs) {
                             modifier = Modifier.size(32.dp),
                             painter = painterResource(id = R.drawable.linkedin_logo),
                             contentDescription = "LinkedIn Logo"
-                        )
-                    }
-                }
-
-                // Instagram Icon
-                aboutUs.instagramLink?.let {
-                    IconButton(
-                        onClick = {
-                            uriHandler.openUri(it)
-                        }
-                    ) {
-                        Image(
-                            modifier = Modifier.size(32.dp),
-                            painter = painterResource(id = R.drawable.instagram_logo),
-                            contentDescription = "Instagram Logo"
                         )
                     }
                 }
