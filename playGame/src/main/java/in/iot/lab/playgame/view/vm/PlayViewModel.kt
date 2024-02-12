@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.network.data.models.hint.RemoteHint
-import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.network.utils.await
@@ -28,8 +27,6 @@ class PlayViewModel @Inject constructor(
     private val auth: FirebaseAuth
 ) : ViewModel() {
 
-    private var teamId = ""
-
     private var userUid: String? = auth.currentUser?.uid
 
     /**
@@ -38,50 +35,7 @@ class PlayViewModel @Inject constructor(
     private val _hintData = MutableStateFlow<UiState<RemoteHint>>(UiState.Idle)
     val hintData = _hintData.asStateFlow()
 
-
-    /**
-     * This variable is used to store the team data.
-     */
-    private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
-    val teamData = _teamData.asStateFlow()
-
     private var hintId = ""
-
-
-    init {
-        getTeamByUserUid()
-    }
-
-
-    /**
-     * This function fetches the Team Data from the Server.
-     */
-    private fun getTeamByUserUid() {
-
-        if (_teamData.value is UiState.Loading)
-            return
-
-        _teamData.value = UiState.Loading
-
-        if (userUid == null) {
-            _teamData.value = UiState.Failed("Data Not Found! Please restart the App Once.")
-            return
-        }
-
-        viewModelScope.launch {
-
-            val token = auth.currentUser!!.getIdToken(false).await().token
-            val bearerToken = "Bearer $token"
-
-            _teamData.value = repository
-                .getTeamById(userUid!!, bearerToken)
-                .toUiState()
-
-            if (_teamData.value is UiState.Success)
-                teamId = (_teamData.value as UiState.Success<RemoteTeam>).data.id ?: ""
-
-        }
-    }
 
 
     /**
@@ -90,7 +44,6 @@ class PlayViewModel @Inject constructor(
      */
     private fun updatePoints(hintId: String) {
 
-        this.hintId = hintId
 
         if (_hintData.value is UiState.Loading)
             return
@@ -102,18 +55,27 @@ class PlayViewModel @Inject constructor(
             val token = auth.currentUser!!.getIdToken(false).await().token
             val bearerToken = "Bearer $token"
 
-            _hintData.value = repository
-                .updateHints(
-                    teamId = teamId,
-                    updatePointRequest = UpdatePointRequest(
-                        score = 100,
-                        hintId = hintId
-                    ),
-                    token = bearerToken
-                ).toUiState()
-        }
+            val teamData = repository
+                .getTeamById(userUid!!, bearerToken)
+                .toUiState()
 
+            if (teamData is UiState.Success) {
+                _hintData.value = repository
+                    .updateHints(
+                        teamId = teamData.data.id!!,
+                        updatePointRequest = UpdatePointRequest(
+                            score = 0,
+                            hintId = hintId
+                        ),
+                        token = bearerToken
+                    ).toUiState()
+            } else if (teamData is UiState.Failed)
+                _hintData.value = UiState.Failed(teamData.message)
+        }
     }
+
+    private val _scannerState = MutableStateFlow<QrScannerState>(QrScannerState.Idle)
+    val scannerState = _scannerState.asStateFlow()
 
 
     /**
@@ -122,28 +84,9 @@ class PlayViewModel @Inject constructor(
     private fun startScanner() {
 
         qrCodeScanner.startScanner {
-
-            when (it) {
-
-                // User Cancelled The Scanner Scan
-                is QrScannerState.Cancelled -> {
-                    _hintData.value = UiState.Failed("User Cancelled the Scanner!")
-                }
-
-                // Scanner Scan is successful
-                is QrScannerState.Success -> {
-                    updatePoints(hintId = it.code)
-                }
-
-                // Scanner scan is a failure
-                is QrScannerState.Failure -> {
-                    _hintData.value = UiState.Failed(it.exception.message.toString())
-                }
-
-                else -> {
-                    // Do Nothing
-                }
-            }
+            _scannerState.value = it
+            if (it is QrScannerState.Success)
+                updatePoints(it.code)
         }
     }
 
@@ -159,10 +102,6 @@ class PlayViewModel @Inject constructor(
 
             is PlayGameEvent.ScannerIO.CheckScannerAvailability -> {
                 startScanner()
-            }
-
-            is PlayGameEvent.NetworkIO.GetTeamData -> {
-                getTeamByUserUid()
             }
 
             is PlayGameEvent.NetworkIO.GetHintDetails -> {
