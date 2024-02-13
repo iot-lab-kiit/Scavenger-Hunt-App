@@ -12,8 +12,6 @@ import `in`.iot.lab.network.utils.await
 import `in`.iot.lab.playgame.data.model.UpdatePointRequest
 import `in`.iot.lab.playgame.data.repo.PlayRepo
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
-import `in`.iot.lab.qrcode.scanner.QrCodeScanner
-import `in`.iot.lab.qrcode.scanner.QrScannerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,7 +20,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayViewModel @Inject constructor(
-    private val qrCodeScanner: QrCodeScanner,
     private val repository: PlayRepo,
     private val auth: FirebaseAuth
 ) : ViewModel() {
@@ -44,6 +41,7 @@ class PlayViewModel @Inject constructor(
      */
     private fun updatePoints(hintId: String) {
 
+        this.hintId = hintId
 
         if (_hintData.value is UiState.Loading)
             return
@@ -74,23 +72,6 @@ class PlayViewModel @Inject constructor(
         }
     }
 
-    private val _scannerState = MutableStateFlow<QrScannerState>(QrScannerState.Idle)
-    val scannerState = _scannerState.asStateFlow()
-
-
-    /**
-     * This function starts the [QrCodeScanner] scanner and start to scan for QR Codes.
-     */
-    private fun startScanner() {
-
-        qrCodeScanner.startScanner {
-            _scannerState.value = it
-            if (it is QrScannerState.Success)
-                updatePoints(it.code)
-        }
-    }
-
-
     /**
      * This function receives the events from the UI Layer and calls the Functions according to the
      * events received.
@@ -100,16 +81,17 @@ class PlayViewModel @Inject constructor(
     fun uiListener(event: PlayGameEvent) {
         when (event) {
 
-            is PlayGameEvent.ScannerIO.CheckScannerAvailability -> {
-                startScanner()
+            is PlayGameEvent.ScannerIO.ResetScanner -> {
+                _hintData.value = UiState.Idle
             }
 
-            is PlayGameEvent.NetworkIO.GetHintDetails -> {
-                updatePoints(hintId)
+            is PlayGameEvent.NetworkIO.UpdatePoints -> {
+                updatePoints(event.hintId)
             }
 
-            is PlayGameEvent.Helper.ResetScanner -> {
-                startScanner()
+            is PlayGameEvent.ScannerIO.ScannerFailure -> {
+                _hintData.value =
+                    UiState.Failed("Qr scanner failed to scan! Please restart and try again.")
             }
         }
     }

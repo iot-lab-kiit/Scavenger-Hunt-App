@@ -2,23 +2,18 @@ package `in`.iot.lab.playgame.view.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import `in`.iot.lab.playgame.view.screens.PlayHintScreenControl
 import `in`.iot.lab.playgame.view.screens.PlayScannerScreenControl
 import `in`.iot.lab.playgame.view.vm.PlayViewModel
 
 
 // Play Game Routes
 const val PLAY_GAME_ROOT_ROUTE = "play_game_root_route"
-const val PLAY_GAME_SCANNER_ROUTE = "play_game_scanner_route"
-const val PLAY_GAME_HINT_ROUTE = "play_game_hint_route"
 
 
 /**
@@ -35,50 +30,27 @@ fun NavController.navigateToPlay(navOptions: NavOptions) {
 /**
  * This function contains the Navigation graph for the Play Game Feature.
  */
-@Composable
-fun PlayGameNavGraph(onCancelClick: () -> Unit) {
+fun NavGraphBuilder.playGameNavGraph(onCancelClick: () -> Unit) {
 
-    val navController = rememberNavController()
-    val viewModel: PlayViewModel = hiltViewModel()
-
-    // Nav Graph for the Play Game Feature
-    NavHost(
-        navController = navController,
-        startDestination = PLAY_GAME_SCANNER_ROUTE,
+    // Scanner Screen
+    composable(
+        PLAY_GAME_ROOT_ROUTE,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None }
     ) {
 
+        val viewModel: PlayViewModel = hiltViewModel()
+
+        //State Variables
+        val hintData = viewModel.hintData.collectAsState().value
+
         // Scanner Screen
-        composable(PLAY_GAME_SCANNER_ROUTE) {
-
-            //State Variables
-            val hintData = viewModel.hintData.collectAsState().value
-            val scannerState = viewModel.scannerState.collectAsState().value
-
-            // Scanner Screen
-            PlayScannerScreenControl(
-                scannerState = scannerState,
-                hintData = hintData,
-                navigateToHints = { navController.navigate(PLAY_GAME_HINT_ROUTE) },
-                popBackStack = onCancelClick,
-                setEvent = viewModel::uiListener
-            )
-        }
-
-        // Hints Screen
-        composable(PLAY_GAME_HINT_ROUTE) {
-
-            // Hint Data
-            val hintData = viewModel.hintData.collectAsState().value
-
-            PlayHintScreenControl(
-                hintData = hintData,
-                onCancelClick = onCancelClick,
-                setEvent = viewModel::uiListener
-            )
-        }
+        PlayScannerScreenControl(
+            hintData = hintData,
+            onCancelClick = onCancelClick,
+            setEvent = viewModel::uiListener
+        )
     }
 }
