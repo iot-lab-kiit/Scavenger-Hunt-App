@@ -78,7 +78,7 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
     }
-    private suspend fun loginWithFirebase(idToken: String): AuthResult {
+    override suspend fun loginWithFirebase(idToken: String): AuthResult {
         val googleCredentials = GoogleAuthProvider.getCredential(idToken, null)
         val firebaseUser = auth.signInWithCredential(googleCredentials).await().user
         return AuthResult(
