@@ -1,10 +1,11 @@
 package `in`.iot.lab.dashboard.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,19 +34,18 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import `in`.iot.lab.dashboard.ui.navigation.DashboardOptions
+import `in`.iot.lab.design.components.PrimaryButton
 
 @Composable
 internal fun DashboardBottomBar(
     navController: NavController,
-    height: Dp = 100.dp,
-    curvatureDepth: Dp = 35.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    height: Dp = 76.dp,
+    curvatureDepth: Dp = 35.dp
 ) {
-    val screens = mutableListOf(
-        DashboardOptions.Leaderboard,
-        DashboardOptions.Team,
-        DashboardOptions.Credits,
-    )
+
+    // Screen List
+    val screens = DashboardOptions.optionList
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -55,9 +54,15 @@ internal fun DashboardBottomBar(
 
     val currentAlign = remember { mutableListOf(0, 1, 2) }
 
-    val alignments = screens.mapIndexed { index, screen ->
-        val xw: Float by animateFloatAsState(-1 + 2 * currentAlign.indexOf(index) / (screens.size - 1f))
-        val yw: Float by animateFloatAsState(if (currentAlign.indexOf(index) == screens.size / 2) 0f else 0.5f)
+    val alignments = List(screens.size) { index ->
+        val xw: Float by animateFloatAsState(
+            -1 + 2 * currentAlign.indexOf(index) / (screens.size - 1f),
+            label = ""
+        )
+        val yw: Float by animateFloatAsState(
+            if (currentAlign.indexOf(index) == screens.size / 2) 0f else 0.5f,
+            label = ""
+        )
         BiasAlignment(xw, yw)
     }.toMutableList()
 
@@ -83,9 +88,6 @@ internal fun DashboardBottomBar(
                             val heap = CornerSize(curvatureDepth).toPx(size, density)
                             path.moveTo(0f, size.height)
                             path.lineTo(0f, heap)
-//                        // Good for debugging
-//                        path.lineTo(size.width / 2, 0f)
-//                        path.lineTo(size.width, heap)
                             path.cubicTo(
                                 size.width / 3,
                                 0f,
@@ -107,29 +109,33 @@ internal fun DashboardBottomBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = modifier.align(alignments[index])
                     ) {
-                        Icon(
-                            painter = painterResource(
-                                id = if (currentDestination?.route == screen.route) screen.selectedIcon else screen.icon
-                            ),
-                            contentDescription = "icon-$index",
-                            modifier = modifier
-                                .clickable {
-//                                    currentAlign.remove(index)
-//                                    currentAlign.add(screens.size / 2, index)
-                                    if (currentDestination?.route != screen.route) {
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
+
+                        PrimaryButton(
+                            modifier = Modifier.size(56.dp),
+                            contentPadding = PaddingValues(8.dp),
+                            onClick = {
+                                if (currentDestination?.route != screen.route) {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
                                         }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
                                 }
-                                .padding(10.dp)
-                                .size(45.dp),
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
+                            }
+                        ) {
+                            Image(
+                                painter = painterResource(
+                                    id = if (currentDestination?.route == screen.route)
+                                        screen.selectedIcon
+                                    else
+                                        screen.icon
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp),
+                            )
+                        }
                     }
                 }
             }

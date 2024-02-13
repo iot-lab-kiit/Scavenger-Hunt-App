@@ -1,6 +1,12 @@
 package `in`.iot.lab.authorization.ui.screen
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,15 +34,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import `in`.iot.lab.authorization.domain.model.AuthResult
 import `in`.iot.lab.design.R
-import `in`.iot.lab.authorization.domain.model.User
 import `in`.iot.lab.design.components.AppBackgroundImage
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
+import `in`.iot.lab.network.state.UiState
 
+// For Readability, Renamed The Launcher used for Legacy Google SignIn
+internal typealias SignInLauncher = ManagedActivityResultLauncher<Intent, ActivityResult>
 
 @Composable
 internal fun SignInRoute(
@@ -45,23 +54,37 @@ internal fun SignInRoute(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-    LaunchedEffect(state.user) {
-        if (state.user != null) {
-            onUserSignedIn()
-        }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = viewModel::onSignInResult
+    )
+
+    LaunchedEffect(state) {
+        if (state is UiState.Success)
+            if ((state as UiState.Success<AuthResult>).data.data != null) {
+                onUserSignedIn()
+            }
     }
     SignInScreen(
         state = state,
-        onLoginClicked = { viewModel.signIn(context) }
+        onLoginClicked = {
+            viewModel.signIn(
+                context = context,
+                signInLauncher = launcher
+            )
+        }
     )
 }
 
 
 @Composable
 internal fun SignInScreen(
-    state: SignInState = SignInState(),
+    state: UiState<AuthResult>,
     onLoginClicked: () -> Unit = {}
 ) {
+
+    val context = LocalContext.current as Activity
+
     AppScreen {
 
         // Back Ground Image
@@ -94,7 +117,7 @@ internal fun SignInScreen(
                     // Sign in with text
                     Text(
                         text = "SIGN IN WITH",
-                        fontStyle = FontStyle(`in`.iot.lab.design.R.font.montserratsemibold),
+                        fontStyle = FontStyle(R.font.montserratsemibold),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 18.sp
                     )
@@ -110,13 +133,17 @@ internal fun SignInScreen(
         }
 
         // Error Message
-        if (state.errorMessage != null) {
-            ErrorDialog(text = state.errorMessage)
+        if (state is UiState.Failed) {
+            ErrorDialog(
+                text = state.message,
+                onCancel = { context.finish() },
+                onTryAgain = onLoginClicked
+            )
         }
 
 
         // Loading State
-        if (state.isLoading) {
+        if (state is UiState.Loading) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -135,9 +162,7 @@ internal fun SignInScreen(
 private fun SignInPreview() {
     ScavengerHuntTheme {
         SignInScreen(
-            state = SignInState(
-                isLoading = true,
-            )
+            state = UiState.Loading
         )
     }
 }
@@ -151,10 +176,7 @@ private fun SignInPreview() {
 private fun SignInPreviewError() {
     ScavengerHuntTheme {
         SignInScreen(
-            state = SignInState(
-                isLoading = false,
-                errorMessage = "Please use your KIIT email to login"
-            )
+            state = UiState.Failed("Error")
         )
     }
 }
@@ -168,16 +190,7 @@ private fun SignInPreviewError() {
 private fun SignInPreviewSuccess() {
     ScavengerHuntTheme {
         SignInScreen(
-            state = SignInState(
-                isLoading = false,
-                errorMessage = null,
-                user = User(
-                    uid = "id",
-                    username = "John Doe",
-                    email = "email@email.com",
-                    photoUrl = "photoUrl"
-                )
-            )
+            state = UiState.Success(AuthResult(null))
         )
     }
 }

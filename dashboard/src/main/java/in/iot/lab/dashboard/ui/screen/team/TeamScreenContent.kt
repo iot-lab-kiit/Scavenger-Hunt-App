@@ -18,14 +18,7 @@ import `in`.iot.lab.network.data.models.team.RemoteTeam
 
 
 @Composable
-fun TeamScreenContent(
-    team: RemoteTeam,
-    tempMainQuests: List<Boolean>,
-    tempSideQuests: List<Boolean>
-) {
-
-    // Temporary value
-    val totalNumQuest = 10f
+fun TeamScreenContent(team: RemoteTeam) {
 
     Column(
         modifier = Modifier.padding(horizontal = 36.dp, vertical = 16.dp),
@@ -35,21 +28,28 @@ fun TeamScreenContent(
 
         // Progress Animation (Comet Design)
         VanillaProgressAnimation(
-            modifier = Modifier
+            mainQuestsDone = team.numMain ?: 0,
+            totalMain = team.totalMain,
+            sideQuestDone = team.numSide ?: 0,
+            totalSide = team.numSide ?: 0,
+            Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.25f),
-            mainProgressStatus = tempMainQuests,
-            subsidiaryProgressStatus = tempSideQuests
         )
 
         // Spacer between the Comet Animation and the Quest Progress Bars.
         Spacer(modifier = Modifier.height(16.dp))
 
         // Main Quest Text and Progress
-        TextAndProgressUI(text = "Main Quest", progress = team.numMain?.div(totalNumQuest) ?: .8f)
+        TextAndProgressUI(
+            text = "Main Quest",
+            progress = team.numMain?.div(team.totalMain.toFloat()) ?: .8f
+        )
 
         // Side Quest
-        TextAndProgressUI(text = "Side Quest", progress = team.numSide?.div(totalNumQuest) ?: .5f)
-
+        TextAndProgressUI(
+            text = "Side Quest",
+            progress = team.numSide?.div(team.totalSide.toFloat()) ?: .5f
+        )
     }
 }

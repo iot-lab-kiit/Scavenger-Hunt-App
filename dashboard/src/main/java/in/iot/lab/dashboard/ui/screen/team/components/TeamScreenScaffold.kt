@@ -2,10 +2,11 @@ package `in`.iot.lab.dashboard.ui.screen.team.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.AppTopBar
-import `in`.iot.lab.design.components.PrimaryButton
 
 
 /**
@@ -47,17 +47,18 @@ fun TeamScreenScaffoldUI(
             )
         },
         floatingActionButton = {
-            PrimaryButton(
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-                    .size(70.dp),
+            FloatingActionButton(
+                modifier = Modifier.padding(bottom = 40.dp),
                 onClick = onNavigateToPlay,
-                contentPadding = PaddingValues(10.dp, 0.dp)
+                containerColor = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(50)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_qr),
                     contentDescription = "Map Icon",
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(32.dp),
                 )
             }
         },

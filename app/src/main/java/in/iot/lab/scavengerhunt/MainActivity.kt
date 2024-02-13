@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
@@ -20,6 +21,7 @@ import `in`.iot.lab.qrcode.installer.ModuleInstallerState
 import `in`.iot.lab.scavengerhunt.navigation.MainNavGraph
 import `in`.iot.lab.scavengerhunt.screen.SplashScreen
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
@@ -38,6 +40,10 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     checkScannerModule()
                 }
+
+//                runBlocking {
+//                    FirebaseAuth.getInstance().signOut()
+//                }
 
                 val installState = installState.collectAsState().value
 

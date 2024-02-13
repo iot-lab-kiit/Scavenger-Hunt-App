@@ -57,13 +57,7 @@ fun PlayScannerScreenControl(
                     }
 
                     is UiState.Failed -> {
-                        ErrorDialog(
-                            text = scannerState.message,
-                            onCancel = popBackStack,
-                            onTryAgain = {
-                                setEvent(PlayGameEvent.Helper.ResetScanner)
-                            }
-                        )
+                        popBackStack()
                     }
                 }
             }

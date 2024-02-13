@@ -58,7 +58,8 @@ internal fun CreateTeamScreenControl(
     teamName: String,
     createTeamState: UiState<RemoteTeam>,
     setEvent: (TeamBuildingEvent) -> Unit,
-    onNavigateToRegistration: () -> Unit
+    onNavigateToRegistration: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
 
     // Default Background
@@ -87,7 +88,7 @@ internal fun CreateTeamScreenControl(
 
             // Failed State
             is UiState.Failed -> {
-                ErrorDialog(onCancel = {}) {
+                ErrorDialog(onCancel = onNavigateToHome) {
                     setEvent(TeamBuildingEvent.NetworkIO.CreateTeamApiCall)
                 }
             }
@@ -111,8 +112,8 @@ private fun CreateTeamIdleScreen(
         Dialog(onDismissRequest = { isCreateTeamLast = false }) {
 
             ConfirmDialogUI(
-                text = "Are you Sure you want to Continue? You won't be able to Join " +
-                        "Another Team after Joining one.",
+                text = "Are you sure you want to continue? You won't be able to join" +
+                        " another team after creating this one.",
                 onDismiss = { isCreateTeamLast = false }
             ) {
                 setEvent(TeamBuildingEvent.NetworkIO.CreateTeamApiCall)

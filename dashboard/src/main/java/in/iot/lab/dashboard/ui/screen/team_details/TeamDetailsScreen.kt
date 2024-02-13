@@ -102,14 +102,54 @@ internal fun TeamDetailsScreen(
                 )
             }
 
-            // Hint Cards
-            item {
 
-                val hintList : MutableList<RemoteHint> = mutableListOf()
-                team.mainQuest?.let { hintList.addAll(it) }
-                team.sideQuest?.let { hintList.addAll(it) }
+            // Main Hint Text
+            team.mainQuest?.let {
+                item {
+                    Text(
+                        modifier = Modifier.padding(start = 32.dp),
+                        text = "MAIN HINTS",
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontFamily = FontFamily(
+                                Font(R.font.orbitron_regular)
+                            ),
+                            letterSpacing = 2.sp,
+                        )
+                    )
+                }
+            }
 
-                HintsCard(hints = hintList)
+
+            // Main Hints Cards
+            team.mainQuest?.let {
+                item {
+                    HintsCard(hints = it)
+                }
+            }
+
+
+            // Side Hints Text
+            team.sideQuest?.let {
+                item {
+                    Text(
+                        modifier = Modifier.padding(start = 32.dp),
+                        text = "SIDE HINTS",
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontFamily = FontFamily(
+                                Font(R.font.orbitron_regular)
+                            ),
+                            letterSpacing = 2.sp,
+                        )
+                    )
+                }
+            }
+
+
+            // Side Hints Cards
+            team.sideQuest?.let {
+                item {
+                    HintsCard(hints = it)
+                }
             }
         }
     }

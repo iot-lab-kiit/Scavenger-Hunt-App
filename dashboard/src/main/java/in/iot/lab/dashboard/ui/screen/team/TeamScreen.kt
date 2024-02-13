@@ -2,9 +2,9 @@ package `in`.iot.lab.dashboard.ui.screen.team
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import `in`.iot.lab.dashboard.ui.screen.team.components.TeamScreenScaffoldUI
@@ -24,6 +24,12 @@ internal fun TeamRoute(
     onNavigateToPlay: () -> Unit
 ) {
     val teamState by viewModel.teamData.collectAsState()
+
+    // Fetching the Team Data
+    LaunchedEffect(Unit) {
+        viewModel.getTeamByUserUid()
+
+    }
 
     when (teamState) {
         is UiState.Success -> {
@@ -65,16 +71,9 @@ internal fun TeamScreen(
         onNavigateToPlay = onNavigateToPlay
     ) {
 
-        // Temp value so the compiler don't complain
-        val tempMainQuests: List<Boolean> = remember { (1..10).map { Math.random() < .5 }.toList() }
-        val tempSideQuests: List<Boolean> = remember { (1..10).map { Math.random() < .5 }.toList() }
 
         // Team Screen Contents are here !!
-        TeamScreenContent(
-            tempMainQuests = tempMainQuests,
-            tempSideQuests = tempSideQuests,
-            team = team
-        )
+        TeamScreenContent(team = team)
     }
 }
 

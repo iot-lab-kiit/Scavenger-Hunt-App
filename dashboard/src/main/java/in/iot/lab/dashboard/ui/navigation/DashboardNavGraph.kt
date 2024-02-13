@@ -44,8 +44,8 @@ sealed class DashboardOptions(
 
     data object Credits : DashboardOptions(
         route = ABOUT_US_ROUTE,
-        icon = R.drawable.ic_group_outline,
-        selectedIcon = R.drawable.ic_group
+        icon = R.drawable.ic_info_outline,
+        selectedIcon = R.drawable.ic_info
     )
 
     data object Leaderboard : DashboardOptions(
@@ -53,6 +53,10 @@ sealed class DashboardOptions(
         icon = R.drawable.ic_leaderboard_outline,
         selectedIcon = R.drawable.ic_leaderboard
     )
+
+    companion object {
+        val optionList = listOf(Leaderboard, Team, Credits)
+    }
 }
 
 fun NavController.navigateToTeam(navOptions: NavOptions) =

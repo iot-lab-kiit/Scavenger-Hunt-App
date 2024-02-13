@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -93,9 +94,11 @@ internal fun RegisterTeamScreenControl(
         }
 
         is UiState.Success -> {
-            if (teamDataState.data.isRegistered == true)
-                onTeamRegistered()
-            else
+            if (teamDataState.data.isRegistered == true) {
+                LaunchedEffect(Unit) {
+                    onTeamRegistered()
+                }
+            } else
                 RegisterTeamSuccessScreen(
                     userData = userData,
                     team = teamDataState.data,
