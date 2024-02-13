@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <!-- This is used to ask for camera permission -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".ScavengerHuntApp"
         android:allowBackup="true"
@@ -17,15 +24,14 @@
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="barcode_ui"/>
+            android:value="barcode_ui" />
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.ScavengerHunt"
             android:configChanges="orientation"
+            android:exported="true"
             android:screenOrientation="portrait"
-            >
+            android:theme="@style/Theme.ScavengerHunt">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

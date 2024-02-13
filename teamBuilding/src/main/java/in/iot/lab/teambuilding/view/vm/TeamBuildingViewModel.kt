@@ -10,8 +10,6 @@ import `in`.iot.lab.network.data.models.user.RemoteUser
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
 import `in`.iot.lab.network.utils.await
-import `in`.iot.lab.qrcode.scanner.QrCodeScanner
-import `in`.iot.lab.qrcode.scanner.QrScannerState
 import `in`.iot.lab.teambuilding.data.model.CreateTeamBody
 import `in`.iot.lab.teambuilding.data.model.UpdateTeamBody
 import `in`.iot.lab.teambuilding.data.repo.TeamBuildingRepo
@@ -26,15 +24,11 @@ import javax.inject.Inject
 
 /**
  * This View model is used for the Team Building Api Calls.
- *
- * @param qrCodeScanner This is the [QrCodeScanner] object which is used to Scan QR Codes and get
- * the Team ID.
  */
 @HiltViewModel
 class TeamBuildingViewModel @Inject constructor(
     private val repository: TeamBuildingRepo,
-    private val firebase: FirebaseAuth,
-    private val qrCodeScanner: QrCodeScanner
+    private val firebase: FirebaseAuth
 ) : ViewModel() {
 
 
@@ -267,36 +261,6 @@ class TeamBuildingViewModel @Inject constructor(
 
 
     /**
-     * This function starts the [QrCodeScanner] scanner and start to scan for QR Codes.
-     */
-    private fun startScanner() {
-        qrCodeScanner.startScanner {
-            when (it) {
-
-                // User Cancelled The Scanner Scan
-                is QrScannerState.Cancelled -> {
-                    _teamData.value = UiState.Failed("User Cancelled QR Scanner")
-                }
-
-                // Scanner Scan is successful
-                is QrScannerState.Success -> {
-                    joinTeam(it.code)
-                }
-
-                // Scanner scan is a failure
-                is QrScannerState.Failure -> {
-                    _teamData.value = UiState.Failed(it.exception.message.toString())
-                }
-
-                else -> {
-                    // Do Nothing
-                }
-            }
-        }
-    }
-
-
-    /**
      * This function receives the events from the UI Layer and calls the Functions according to the
      * events received.
      *
@@ -313,10 +277,6 @@ class TeamBuildingViewModel @Inject constructor(
                 setTeamName(event.teamName)
             }
 
-            is TeamBuildingEvent.ScannerIO.CheckScannerAvailability -> {
-                startScanner()
-            }
-
             is TeamBuildingEvent.NetworkIO.CreateTeamApiCall -> {
                 createTeamApi()
             }
@@ -331,6 +291,19 @@ class TeamBuildingViewModel @Inject constructor(
 
             is TeamBuildingEvent.Helper.OnClickInRegisterScreen -> {
                 onCancelInRegisterScreenClick()
+            }
+
+            is TeamBuildingEvent.NetworkIO.JoinTeam -> {
+                joinTeam(event.teamId)
+            }
+
+            is TeamBuildingEvent.Helper.ResetTeamJoiningState -> {
+                _teamData.value = UiState.Idle
+            }
+
+            is TeamBuildingEvent.ScannerIO.ScannerFailure -> {
+                _teamData.value =
+                    UiState.Failed("Qr scanner failed to scan! Please restart and try again.")
             }
         }
     }
