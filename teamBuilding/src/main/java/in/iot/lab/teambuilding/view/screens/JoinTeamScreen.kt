@@ -2,12 +2,12 @@ package `in`.iot.lab.teambuilding.view.screens
 
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
+import `in`.iot.lab.qrcode.scanner.CodeScannerScreen
 import `in`.iot.lab.teambuilding.view.events.TeamBuildingEvent
 
 
@@ -28,11 +28,6 @@ internal fun JoinTeamScreenControl(
     setEvent: (TeamBuildingEvent) -> Unit
 ) {
 
-    // Starting the Scanner Flow in the View Model
-    LaunchedEffect(Unit) {
-        setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
-    }
-
     AppScreen {
 
         // Checking the Team Joining Api State
@@ -40,7 +35,14 @@ internal fun JoinTeamScreenControl(
 
             // Idle state
             is UiState.Idle -> {
-
+                CodeScannerScreen(
+                    onCodeScanned = {
+                        setEvent(TeamBuildingEvent.NetworkIO.JoinTeam(it))
+                    },
+                    onFailure = {
+                        setEvent(TeamBuildingEvent.ScannerIO.ScannerFailure)
+                    }
+                )
             }
 
             // Api Call is being queued
@@ -59,9 +61,12 @@ internal fun JoinTeamScreenControl(
                 // Failure Screen
                 ErrorDialog(
                     text = teamJoiningApiState.message,
-                    onCancel = popBackStack
+                    onCancel = {
+                        setEvent(TeamBuildingEvent.Helper.ResetTeamJoiningState)
+                        popBackStack()
+                    }
                 ) {
-                    setEvent(TeamBuildingEvent.ScannerIO.CheckScannerAvailability)
+                    setEvent(TeamBuildingEvent.Helper.ResetTeamJoiningState)
                 }
             }
         }

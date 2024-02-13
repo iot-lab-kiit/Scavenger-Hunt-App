@@ -7,15 +7,15 @@ import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
 import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.network.data.models.hint.RemoteHint
-import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.playgame.view.event.PlayGameEvent
+import `in`.iot.lab.qrcode.scanner.QrScannerState
 
 
 @Composable
 fun PlayScannerScreenControl(
-    teamData: UiState<RemoteTeam>,
-    scannerState: UiState<RemoteHint>,
+    scannerState: QrScannerState,
+    hintData: UiState<RemoteHint>,
     navigateToHints: () -> Unit,
     popBackStack: () -> Unit,
     setEvent: (PlayGameEvent) -> Unit
@@ -23,26 +23,24 @@ fun PlayScannerScreenControl(
 
     // Starting the Scanner
     LaunchedEffect(Unit) {
-        setEvent(PlayGameEvent.NetworkIO.GetTeamData)
+        setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
     }
 
     // App Scaffold
     AppScreen {
 
-        when (teamData) {
+        when (scannerState) {
 
-            is UiState.Idle -> {
-                // Do Nothing
+            // Cancelled State
+            is QrScannerState.Cancelled -> {
+                popBackStack()
             }
 
-            is UiState.Loading -> {
-                LoadingTransition()
-            }
+            // Success State
+            is QrScannerState.Success -> {
 
-            is UiState.Success -> {
-
-                // Checking Scanner States.
-                when (scannerState) {
+                // Checking Hint Api Call Status.
+                when (hintData) {
 
                     is UiState.Idle -> {
                         setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
@@ -57,21 +55,32 @@ fun PlayScannerScreenControl(
                     }
 
                     is UiState.Failed -> {
-                        popBackStack()
+
+                        ErrorDialog(
+                            text = hintData.message,
+                            onCancel = popBackStack,
+                            onTryAgain = {
+                                setEvent(PlayGameEvent.Helper.ResetScanner)
+                            }
+                        )
                     }
                 }
             }
 
-            is UiState.Failed -> {
+            is QrScannerState.Failure -> {
                 ErrorDialog(
-                    text = teamData.message,
+                    text = scannerState.exception.message.toString(),
                     onCancel = popBackStack,
                     onTryAgain = {
                         setEvent(PlayGameEvent.ScannerIO.CheckScannerAvailability)
                     }
                 )
             }
-        }
 
+            // Idle and Running State
+            else -> {
+
+            }
+        }
     }
 }

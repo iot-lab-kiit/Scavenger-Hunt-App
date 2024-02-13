@@ -28,7 +28,7 @@ import `in`.iot.lab.design.theme.ScavengerHuntTheme
 @Composable
 private fun DefaultPreview1() {
     ScavengerHuntTheme {
-        AppPointsUI(text = "143")
+        AppPointsUI(text = "4567")
     }
 }
 
@@ -44,7 +44,7 @@ fun AppPointsUI(text: String) {
     PrimaryButton(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
         onClick = {},
-        contentPadding = PaddingValues(4.dp),
+        contentPadding = PaddingValues(8.dp),
         content = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

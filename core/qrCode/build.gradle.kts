@@ -69,4 +69,6 @@ dependencies {
     // Code Generator Dependency
     implementation("com.google.zxing:core:3.5.1")
 
+    // ZXing Code Scanner Dependency
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

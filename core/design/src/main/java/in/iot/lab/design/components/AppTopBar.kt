@@ -32,7 +32,7 @@ private fun DefaultPreview1() {
     ScavengerHuntTheme {
         AppTopBar(
             headerText = "HEADER STRING FILES",
-            pointDisplay = "540"
+            pointDisplay = "5400"
         ) {}
     }
 }

@@ -90,4 +90,7 @@ dependencies {
     // Firebase Dependency
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-auth")
+
+    // Coil Dependency
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }

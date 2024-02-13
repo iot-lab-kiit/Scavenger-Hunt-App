@@ -1,8 +1,10 @@
 package `in`.iot.lab.scavengerhunt.navigation
 
+import android.app.Activity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
@@ -12,6 +14,7 @@ import `in`.iot.lab.authorization.ui.navigation.SIGN_IN_ROUTE
 import `in`.iot.lab.authorization.ui.navigation.signInScreen
 import `in`.iot.lab.dashboard.ui.navigation.dashboardScreen
 import `in`.iot.lab.dashboard.ui.navigation.navigateToDashboard
+import `in`.iot.lab.scavengerhunt.screen.PermissionScreen
 import `in`.iot.lab.teambuilding.view.navigation.TEAM_BUILDING_ROOT_ROUTE
 import `in`.iot.lab.teambuilding.view.navigation.navigateToTeamBuilding
 import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
@@ -24,6 +27,12 @@ import `in`.iot.lab.teambuilding.view.navigation.teamNavGraph
  */
 @Composable
 fun MainNavGraph(navHostController: NavHostController) {
+
+    val context = LocalContext.current as Activity
+
+    PermissionScreen {
+        if (!it) context.finish()
+    }
 
     // Finding Initial Route
     val initialRoute = if (Firebase.auth.currentUser != null)
