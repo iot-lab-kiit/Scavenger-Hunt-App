@@ -56,13 +56,11 @@ fun PlayGameNavGraph(onCancelClick: () -> Unit) {
 
             //State Variables
             val hintData = viewModel.hintData.collectAsState().value
-            val scannerState = viewModel.scannerState.collectAsState().value
 
             // Scanner Screen
             PlayScannerScreenControl(
-                scannerState = scannerState,
                 hintData = hintData,
-                navigateToHints = { navController.navigate(PLAY_GAME_HINT_ROUTE) },
+                onCancelClick = onCancelClick,
                 popBackStack = onCancelClick,
                 setEvent = viewModel::uiListener
             )

@@ -44,7 +44,6 @@ import coil.request.ImageRequest
 import `in`.iot.lab.design.R
 import `in`.iot.lab.design.components.AppScreen
 import `in`.iot.lab.design.components.ErrorDialog
-import `in`.iot.lab.design.components.LoadingTransition
 import `in`.iot.lab.design.components.PrimaryButton
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.design.theme.darkBackGround
@@ -92,16 +91,6 @@ fun PlayHintScreenControl(
 
         when (hintData) {
 
-            // Idle State
-            is UiState.Idle -> {
-                setEvent(PlayGameEvent.NetworkIO.GetHintDetails)
-            }
-
-            // Loading State
-            is UiState.Loading -> {
-                LoadingTransition()
-            }
-
             // Success State
             is UiState.Success -> {
 
@@ -109,7 +98,7 @@ fun PlayHintScreenControl(
                 PlayHintSuccessScreen(
                     hintData = hintData.data,
                     onScanAgainClick = {
-                        setEvent(PlayGameEvent.Helper.ResetScanner)
+                        setEvent(PlayGameEvent.ScannerIO.ResetScanner)
                     },
                     onBackPress = onCancelClick
                 )
@@ -121,9 +110,13 @@ fun PlayHintScreenControl(
                     text = hintData.message,
                     onCancel = onCancelClick,
                     onTryAgain = {
-                        setEvent(PlayGameEvent.Helper.ResetScanner)
+                        setEvent(PlayGameEvent.ScannerIO.ResetScanner)
                     }
                 )
+            }
+
+            else -> {
+
             }
         }
 
