@@ -79,7 +79,7 @@ fun ThemeCardUI(
             Text(
                 modifier = Modifier.padding(start = 16.dp),
                 text = theme,
-                style = MaterialTheme.typography.bodySmall.copy(
+                style = MaterialTheme.typography.bodyMedium.copy(
                     fontFamily = FontFamily(Font(R.font.montserratsemibold))
                 )
             )
