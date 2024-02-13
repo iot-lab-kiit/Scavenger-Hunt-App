@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.dashboard.data.repository.DashboardRepository
+import `in`.iot.lab.network.data.models.hint.RemoteHint
 import `in`.iot.lab.network.data.models.team.RemoteTeam
 import `in`.iot.lab.network.state.UiState
 import `in`.iot.lab.network.utils.NetworkUtil.toUiState
@@ -27,6 +28,14 @@ class TeamScreenViewModel @Inject constructor(
     // Team Data
     private val _teamData = MutableStateFlow<UiState<RemoteTeam>>(UiState.Idle)
     val teamData = _teamData.asStateFlow()
+
+
+    // Hint Data
+    var hintData = RemoteHint()
+
+    fun setHint(hintData: RemoteHint) {
+        this.hintData = hintData
+    }
 
 
     /**

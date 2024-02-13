@@ -3,7 +3,7 @@ package `in`.iot.lab.dashboard.ui.screen.team_details.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,13 +28,13 @@ import `in`.iot.lab.design.components.SecondaryButton
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.network.data.models.hint.RemoteHint
 
+
 @Composable
 fun HintsCard(
     modifier: Modifier = Modifier,
     hints: List<RemoteHint>? = null,
+    onShowDetailClick: (RemoteHint) -> Unit
 ) {
-
-    val uriHandler = LocalUriHandler.current
 
     Card(
         modifier = modifier.padding(horizontal = 24.dp),
@@ -49,7 +48,7 @@ fun HintsCard(
         )
     ) {
         hints?.forEachIndexed { index, _ ->
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -61,7 +60,8 @@ fun HintsCard(
                             angleInDegrees = 60f
                         )
                     ),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
                 // Hint Text
@@ -74,26 +74,14 @@ fun HintsCard(
                     )
                 )
 
-
-                // Hint Question Theme
-                Text(
-                    modifier = Modifier.padding(start = 24.dp),
-                    text = hints[index].question ?: "Question",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontFamily = FontFamily(Font(R.font.montserratsemibold))
-                    )
-                )
-
-
                 // Visit Reward button
                 SecondaryButton(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        uriHandler.openUri(hints[index].answer ?: "")
+                        onShowDetailClick(hints[index])
                     },
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(text = "View Reward")
+                    Text(text = "View Details")
                 }
 
                 Divider(
@@ -104,6 +92,7 @@ fun HintsCard(
         }
     }
 }
+
 
 @Composable
 @Preview
@@ -147,7 +136,7 @@ fun HintsCardPreview() {
     )
     ScavengerHuntTheme {
         AppScreen {
-            HintsCard(hints = mockHint)
+            HintsCard(hints = mockHint) { _ -> }
         }
     }
 }

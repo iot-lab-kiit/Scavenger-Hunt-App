@@ -20,6 +20,7 @@ import `in`.iot.lab.dashboard.R
 import `in`.iot.lab.dashboard.ui.screen.team.TeamRoute
 import `in`.iot.lab.dashboard.ui.screen.team.TeamScreenViewModel
 import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
+import `in`.iot.lab.dashboard.ui.screen.team_details.components.HintDetailCards
 import `in`.iot.lab.design.animation.navigation.exit.appFadeOutTransition
 import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
@@ -29,6 +30,7 @@ import `in`.iot.lab.playgame.view.navigation.playGameNavGraph
 
 const val TEAM_ROUTE = "team_route"
 const val TEAM_DETAILS_ROUTE = "team_details_route"
+const val TEAM_HINT_DETAILS_ROUTE = "team_hint_details_route"
 
 sealed class DashboardOptions(
     val route: String,
@@ -108,8 +110,17 @@ internal fun DashboardNavGraph(
                 viewModel = teamViewModel,
                 onBackClick = onBackPressed,
                 onTryAgainClick = teamViewModel::getTeamByUserUid,
-                onCancelClick = { context.finish() }
+                onCancelClick = { context.finish() },
+                onShowDetailClick = {
+                    teamViewModel.setHint(it)
+                    navController.navigate(TEAM_HINT_DETAILS_ROUTE)
+                }
             )
+        }
+
+        // Hint Details Screen
+        composable(TEAM_HINT_DETAILS_ROUTE) {
+            HintDetailCards(hintData = teamViewModel.hintData)
         }
 
         // Play Game Screen
