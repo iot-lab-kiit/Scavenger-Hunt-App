@@ -23,9 +23,8 @@ import `in`.iot.lab.dashboard.ui.screen.team_details.TeamDetailsRoute
 import `in`.iot.lab.design.animation.navigation.exit.appFadeOutTransition
 import `in`.iot.lab.leaderboard.view.navigation.LEADERBOARD_ROOT_ROUTE
 import `in`.iot.lab.leaderboard.view.navigation.leaderBoardNavGraph
-import `in`.iot.lab.playgame.view.navigation.PLAY_GAME_ROOT_ROUTE
-import `in`.iot.lab.playgame.view.navigation.PlayGameNavGraph
 import `in`.iot.lab.playgame.view.navigation.navigateToPlay
+import `in`.iot.lab.playgame.view.navigation.playGameNavGraph
 
 
 const val TEAM_ROUTE = "team_route"
@@ -114,17 +113,35 @@ internal fun DashboardNavGraph(
         }
 
         // Play Game Screen
-        composable(PLAY_GAME_ROOT_ROUTE) {
-            PlayGameNavGraph(
-                onCancelClick = {
-                    navController.navigateToTeam(navOptions {})
+        playGameNavGraph {
+            navController.navigateToTeam(
+                navOptions {
+                    popUpTo(TEAM_ROUTE) {
+                        inclusive = true
+                    }
                 }
             )
         }
 
-        aboutUsNavGraph(navController) { }
+        aboutUsNavGraph(navController) {
+            navController.navigateToTeam(
+                navOptions {
+                    popUpTo(TEAM_ROUTE) {
+                        inclusive = true
+                    }
+                }
+            )
+        }
 
         // Leaderboard Screen
-        leaderBoardNavGraph { }
+        leaderBoardNavGraph {
+            navController.navigateToTeam(
+                navOptions {
+                    popUpTo(TEAM_ROUTE) {
+                        inclusive = true
+                    }
+                }
+            )
+        }
     }
 }

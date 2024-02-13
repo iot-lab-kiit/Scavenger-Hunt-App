@@ -57,7 +57,6 @@ import `in`.iot.lab.qrcode.scanner.CodeScannerScreen
 fun PlayScannerScreenControl(
     hintData: UiState<RemoteHint>,
     onCancelClick: () -> Unit,
-    popBackStack: () -> Unit,
     setEvent: (PlayGameEvent) -> Unit
 ) {
 
@@ -98,7 +97,7 @@ fun PlayScannerScreenControl(
 
                 ErrorDialog(
                     text = hintData.message,
-                    onCancel = popBackStack,
+                    onCancel = onCancelClick,
                     onTryAgain = {
                         setEvent(PlayGameEvent.ScannerIO.ResetScanner)
                     }
