@@ -125,8 +125,47 @@ internal fun TeamDetailsScreen(
             }
 
 
+            team.mainQuest?.let {
+                if (it.isNotEmpty())
+                    item {
+                        Text(
+                            modifier = Modifier.padding(start = 32.dp),
+                            text = "MAIN HINTS",
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontFamily = FontFamily(Font(R.font.orbitron_regular)),
+                                letterSpacing = 2.sp,
+                            )
+                        )
+                    }
+            }
+
+
             // Main Hints Cards
             team.mainQuest?.let {
+                if (it.isNotEmpty())
+                    item {
+                        HintsCard(hints = it, onShowDetailClick = onShowDetailClick)
+                    }
+            }
+
+
+            team.sideQuest?.let {
+                if (it.isNotEmpty())
+                    item {
+                        Text(
+                            modifier = Modifier.padding(start = 32.dp),
+                            text = "SIDE HINTS",
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontFamily = FontFamily(Font(R.font.orbitron_regular)),
+                                letterSpacing = 2.sp,
+                            )
+                        )
+                    }
+            }
+
+
+            // Side Quest Cards
+            team.sideQuest?.let {
                 if (it.isNotEmpty())
                     item {
                         HintsCard(hints = it, onShowDetailClick = onShowDetailClick)
