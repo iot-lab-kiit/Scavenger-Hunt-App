@@ -1,7 +1,12 @@
 package `in`.iot.lab.authorization.ui.screen
 
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +44,8 @@ import `in`.iot.lab.design.components.TheMatrixHeaderUI
 import `in`.iot.lab.design.theme.ScavengerHuntTheme
 import `in`.iot.lab.network.state.UiState
 
+// For Readability, Renamed The Launcher used for Legacy Google SignIn
+internal typealias SignInLauncher = ManagedActivityResultLauncher<Intent, ActivityResult>
 
 @Composable
 internal fun SignInRoute(
@@ -47,6 +54,11 @@ internal fun SignInRoute(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = viewModel::onSignInResult
+    )
+
     LaunchedEffect(state) {
         if (state is UiState.Success)
             if ((state as UiState.Success<AuthResult>).data.data != null) {
@@ -55,7 +67,12 @@ internal fun SignInRoute(
     }
     SignInScreen(
         state = state,
-        onLoginClicked = { viewModel.signIn(context) }
+        onLoginClicked = {
+            viewModel.signIn(
+                context = context,
+                signInLauncher = launcher
+            )
+        }
     )
 }
 

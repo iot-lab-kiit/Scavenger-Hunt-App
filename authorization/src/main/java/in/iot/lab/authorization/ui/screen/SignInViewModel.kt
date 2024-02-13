@@ -1,6 +1,7 @@
 package `in`.iot.lab.authorization.ui.screen
 
 import android.content.Context
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,9 +23,23 @@ class SignInViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
 
-    fun signIn(context: Context) {
+    fun signIn(context: Context, signInLauncher: SignInLauncher) {
         viewModelScope.launch {
-            signInUseCase.invoke(context).collect {
+            signInUseCase.invoke(
+                context = context,
+                signInLauncher = signInLauncher
+            ).collect {
+                _state.value = it
+            }
+        }
+    }
+
+    // Result From Legacy SignIn Flow
+    fun onSignInResult(result: ActivityResult) {
+        viewModelScope.launch {
+            signInUseCase.handleSignInResult(
+                result = result
+            ).collect {
                 _state.value = it
             }
         }

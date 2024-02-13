@@ -11,4 +11,5 @@ interface AuthRepository {
     suspend fun signIn(context: Context): AuthResult
     suspend fun logout()
     suspend fun authenticateUserOnServer(token: String): ResponseState<AuthResponse>
+    suspend fun loginWithFirebase(idToken: String): AuthResult
 }
