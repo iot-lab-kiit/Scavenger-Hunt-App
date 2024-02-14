@@ -117,7 +117,7 @@ fun HintDetailCards(hintData: RemoteHint) {
                             .build(),
                         placeholder = painterResource(R.drawable.light_bulb),
                         contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.Fit
                     )
                 }
 
@@ -146,7 +146,7 @@ fun HintDetailCards(hintData: RemoteHint) {
                     )
                 }
 
-                if (hintData.type?.contains("main") == true)
+                if (hintData.type?.contains("main") == true && !hintData.answer.isNullOrBlank())
                     PrimaryButton(
                         onClick = { uriHandler.openUri(hintData.answer ?: "") }
                     ) {

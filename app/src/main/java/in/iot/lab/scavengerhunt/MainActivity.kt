@@ -26,9 +26,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             ScavengerHuntTheme {
 
-//                runBlocking {
-//                    FirebaseAuth.getInstance().signOut()
-//                }
+                runBlocking {
+                    FirebaseAuth.getInstance().signOut()
+                }
 
                 // Variable which says whether to show the splash screen or not
                 var showSplash by remember { mutableStateOf(true) }

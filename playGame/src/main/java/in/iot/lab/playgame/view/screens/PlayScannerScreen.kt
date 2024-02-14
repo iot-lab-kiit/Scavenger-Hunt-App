@@ -84,13 +84,16 @@ fun PlayScannerScreenControl(
             is UiState.Success -> {
 
                 // Success Screen
-                PlayHintSuccessScreen(
-                    hintData = hintData.data,
-                    onScanAgainClick = {
-                        setEvent(PlayGameEvent.ScannerIO.ResetScanner)
-                    },
-                    onBackPress = onCancelClick
-                )
+                if (hintData.data.type.equals("main")) {
+                    PlayHintSuccessScreen(
+                        hintData = hintData.data,
+                        onScanAgainClick = {
+                            setEvent(PlayGameEvent.ScannerIO.ResetScanner)
+                        },
+                        onBackPress = onCancelClick
+                    )
+                } else
+                    PlayHintSuccessSideScreen(hintData = hintData.data)
             }
 
             is UiState.Failed -> {
@@ -217,6 +220,91 @@ private fun PlayHintSuccessScreen(
         ) {
             RewardUI(onSkipClick = { showReward = false }) {
                 uriHandler.openUri(hintData.answer ?: "")
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun PlayHintSuccessSideScreen(hintData: RemoteHint) {
+
+    OutlinedCard(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        border = BorderStroke(
+            width = 2.5.dp,
+            color = MaterialTheme.colorScheme.primary
+        ),
+        colors = CardDefaults.outlinedCardColors(containerColor = darkBackGround)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(32.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            // Hint text
+            Text(
+                text = "Checked",
+                style = TextStyle(
+                    fontSize = 32.sp,
+                    fontFamily = FontFamily(Font(R.font.orbitron_regular)),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+
+
+            // Bulb Icon
+            if (hintData.image == null)
+                Image(
+                    painter = painterResource(id = R.drawable.light_bulb),
+                    contentDescription = "Hint Light Bulb Image"
+                )
+
+            // Image For hint
+            hintData.image?.let {
+                AsyncImage(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(24.dp))
+                        .size(200.dp),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(hintData.image)
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(R.drawable.reward),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                )
+            }
+
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onSurface,
+                    contentColor = MaterialTheme.colorScheme.surface
+                )
+            ) {
+
+                // Hint Question Text
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    text = hintData.question ?: "Hint Question",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily(Font(R.font.montserratsemibold)),
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF4B4B4B),
+                        textAlign = TextAlign.Center,
+                    )
+                )
             }
         }
     }
