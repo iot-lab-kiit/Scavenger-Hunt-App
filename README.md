@@ -80,7 +80,7 @@ Install the Scavenger Hunt Application in your Android phones by downloading the
 
 ## Feedback
 
-If you have any feedback, please reach out to us at abhranilnxt@gmail.com or iot.lab@kiit.ac.in
+If you have any feedback, please reach out to us at iot.lab@kiit.ac.in
 
 
 ## Platforms/softwares(s) used to develop this:
