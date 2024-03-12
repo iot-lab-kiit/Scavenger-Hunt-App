@@ -71,7 +71,7 @@ This Application was developed by the IoT Lab Android Team for a Scavenger Hunt 
 
 Install the Scavenger Hunt Application in your Android phones by downloading the APK provided in the Releases Section.
 
-[APK](https://github.com/AbhranilNXT/Scavenger-Hunt-Clone/releases/tag/v1.0.1) 
+[APK](https://github.com/iot-lab-kiit/Scavenger-Hunt-App/releases/download/1.0.1/Scavenger-Hunt-v1.0.1.apk)
     
 ## License
 
@@ -94,7 +94,7 @@ If you have any feedback, please reach out to us at abhranilnxt@gmail.com or iot
 
 To clone this repo and look into the source code, go to the terminal in your workspace and then type
 
-> https://github.com/AbhranilNXT/Scavenger-Hunt-Clone
+> https://github.com/iot-lab-kiit/Scavenger-Hunt-App
 
 
 ## Contributing
