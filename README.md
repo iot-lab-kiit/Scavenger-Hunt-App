@@ -12,17 +12,17 @@ An Android Application which was created by IoT lab Android Team for a Scavenger
 This Application was developed by the IoT Lab Android Team for a Scavenger Hunt Game organised under KIIT Fest 7.0 by the School of Computer Engineering. The game featured numerous hints scattered across the Campus which were to be found by the participants and scanned by the QR Scanner in the App, upon which a follow up hint location would pop up. Main Hints and Side Quest both provided points to the teams, which was shown in the App Leaderboard Screen.
 
 ## Table of contents
-- [Logo](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#logo)
-- [Authors](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#authors)
-- [Screenshots](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#screenshots)
-- [Features](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#features)
-- [Color references](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#color-reference)
-- [Installation](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#installation)
-- [License](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#license)
-- [Feedback](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#feedback)
-- [Platform/Software(s) used to develop this](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#platformssoftwares-used-to-develop-this)
-- [Source Code](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#source-code)
-- [Contributing](https://github.com/AbhranilNXT/Scavenger-Hunt-App?tab=readme-ov-file#contributing)
+- [Logo](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#logo)
+- [Authors](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#authors)
+- [Screenshots](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#screenshots)
+- [Features](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#features)
+- [Color references](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#color-reference)
+- [Installation](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#installation)
+- [License](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#license)
+- [Feedback](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#feedback)
+- [Platform/Software(s) used to develop this](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#platformssoftwares-used-to-develop-this)
+- [Source Code](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#source-code)
+- [Contributing](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#contributing)
 
 
 ## Logo
