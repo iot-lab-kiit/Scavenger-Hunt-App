@@ -85,9 +85,9 @@ If you have any feedback, please reach out to us at abhranilnxt@gmail.com or iot
 
 ## Platforms/softwares(s) used to develop this:
 
-*Android:* Android Studio, Jetpack Compose, MVVM, Kotlin Courotines, Retrofit, ZXing, Material UI, Hilt & Dagger
+**Android:** Android Studio, Jetpack Compose, MVVM, Kotlin Courotines, Retrofit, ZXing, Material UI, Hilt & Dagger
 
-*Backend:* NodeJS
+**Backend:** NodeJS, ExpressJS, MongoDB, ngrok
 
 
 ## Source Code
@@ -101,4 +101,5 @@ To clone this repo and look into the source code, go to the terminal in your wor
 
 Contributions are always welcome!
 
-Please adhere to this project's code of conduct.
+Please adhere to this project's `code of conduct`.
+
