@@ -20,7 +20,7 @@ This Application was developed by the IoT Lab Android Team for a Scavenger Hunt 
 - [Installation](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#installation)
 - [License](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#license)
 - [Feedback](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#feedback)
-- [Platform/Software(s) used to develop this](https://github.com/iot-lab-kiit/Scavenger-Hunt-App/edit/master/README.md#platformssoftwaress-used-to-develop-this)
+- [Platform/Software(s) used to develop this](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#platformssoftwaress-used-to-develop-this)
 - [Source Code](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#source-code)
 - [Contributing](https://github.com/iot-lab-kiit/Scavenger-Hunt-App?tab=readme-ov-file#contributing)
 
